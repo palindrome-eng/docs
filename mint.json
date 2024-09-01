@@ -1,18 +1,18 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "ReflectCX",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#1440B8",
+    "light": "#B723B7",
+    "dark": "#1440B8",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#1440B8",
+      "to": "#B723B7"
     }
   },
   "topbarLinks": [
