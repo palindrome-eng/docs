@@ -9,12 +9,12 @@ Learn how to update your docs locally and deploy them to the public.
 
 ## Using Reflected Currencies
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+Discover common use cases for **Reflected Currencies** below such as hedging your Solana assets to earn US Dollars (USD), or international payments in currencies such as Hong Kong Dollar (HKD).
 
 <CardGroup>
 
 <Card title="Hedge SOL (Solana)" icon="chart-simple" href="/settings/global">
-  Add flair to your docs with personalized branding.
+  For every Liquid Staked Solana that users deposit, the program opens an equal short via Perp DEX's.
 </Card>
 
 <Card
@@ -22,7 +22,7 @@ Add content directly in your files with MDX syntax and React components. You can
   icon="chart-mixed"
   href="/api-playground/configuration"
 >
-  Implement your OpenAPI spec and enable API user interaction.
+  Reflect **compounds interest** earnt from Staking and Funding Rates and pays this back to depositors in US Dollars (USDR).
 </Card>
 
 <Card
@@ -30,7 +30,7 @@ Add content directly in your files with MDX syntax and React components. You can
   icon="globe"
   href="/analytics/supported-integrations"
 >
-  Draw insights from user interactions with your documentation.
+  Utilise **MirrorSwap** to convert US Dollars into any global US Dollar pegged currency. Facilitating instant zero slippage payments with no fees on forex.
 </Card>
 
 <Card
@@ -38,7 +38,7 @@ Add content directly in your files with MDX syntax and React components. You can
   icon="square-code"
   href="/settings/custom-domain/subdomain"
 >
-  Keep your docs on your own website's subdomain.
+  Reflect makes it seamless to offer Tokenised Yields in US Dollars for Liquid Staked Solana Tokens (LSTs).
 </Card>
 
 </CardGroup>
@@ -47,20 +47,18 @@ Add content directly in your files with MDX syntax and React components. You can
 <br/>
 
 <AccordionGroup>
-  <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
+  <Accordion icon="circle-question" title="Are their any Mint/Redeem fees?">
+    **No**, There are zero fees when minting or redeeming Reflected Currencies.
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
+  <Accordion icon="circle-question" title="How is the price of Reflected Currencies stable?">
+    Reflect Protocol operates what is known as a Delta-Neutral trade or in simpler terms, it is hedging your deposit with an equal size short of the same asset. This removes exposure to price risk and increases exposure to funding rates.
+  </Accordion>
+  <Accordion icon="circle-question" title="Where does the Interest (yield) come from?">
+    Interest is generated from two primary avenues and a multitude of others. These are **Staking Yields and Funding Rate Exposure.**
+
+    The increased exposure to funding rates inherit from the creation of a Delta-Neutral position comes with a historically positive APY(%) paid by those seeking leverage on perpetuals.
+  </Accordion>
+  <Accordion icon="circle-question" title="Is the collateral in the protocol insured?">
+    **Yes.** Reflect Protocol operates both a hard cash insurance fund and multiple Restaked Validated Services that offloads protocol risk to network stakers in exchange for a portion of revenue.
   </Accordion>
 </AccordionGroup>
