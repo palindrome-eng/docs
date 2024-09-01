@@ -1,18 +1,18 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "ReflectCX",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/logo-dark.svg",
+    "light": "/logo/logo-light.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#0088FF",
+    "light": "#0088FF",
+    "dark": "#0088FF",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#0088FF",
+      "to": "#FF48F9"
     }
   },
   "topbarLinks": [
@@ -22,8 +22,8 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Mint USDR",
+    "url": "https://reflect.cx"
   },
   "tabs": [
     {
@@ -33,17 +33,17 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
+      "name": "Application",
       "icon": "book-open-cover",
       "url": "https://mintlify.com/docs"
     },
     {
       "name": "Community",
-      "icon": "slack",
+      "icon": "telegram",
       "url": "https://mintlify.com/community"
     },
     {
-      "name": "Blog",
+      "name": "Articles",
       "icon": "newspaper",
       "url": "https://mintlify.com/blog"
     }
