@@ -33,8 +33,8 @@
   ],
   "anchors": [
     {
-      "name": "Application",
-      "icon": "book-open-cover",
+      "name": "GitHub",
+      "icon": "github",
       "url": "https://mintlify.com/docs"
     },
     {
@@ -50,7 +50,7 @@
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Protocol Overview",
       "pages": [
         "introduction",
         "quickstart",
@@ -84,8 +84,8 @@
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "x": "https://x.com/reflectcx",
+    "github": "https://github.com/palindrome-eng",
+    "substack": "https://reflectcx.substack.com/"
   }
 }
