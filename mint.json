@@ -62,12 +62,8 @@
     {
       "group": "Risk Management",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "risk-management/notice",
+        "risk-management/rms",
       ]
     },
     {
