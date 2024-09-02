@@ -55,7 +55,7 @@
       "pages": [
         "introduction",
         "currencies",
-        "interest",
+        "earninterest",
         "insurance"
       ]
     },
@@ -63,7 +63,7 @@
       "group": "Risk Management",
       "pages": [
         "risk-management/notice",
-        "risk-management/rms",
+        "risk-management/rms"
       ]
     },
     {
