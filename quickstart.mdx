@@ -28,6 +28,28 @@ RDC's are an onchain, <ins>fully decentralized</ins> token denominated hedge - W
 />
 </Frame>
 
+## How Reflected Currencies are created
+
+RDC's are created when users deposit into Reflect Protocol in order to hedge their liquid stake tokens (LSTs). The protocol accepts multiple LSTs as collateral and issues a single unified US Dollar denominated token (USDR) in return at a 1:1 cash value to the deposit.
+
+
+<Frame align="center" width="100%" caption="LST Deposits converging into a Tokenised Dollar (USDR).">
+<img
+  className="block dark:block"
+  src="/images/usdr-mint-example.png"
+  alt="Example of Reflected Currencies"
+  width="100%"
+  margin-left="auto"
+  margin-right="auto"
+  align="center"
+/>
+</Frame>
+
+### How Redeeming Reflected Currencies works
+Redemption of RDC's is the exact reverse of the Deposit flow. Users will Burn (An onchain redemption mechanic) the equivalent amount of USDR (US Dollars Reflected) for the underlying amount of requested LST.
+
+<Info>Redemption of USDR and the subsequent withdrawals of LSTs is an instant atomic process. *There is no wait period to receive collateral from the protocol.*</Info>
+
 ## Using Reflected Currencies
 
 Discover common use cases for **Reflected Currencies** below such as hedging your Solana assets to earn US Dollars (USD), or international payments in currencies such as Hong Kong Dollar (HKD).
