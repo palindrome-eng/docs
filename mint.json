@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "ReflectCX",
+  "name": "Reflect Protocol",
   "backgroundImage": "/images/bg-image.png",
   "logo": {
     "dark": "/logo/logo-light.svg",
@@ -18,8 +18,8 @@
   },
   "topbarLinks": [
     {
-      "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "name": "Follow on X",
+      "url": "https://x.com/reflectcx"
     }
   ],
   "topbarCtaButton": {
