@@ -7,24 +7,48 @@ description: 'RDCs are currencies produced and managed by Reflects Decentralized
 
 RDC's are an onchain, <ins>fully decentralized</ins> token denominated hedge - Where each token represents a US Dollar or its pegged equivalent in underlying capital. Reflected Currencies make it easy to **hedge Solana Liquid Stake Tokens (LSTs) and earn US Dollars in interest.**
 
-<Frame align="center">
+<Frame align="center" width="100%">
 <img
   className="block dark:hidden"
-  src="/images/currency-examples-light.svg"
+  src="/images/currency-examples-light.png"
   alt="Example of Reflected Currencies"
-  width="65%"
-  height="auto"
-  margin="auto"
+  width="100%"
+  margin-left="auto"
+  margin-right="auto"
+  align="center"
 />
 <img
   className="hidden dark:block"
-  src="/images/currency-examples-dark.svg"
+  src="/images/currency-examples-dark.png"
   alt="Example of Reflected Currencies"
-  width="65%"
-  height="auto"
-  margin="auto"
+  width="100%"
+  margin-left="auto"
+  margin-right="auto"
+  align="center"
 />
 </Frame>
+
+## How Reflected Currencies are created
+
+RDC's are created when users deposit into Reflect Protocol in order to hedge their liquid stake tokens (LSTs). The protocol accepts multiple LSTs as collateral and issues a single unified US Dollar denominated token (USDR) in return at a 1:1 cash value to the deposit.
+
+
+<Frame align="center" width="100%" caption="LST Deposits converging into a Tokenised Dollar (USDR).">
+<img
+  className="block dark:block"
+  src="/images/usdr-mint-example.png"
+  alt="Example of Reflected Currencies"
+  width="100%"
+  margin-left="auto"
+  margin-right="auto"
+  align="center"
+/>
+</Frame>
+
+### How Redeeming Reflected Currencies works
+Redemption of RDC's is the exact reverse of the Deposit flow. Users will Burn (An onchain redemption mechanic) the equivalent amount of USDR (US Dollars Reflected) for the underlying amount of requested LST.
+
+<Info>Redemption of USDR and the subsequent withdrawals of LSTs is an instant atomic process. *There is no wait period to receive collateral from the protocol.*</Info>
 
 ## Using Reflected Currencies
 
