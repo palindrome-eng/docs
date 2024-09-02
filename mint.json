@@ -36,7 +36,7 @@
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://mintlify.com/docs"
+      "url": "https://github.com/palindrome-eng"
     },
     {
       "name": "Community",
@@ -46,7 +46,7 @@
     {
       "name": "Articles",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://reflectcx.substack.com/"
     }
   ],
   "navigation": [
@@ -54,8 +54,8 @@
       "group": "Protocol Overview",
       "pages": [
         "introduction",
-        "quickstart",
-        "development",
+        "currencies",
+        "yield",
         "insurance"
       ]
     },
@@ -71,13 +71,13 @@
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "ReflectAPI - Documentation",
       "pages": [
         "api-reference/introduction"
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "ReflectAPI - Endpoints",
       "pages": [
         "api-reference/endpoint/get",
         "api-reference/endpoint/create",
