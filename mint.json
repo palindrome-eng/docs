@@ -79,6 +79,12 @@
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
       ]
+    },
+      {
+      "group": "Open Source Technologies",
+      "pages": [
+        "api-reference/oss-intro"
+      ]
     }
   ],
   "footerSocials": {
