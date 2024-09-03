@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "Reflect API",
+    "description": "API for interacting with the Reflect Protocol",
     "license": {
       "name": "MIT"
     },
@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://sandbox.reflectprotocol.com"
     }
   ],
   "security": [
@@ -19,29 +19,32 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/protocol/metrics": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "description": "Fetches Reflect Protocol metrics such as total value locked, USDR supply, and insurance fund size.",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Protocol metrics response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "totalValueLocked": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Total value locked in the Reflect Protocol"
+                    },
+                    "usdrSupply": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Current supply of USDR"
+                    },
+                    "insuranceFundSize": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Size of the insurance fund"
+                    }
                   }
                 }
               }
@@ -58,15 +61,24 @@
             }
           }
         }
-      },
+      }
+    },
+    "/usdr/mint": {
       "post": {
-        "description": "Creates a new plant in the store",
+        "description": "Builds transaction for depositing Liquid Stake Token into Reflect in exchange for USDR.",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "Data required for minting USDR",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Amount of Liquid Stake Token to deposit"
+                  }
+                }
               }
             }
           },
@@ -74,17 +86,27 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "Transaction built successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "transactionId": {
+                      "type": "string",
+                      "description": "The ID of the transaction"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status of the transaction"
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -96,28 +118,50 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
+    "/usdr/redeem": {
+      "post": {
+        "description": "Builds transaction for redeeming USDR in exchange for Liquid Stake Tokens.",
+        "requestBody": {
+          "description": "Data required for redeeming USDR",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Amount of USDR to redeem"
+                  }
+                }
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Transaction built successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactionId": {
+                      "type": "string",
+                      "description": "The ID of the transaction"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Status of the transaction"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -132,42 +176,6 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
       "Error": {
         "required": [
           "error",
