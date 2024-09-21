@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.reflectprotocol.com"
+      "url": "http://api.reflect.cx"
     }
   ],
   "security": [

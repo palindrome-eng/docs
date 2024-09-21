@@ -66,20 +66,6 @@
         "risk-management/rms"
       ]
     },
-    {
-      "group": "ReflectAPI - Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "ReflectAPI - Endpoints",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
-      ]
-    },
       {
       "group": "Open Source Technologies",
       "pages": [
