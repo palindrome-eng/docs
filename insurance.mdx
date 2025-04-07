@@ -1,35 +1,39 @@
 ---
-title: 'Insuring Reflect Deposits'
-description: 'Comprehensive Review of Insurance Fund Mechanics'
+title: "Verifiable Insurance Fund(s)"
+description: "Overview of the verifiable insurance system(s) pertaining to individual tokenised money expanses. "
 ---
-        <CodeGroup>
-        ```rust Cash Fund Address
-        0xPlAcEhOlDeRaDdResSfOrD0cuM3n2s
-        ```
-        ```rust (Re)Staked Insurance Fund Address
-        0xR3St4k3d1nSur4nc3FUnD
-        ```
-        </CodeGroup>
+
+<CodeGroup>
+
+```rust USDR (Re)staked Insurance
+0xR3St4k3d1nSur4nc3FUnD
+```
+
+</CodeGroup>
 
 ## Protecting Deposits via Insurance Fund Mechanics
 
 Reflect Protocol is deeply integrated with its Insurance Fund(s) in a way that is both autonomous and can be validated publicly at any moment. The protocol utilises both a Cash Fund and Validated Restaked Insurance Fund to mitigate risk onboarded by the protocol via deposits.
 
-These funds exist entirely onchain in a way that is both **secure** and *programmatic* thus allowing the program to process insurance claims in unprecedented speed.
+These funds exist entirely onchain in a way that is both **secure** and _programmatic_ thus allowing the program to process insurance claims in unprecedented speed.
 
 ### Minimum Insurance Ratio for Assets Under Management
+
 Reflect Protocol's maximum assets under management (AUM) are directly linked to the total value locked (TVL) in its Insurance Fund(s). This linkage is due to the necessity of maintaining a minimum insurance percentage relative to the deposit cap. In simpler terms, every dollar deposited into Reflect Protocol must be partially insured.
 
 Upon deployment, the protocol has set this insurance ratio at 1:0.2, meaning that for every dollar deposited, 20 cents of insurance must be available. This will initially be funded by the founding org up to 2M USD.
 
 ### Boosting Stake Yields by Distributing Protocol Risk at the Personal Level.
-Distributed Protocols should reward those who take the most 'productive risk' in which allows for the growth of revenue. In the case of Reflect Protocol insurerers onboard the most risk as the insurance fund acts as the first backstop to any funding rate losses. 
 
-Because of this, the protocol is designed in its early stages to distribute a major portion of revenue via the insurance fund. Both in yield distribution and in fund growth. Insurance fund payments will make up 30% of all yield made by the protocol for the first *3 years* unless modified via governance.
+Distributed Protocols should reward those who take the most 'productive risk' in which allows for the growth of revenue. In the case of Reflect Protocol insurerers onboard the most risk as the insurance fund acts as the first backstop to any funding rate losses.
 
-Individuals can opt-in for a portion of this yield, by Restaking their reflectSOL (rSOL) for a given lockup period. Not only will this maintain native yield but it will also earn protocol revenue and decentralization bonds. 
+Because of this, the protocol is designed in its early stages to distribute a major portion of revenue via the insurance fund. Both in yield distribution and in fund growth. Insurance fund payments will make up 30% of all yield made by the protocol for the first _3 years_ unless modified via governance.
 
-<Info>The insurance restaking primitive uniquely enables network participants to not only earn Proof of Stake yields from Solana (SOL) but to Stake again (rSOL, other LSTs) in locked periods whereby the reward is both Solana (SOL) and Reflected US Dollars (USDR). </Info>
+Individuals can opt-in for a portion of this yield, by Restaking their reflectSOL (rSOL) for a given lockup period. Not only will this maintain native yield but it will also earn protocol revenue and decentralization bonds.
+
+<Info>
+  The insurance restaking primitive uniquely enables network participants to not only earn Proof of Stake yields from Solana (SOL) but to Stake again (rSOL, other LSTs) in locked periods whereby the reward is both Solana (SOL) and Reflected US Dollars (USDR). 
+</Info>
 
 ### Operational Policies
 
@@ -90,37 +94,37 @@ Individuals can opt-in for a portion of this yield, by Restaking their reflectSO
     1.2 Operational Flexibility:
     While the primary function of the cash fund is loss rectification and market stabilization, operators are permitted to utilize up to 40% of the total cash fund in low-risk, permissionless, on-chain earning opportunities. These opportunities must be strictly low-risk, and funds must be retrievable at any moment without restriction, ensuring they remain readily available for their primary purpose.
 
-    2. Governance and Community Consultation
-    2.1 Asset Allocation Adjustments:
-    Should there be a need to adjust the percentage weights of assets within the cash fund, including the portion allocated to earning opportunities, signers are required to consult the Reflect community. This consultation should be conducted transparently, utilizing decentralized voting mechanisms whenever feasible, to ensure that any changes reflect the consensus of the community.
+    1. Governance and Community Consultation
+       2.1 Asset Allocation Adjustments:
+       Should there be a need to adjust the percentage weights of assets within the cash fund, including the portion allocated to earning opportunities, signers are required to consult the Reflect community. This consultation should be conducted transparently, utilizing decentralized voting mechanisms whenever feasible, to ensure that any changes reflect the consensus of the community.
 
     2.2 Community Engagement:
     Signers must actively engage with the community, providing detailed proposals and rationales for any suggested changes to the asset composition of the cash fund, including the use of funds for earning opportunities. This engagement process is critical for maintaining trust and ensuring that decisions are made in the best interest of all stakeholders.
 
-    3. Reporting and Transparency
-    3.1 Monthly Updates:
-    Signers are obligated to provide routine updates on the status of the cash fund, including details on the portion deployed in earning opportunities, historical funding rates, and proof of reserves snapshots. These updates should be published every month, with a maximum interval of 31 days between reports. This regular reporting ensures transparency and allows stakeholders to monitor the fund's status and performance.
+    1. Reporting and Transparency
+       3.1 Monthly Updates:
+       Signers are obligated to provide routine updates on the status of the cash fund, including details on the portion deployed in earning opportunities, historical funding rates, and proof of reserves snapshots. These updates should be published every month, with a maximum interval of 31 days between reports. This regular reporting ensures transparency and allows stakeholders to monitor the fund's status and performance.
 
     3.2 Public Disclosures:
     All reports and updates must be publicly accessible, providing stakeholders with clear, accurate, and comprehensive information about the cash fund's operations and status, including the specific earning strategies employed and their associated risks.
 
-    4. Prohibition of Personal Gain
-    4.1 Strict Prohibition:
-    The cash fund is strictly not for personal gain or for the benefit of any individual or group. It is intended solely as a financial backstop to protect against losses and market discrepancies. Any attempt to use the fund for personal enrichment or other unauthorized purposes is strictly prohibited and subject to disciplinary action.
+    1. Prohibition of Personal Gain
+       4.1 Strict Prohibition:
+       The cash fund is strictly not for personal gain or for the benefit of any individual or group. It is intended solely as a financial backstop to protect against losses and market discrepancies. Any attempt to use the fund for personal enrichment or other unauthorized purposes is strictly prohibited and subject to disciplinary action.
 
     4.2 Conflict of Interest:
     Signers must avoid any conflict of interest when managing the cash fund. All decisions and actions, including those related to earning opportunities, must prioritize the fund's primary purpose of providing financial security and stability for the protocol.
 
-    5. Multisig Signer Protocols
-    5.1 Signature Announcements:
-    Signers must publicly announce each time a signature is made on the multisig wallet. These announcements should include the purpose of the transaction, the amount involved, and the signatures obtained. This transparency is crucial for maintaining trust and accountability.
+    1. Multisig Signer Protocols
+       5.1 Signature Announcements:
+       Signers must publicly announce each time a signature is made on the multisig wallet. These announcements should include the purpose of the transaction, the amount involved, and the signatures obtained. This transparency is crucial for maintaining trust and accountability.
 
     5.2 Approval Process:
     All transactions involving the cash fund, including those related to earning opportunities, must follow a rigorous approval process, requiring multiple signatures from authorized custodians. This process ensures that no single individual can unilaterally access or manipulate the funds, providing an additional layer of security.
 
-    6. Additional Legal and Operational Considerations
-    6.1 Compliance with Regulatory Requirements:
-    Signers must ensure that all activities related to the cash fund comply with relevant regulatory requirements. This includes maintaining proper records, conducting regular audits, and adhering to any reporting obligations.
+    1. Additional Legal and Operational Considerations
+       6.1 Compliance with Regulatory Requirements:
+       Signers must ensure that all activities related to the cash fund comply with relevant regulatory requirements. This includes maintaining proper records, conducting regular audits, and adhering to any reporting obligations.
 
     6.2 Security Measures:
     Signers are required to implement and maintain robust security measures to protect the cash fund. This includes secure key management practices, regular security audits, and immediate action in response to any identified vulnerabilities or breaches.
@@ -135,40 +139,21 @@ Individuals can opt-in for a portion of this yield, by Restaking their reflectSO
 
 ### Mechanisms for Insurance Fund Growth
 
-<CardGroup cols={1}>
-  <Card
-    title="Establishing Innovative Partnerships with ReStaking Platforms."
-    icon="handshake"
-    href="https://x.com/jito_sol/status/1820849416942866827"
-  >
+<CardGroup cols="1">
+  <Card title="Establishing Innovative Partnerships with ReStaking Platforms." icon="handshake" href="https://x.com/jito_sol/status/1820849416942866827">
     Reflect Protocol has established partnerships with industry leading Restaking Platforms to provide external growth avenues where the protocol can offboard risk in exchange for revenue. By facilitating multiple restaked funds across many platforms the protocol diversifies its asset risk.
-    <br/>
 
-    <a href="https://x.com/jito_sol/status/1820849416942866827">Learn more about (Re)Staking</a> 
-    
+    <br />
+
+    Learn more about (Re)Staking
   </Card>
-  <Card
-    title="Increased Capital Efficiency for Cash Fund Deployement."
-    icon="money-bill-trend-up"
-  >
+  <Card title="Increased Capital Efficiency for Cash Fund Deployement." icon="money-bill-trend-up">
     Capital Efficiency is achieved through a cold and hot dispersement system of Cash Fund deposits. The protocol will distribute a hot percentage of the cash fund into low-risk interest bearing opportunities onchain.
-
   </Card>
-  <Card
-    title="Decentralization Bonds"
-    icon="hand-holding-dollar"
-  >
-    In return for vested deposits into a Insurance based fund Reflect Protocol pays out both revenue and options on a perpetual bond. To excercise these bonds the holder must pay the redemption cost before they become transferrable, tradeable etc. 
-
+  <Card title="Decentralization Bonds" icon="hand-holding-dollar">
+    In return for vested deposits into a Insurance based fund Reflect Protocol pays out both revenue and options on a perpetual bond. To excercise these bonds the holder must pay the redemption cost before they become transferrable, tradeable etc.
   </Card>
-  <Card
-    title="Protocol Owned Insurance (POI)"
-    icon="building-columns"
-
-  >
+  <Card title="Protocol Owned Insurance (POI)" icon="building-columns">
     Protocol Owned Insurance is gained during the process of Decentralization Bonds being excercised. All funds raised via this mechanic are re-distributed into the Cash Fund and therefore perpetually owned by the protocol in a way that both benefits bond holders and LST depositors.
-
   </Card>
 </CardGroup>
-
-
