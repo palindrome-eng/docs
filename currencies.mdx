@@ -1,107 +1,112 @@
 ---
-title: 'Reflected Digital Currencies (RDC)'
-description: 'RDCs are currencies produced and managed by Reflects Decentralized program infrastructure.'
+title: "Programmable Stablecoins"
+description: "Reflect issued stablecoins are unique primitives that allow users and developers to capture the productivity of specific monetary expansion permissionlessly."
 ---
 
-## Introduction to RDC's
+### Reflect Issued Stablecoins
 
-RDC's are an onchain, <ins>fully decentralized</ins> token denominated hedge - Where each token represents a US Dollar or its pegged equivalent in underlying capital. Reflected Currencies make it easy to **hedge Solana Liquid Stake Tokens (LSTs) and earn US Dollars in interest.**
+| Ticker | Money Expanse             | Collateral                   | Status   | Audit(s)        |
+| ------ | ------------------------- | ---------------------------- | -------- | --------------- |
+| USDR   | Single-Sided Perpetual OI | LST(s)                       | Not Live | _<u>1 of 2</u>_ |
+| USTR   | US Treasuries             | USDY / BUIDL / BENJI / ACRED | Not Live | _<u>0 of 2</u>_ |
+| USX    | Double-Sided Perpetual OI | USDC                         | Not Live | _<u>0 of 2</u>_ |
+| USD^   | USD Money Markets         | SOL / USDC                   | Not Live | _<u>0 of 2</u>_ |
 
-<Frame align="center" width="100%">
-<img
-  className="block dark:hidden"
-  src="/images/currency-examples-light.png"
-  alt="Example of Reflected Currencies"
-  width="100%"
-  margin-left="auto"
-  margin-right="auto"
-  align="center"
-/>
-<img
-  className="hidden dark:block"
-  src="/images/currency-examples-dark.png"
-  alt="Example of Reflected Currencies"
-  width="100%"
-  margin-left="auto"
-  margin-right="auto"
-  align="center"
-/>
+**Definitive Properties of Reflect Issued Stablecoin(s) :- **
+
+- **Non-Custodial** : _all collateral funds are held in program accounts on the issuing network, with no access for any human party._
+- **Permissionless** :_all reflect issued stablecoins can be created and redeemed at will with no restrictions or required access controls._ 
+- **Composable**_: swap and redeem reflect stablecoins to and from their original collaterals with zero fees, slippage or any MEV encountered._ 
+- **Infinitely Liquid**_: due to the nature of all collateral existing onchain, reflect issued stablecoins can utilise their native backings for feeless swaps, liquidations etc._ 
+- **Collaborative** :_reflect issues stablecoins that only benefit the monetary expanse in which it is capturing the productivity of i.e. increasing available liquidity depth for X markets._ 
+
+### Representative Fixed-Rate Forex
+
+In the interest of maximum composability across markets, nations and cultures Reflect issued programmatic stablecoins will be available as representative pegged rate currencies such as hong kong dollars (HKD) or arab emirates dirham (AED) via a fixed-rate onchain swap. 
+
+_<sub>This allows for users and developers anywhere in the world to build compliant, localised fintech that scales on the power of USD monetary expanse onchain. </sub>_
+
+<Frame>
+  <img
+    className="block dark:hidden"
+    src="/images/currency-examples-light.png"
+    alt="Example of Reflected Currencies"
+    width="100%"
+    margin-left="auto"
+    margin-right="auto"
+    align="center"
+  />
+
+  <img
+    className="hidden dark:block"
+    src="/images/currency-examples-dark.png"
+    alt="Example of Reflected Currencies"
+    width="100%"
+    margin-left="auto"
+    margin-right="auto"
+    align="center"
+  />
 </Frame>
 
-## How Reflected Currencies are created
+### How Reflect issued stablecoins are created:
 
-RDC's are created when users deposit into Reflect Protocol in order to hedge their liquid stake tokens (LSTs). The protocol accepts multiple LSTs as collateral and issues a single unified US Dollar denominated token (USDR) in return at a 1:1 cash value to the deposit.
+Reflect allows for the creation of many types of stablecoins according to the collateral and backing model sought by the depositor - in the example shown below, a user is seeking USDR a higher risk beta to perpetual open interest which typically returns a high interest rate - <u>to mint, they are depositing one of the accepted LST(s) as collateral in return for the stablecoin. </u>
 
-
-<Frame align="center" width="100%" caption="LST Deposits converging into a Tokenised Dollar (USDR).">
-<img
-  className="block dark:block"
-  src="/images/usdr-mint-example.png"
-  alt="Example of Reflected Currencies"
-  width="100%"
-  margin-left="auto"
-  margin-right="auto"
-  align="center"
-/>
+<Frame caption="LST Deposits converging into a Tokenised Dollar (USDR).">
+  <img
+    className="block dark:block"
+    src="/images/usdr-mint-example.png"
+    alt="Example of Reflected Currencies"
+    width="100%"
+    margin-left="auto"
+    margin-right="auto"
+    align="center"
+    title=""
+  />
 </Frame>
 
-### How Redeeming Reflected Currencies works
-Redemption of RDC's is the exact reverse of the Deposit flow. Users will Burn (An onchain redemption mechanic) the equivalent amount of USDR (US Dollars Reflected) for the underlying amount of requested LST.
+### How Redeeming Reflect issued stablecoins works:
 
-<Info>Redemption of USDR and the subsequent withdrawals of LSTs is an instant atomic process. *There is no wait period to receive collateral from the protocol.*</Info>
+Redemption of Reflect issued stablecoins is relatively simple depending on the tokenised money expanse used - in the above example the user has minted USDR with LST(s) which in order to redeem they would simply burn the USDR via the Reflect Single-Sided Delta-Neutral program to receive the equivalent dollar value of LST(s) back. 
 
-## Using Reflected Currencies
+<Info>
+  Redemption of USDR and the subsequent withdrawals of LSTs is an instant atomic process. _There is no wait period to receive collateral from the protocol._
+</Info>
 
-Discover common use cases for **Reflected Currencies** below such as hedging your Solana assets to earn US Dollars (USD), or international payments in currencies such as Hong Kong Dollar (HKD).
+### Proposed applications of Reflect issued stablecoins:
 
-<CardGroup>
+Discover boundless unchartered fintech use-cases with truly programmable stablecoins, issue the stablecoins for your needs. 
 
-<Card title="Hedge SOL (Solana)" icon="chart-simple" href="/settings/global">
-  For every Liquid Staked Solana that users deposit, the program opens an equal short via Perp DEX's.
-</Card>
-
-<Card
-  title="Earn US Dollar Yields"
-  icon="chart-mixed"
-  href="/api-playground/configuration"
->
-  Reflect **compounds interest** earnt from Staking and Funding Rates and pays this back to depositors in US Dollars (USDR).
-</Card>
-
-<Card
-  title="Swap to USD Pegged Fiat"
-  icon="globe"
-  href="/analytics/supported-integrations"
->
-  Utilise **MirrorSwap** to convert US Dollars into any global US Dollar pegged currency. Facilitating instant zero slippage payments with no fees on forex.
-</Card>
-
-<Card
-  title="Developers: Integrate RDCs"
-  icon="square-code"
-  href="/settings/custom-domain/subdomain"
->
-  Reflect makes it seamless to offer Tokenised Yields in US Dollars for Liquid Staked Solana Tokens (LSTs).
-</Card>
-
+<CardGroup cols={2}>
+  <Card title="Hedge SOL (Solana)" icon="chart-simple" href="/settings/global">
+    Hedge against price risk by issuing delta-neutral stablecoins with productive SOL based capital (LSTs).
+  </Card>
+  <Card title="Earn US Dollar Yields" icon="chart-mixed" href="/api-playground/configuration">
+    Reflect makes finding the yield for you easy, with many options and risk profiles to choose from. Mint with your favourite assets today.
+  </Card>
+  <Card title="Swap to USD Pegged Fiat" icon="globe" href="/analytics/supported-integrations">
+    Convert programmable US Dollars to any global USD pegged fiat currency and build localised fintech applications that scale for your users. 
+  </Card>
+  <Card title="Build next-gen fintech" icon="square-code">
+    Provide customisable and composable interest rates to your users based on risk profile, location and collateral types - no need to worry about risk or liquidity\!
+  </Card>
 </CardGroup>
 
 ### Frequently Asked Questions (FAQs)
-<br/>
+
+<br />
 
 <AccordionGroup>
-  <Accordion icon="circle-question" title="Are their any Mint/Redeem fees?">
+  <Accordion title="Are their any Mint/Redeem fees?" icon="circle-question">
     **No**, There are zero fees when minting or redeeming Reflected Currencies.
   </Accordion>
-  <Accordion icon="circle-question" title="How is the price of Reflected Currencies stable?">
-    Reflect Protocol operates what is known as a **Delta-Neutral trade** or in simpler terms, it is **hedging** your deposit with an equal size short of the same asset. This removes exposure to price risk and increases exposure to funding rates.
+  <Accordion title="How is the price of Reflected Currencies made to be stable?" icon="circle-question">
+    **Reflect issued stablecoins have in-built stability mechanisms like rebalancing, debt-settlement and more within its onchain programs.** They can be called permissionlessly and automatically allowing for the maximum frequency of attestation. 
   </Accordion>
-  <Accordion icon="circle-question" title="Where does the Interest (yield) come from?">
-    Interest is generated from two primary avenues and a multitude of others. These are **Staking Yields and Funding Rate Exposure.**
-
-    The increased exposure to funding rates inherit from the creation of a Delta-Neutral position comes with a historically positive APY(%) paid by those seeking leverage on perpetuals.
+  <Accordion title="Where does the Interest (yield) come from?" icon="circle-question">
+    **Interest rates or "yields" are generated via the productivity of the relevant specific monetary expansion** - for example, in the case of USDR our single-sided delta-neutral token the yield is generated by those paying funding rates to leverage long SOL-USD and the network inflation rate. In the case of other stablecoins this will vary. 
   </Accordion>
-  <Accordion icon="circle-question" title="Is the collateral in the protocol insured?">
-    **Yes.** Reflect Protocol operates both a **hard cash insurance fund** and multiple **Restaked Validated Services** that *offloads* protocol risk to network stakers in exchange for a portion of revenue.
+  <Accordion title="Is the collateral in the program(s) insured?" icon="circle-question">
+    **Yes.** Reflect Protocol operates both a **hard cash insurance fund** and multiple **Restaked Validated Services** that _offloads_ protocol risk to network stakers in exchange for a portion of revenue of each specific monetary expanse which is tokenised. 
   </Accordion>
 </AccordionGroup>
