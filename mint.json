@@ -1,18 +1,18 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Reflect Protocol",
-  "backgroundImage": "/images/docs-bg.png",
+  "backgroundImage": "/images/docs-bg-g.png",
   "logo": {
     "dark": "/logo/logo-light.svg",
     "light": "/logo/logo-dark.svg"
   },
   "favicon": "/logo/logo-dark.svg",
   "colors": {
-    "primary": "#0088FF",
-    "light": "#0088FF",
-    "dark": "#0088FF",
+    "primary": "#00ff00",
+    "light": "#00ff00",
+    "dark": "#00ff00",
     "anchors": {
-      "from": "#0088FF",
+      "from": "#00ff00",
       "to": "#FF48F9"
     }
   },
