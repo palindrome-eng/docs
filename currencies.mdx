@@ -1,81 +1,66 @@
 ---
-title: "Programmable Stablecoins"
-description: "Reflect issued stablecoins are unique primitives that allow users and developers to capture the productivity of specific monetary expansion permissionlessly."
+title: "Strategies & Stablecoins"
+description: "Apr, 2025."
 ---
 
-### Reflect Issued Stablecoins
+<Card title="Overview of Strategies & Stablecoins" icon="money-bill-trend-up" img="/images/docs-image-two.png">
+  This section of the documentation covers the _DeFi Strategy_ and _Stablecoins_ managed by the Reflect Money programs. You will learn about different financial product types and how they affect the corresponding stablecoin.
 
-| Ticker      | Money Expanse             | Collateral                   | Status   | Audit(s)        |
-| ----------- | ------------------------- | ---------------------------- | -------- | --------------- |
-| <u>USDR</u> | Single-Sided Perpetual OI | LST(s)                       | Not Live | _<u>1 of 2</u>_ |
-| <u>USTR</u> | US Treasuries             | USDY / BUIDL / BENJI / ACRED | Not Live | _<u>0 of 2</u>_ |
-| <u>USX</u>  | Double-Sided Perpetual OI | USDC                         | Not Live | _<u>0 of 2</u>_ |
-| <u>USD^</u> | USD Money Markets         | SOL / USDC                   | Not Live | _<u>0 of 2</u>_ |
+  ###   _Stablecoins:_
 
-**Definitive Properties of Reflect Issued Stablecoin(s) :-**
+  | Ticker      | DeFi Strategy                           | Collateral | Status   | Audit(s)        |
+  | :---------- | :-------------------------------------- | :--------- | :------- | :-------------- |
+  | <u>USDR</u> | Delta-Neutral Funding Rate Capture      | JLP        | Not Live | _<u>1 of 2</u>_ |
+  | <u>USDX</u> | Delta-Neutral Cross Margin Rate Capture | USDC       | Not Live | _<u>0 of 2</u>_ |
+</Card>
 
-- **Non-Custodial** : _all collateral funds are held in program accounts on the issuing network, with no access for any human party._
-- **Permissionless** : _all reflect issued stablecoins can be created and redeemed at will with no restrictions or required access controls._
-- **Composable** _: swap and redeem reflect stablecoins to and from their original collaterals with zero fees, slippage or any MEV encountered._
-- **Infinitely Liquid** _: due to the nature of all collateral existing onchain, reflect issued stablecoins can utilise their native backings for feeless swaps, liquidations etc._
-- **Collaborative** : _reflect issues stablecoins that only benefit the monetary expanse in which it is capturing the productivity of i.e. increasing available liquidity depth for X markets._
+###   Strategic Stablecoin _Properties:_
 
-### Representative Fixed-Rate Forex
-
-In the interest of maximum composability across markets, nations and cultures Reflect issued programmatic stablecoins will be available as representative pegged rate currencies such as hong kong dollars (HKD) or arab emirates dirham (AED) via a fixed-rate onchain swap.
-
-_<sub>This allows for users and developers anywhere in the world to build compliant, localised fintech that scales on the power of USD monetary expanse onchain. </sub>_
-
-<Frame caption="Programmable Denominators as Stablecoins">
-  ![Currency Image One Pn](/images/currency-image-one.png)
-</Frame>
-
-### How Reflect issued stablecoins are created:
-
-Reflect allows for the creation of many types of stablecoins according to the collateral and backing model sought by the depositor - in the example shown below, a user is seeking USDR a higher risk beta to perpetual open interest which typically returns a high interest rate - <u>to mint, they are depositing one of the accepted LST(s) as collateral in return for the stablecoin. </u>
-
-### How Redeeming Reflect issued stablecoins works:
-
-Redemption of Reflect issued stablecoins is relatively simple depending on the tokenised money expanse used - in the above example the user has minted USDR with LST(s) which in order to redeem they would simply burn the USDR via the Reflect Single-Sided Delta-Neutral program to receive the equivalent dollar value of LST(s) back.
-
-<Info>
-  Redemption of USDR and the subsequent withdrawals of LSTs is an instant atomic process. _There is no wait period to receive collateral from the protocol._
-</Info>
-
-### Proposed applications of Reflect issued stablecoins:
-
-Discover boundless unchartered fintech use-cases with truly programmable stablecoins, issue the stablecoins for your needs.
-
-<CardGroup cols="2">
-  <Card title="Hedge SOL (Solana)" icon="chart-simple" color="#00ff00">
-    Hedge against price risk by issuing delta-neutral stablecoins with productive SOL based capital (LSTs).
+<CardGroup cols={2}>
+  <Card title="Non-Custodial" icon="wallet">
+    - All collateral deposits are held in program accounts on the issuing network, with no access for any human party. _This means all of your funds are safe from human hands._
   </Card>
-  <Card title="Earn US Dollar Yields" icon="chart-mixed" color="#00ff00">
-    Reflect makes finding the yield for you easy, with many options and risk profiles to choose from. Mint with your favourite assets today.
+  <Card title="Permissionless" icon="unlock">
+    - All reflect issued stablecoins can be created and redeemed at will with no restrictions or required access controls. 
   </Card>
-  <Card title="Swap to USD Pegged Fiat" icon="globe" color="#00ff00">
-    Convert programmable US Dollars to any global USD pegged fiat currency and build localised fintech applications that scale for your users.
+  <Card title="Liquid" icon="water">
+    Use the liquidity of the entire collateral pool(s) for MEVless perfect rate swaps between tokens - _No more LP requirements or fees\!_
   </Card>
-  <Card title="Build next-gen fintech" icon="square-code" color="#00ff00">
-    Provide customisable and composable interest rates to your users based on risk profile, location and collateral types - no need to worry about risk or liquidity\!
+  <Card title="Programmable" icon="code">
+    Easily build next-generation stablecoin fintech using Reflect Money as the infrastructure-level intermediation service in just a few lines of code.
   </Card>
 </CardGroup>
 
-### Frequently Asked Questions (FAQs)
+### Decentralised Finance _Strategies:_
+
+<CardGroup cols={1}>
+  <Card title="Delta-Neutral Funding Rate Capture" icon="chart-simple" color="#00ff00" img="/images/docs-usdr-bar.png">
+    This strategy utilises a single-sided delta-neutral trade whereby productive capital is deposited by users or integrated programs and the equal dollar value amount short position is opened against the likewise asset. _i.e. if a user deposits 100\$ of SOL then 100\$ of SOL is shorted to create a zero delta position. _\
+    \
+    This removes the exposure to price risk, i.e. _price going up and down_ - and instead <u>increases exposure to the funding rate</u> - a cash settled payment which helps to balance the pricing of the markets, this payment can be determined to be the yield and or potential loss of this strategy.
+  </Card>
+  <Card title="Delta-Neutral Cross Margin Rate Capture" icon="chart-mixed" color="#00ff00" img="/images/docs-usdx-bar.png">
+    This strategy utilises a double-sided delta-neutral trade whereby collateral is converted to cash upon deposit and used to place a trade on both sides of the same market at an identical strike price. This removes exposure to price and funding rate and increases exposure to cross-margin capital demands. \
+    \
+    Cross-margin capital rates are determined by how many people are leverage trading across all markets on the perpetual exchange. _This demand to trade increases the demand for cash and thus increases the yield paid to those who deposit cash into the markets. _
+  </Card>
+</CardGroup>
+
+### _Frequently Asked Questions (FAQs)_
 
 <br />
 
 <AccordionGroup>
   <Accordion title="Are their any Mint/Redeem fees?" icon="circle-question">
-    **No**, There are zero fees when minting or redeeming Reflected Currencies.
+    **No**, there are zero fees when minting or redeeming Strategic Stablecoins. _Depending on the strategy chosen, there may be a temporary arb hold percentage._
   </Accordion>
   <Accordion title="How is the price of Reflected Currencies made to be stable?" icon="circle-question">
     **Reflect issued stablecoins have in-built stability mechanisms like rebalancing, debt-settlement and more within its onchain programs.** They can be called permissionlessly and automatically allowing for the maximum frequency of attestation.
   </Accordion>
   <Accordion title="Where does the Interest (yield) come from?" icon="circle-question">
-    **Interest rates or "yields" are generated via the productivity of the relevant specific monetary expansion** - for example, in the case of USDR our single-sided delta-neutral token the yield is generated by those paying funding rates to leverage long SOL-USD and the network inflation rate. In the case of other stablecoins this will vary.
+    **Interest rates or "yields" are generated via the productivity of the relevant DeFi Strategy** - for example, in the case of USDR our single-sided delta-neutral token the yield is generated by those paying funding rates to leverage long SOL-USD. _In the case of other stablecoins this will vary._
   </Accordion>
   <Accordion title="Is the collateral in the program(s) insured?" icon="circle-question">
-    **Yes.** Reflect Protocol operates both a **hard cash insurance fund** and multiple **Restaked Validated Services** that _offloads_ protocol risk to network stakers in exchange for a portion of revenue of each specific monetary expanse which is tokenised.
+    **Yes.** Reflect Protocol operates both a **hard cash insurance fund** and multiple **Restaked Validated Services** that _offloads_ protocol risk to network stakers in exchange for a portion of revenue of each specific defi strategy which is tokenised.
   </Accordion>
 </AccordionGroup>
