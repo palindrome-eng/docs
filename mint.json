@@ -19,12 +19,12 @@
   "topbarLinks": [
     {
       "name": "Follow on X",
-      "url": "https://x.com/reflectcx"
+      "url": "https://x.com/reflectmoney"
     }
   ],
   "topbarCtaButton": {
     "name": "Open Application",
-    "url": "https://reflect.cx"
+    "url": "https://reflect.money"
   },
   "tabs": [
     {
@@ -58,13 +58,6 @@
         "interestrates"
       ]
     },
-    {
-      "group": "Risk Management",
-      "pages": [
-        "risk-management/notice",
-        "risk-management/rms"
-      ]
-    },
       {
       "group": "Open Source Technologies",
       "pages": [
@@ -73,7 +66,7 @@
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/reflectcx",
+    "x": "https://x.com/reflectmoney",
     "github": "https://github.com/palindrome-eng"
   }
 }
