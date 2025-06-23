@@ -63,6 +63,12 @@
       "pages": [
         "api-reference/oss-intro"
       ]
+    },
+      {
+      "group": "Risk Management",
+      "pages": [
+        "risk-management/notice"
+      ]
     }
   ],
   "footerSocials": {

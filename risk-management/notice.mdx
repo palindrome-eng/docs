@@ -1,87 +1,76 @@
 ---
-title: "Single-Sided Delta-Neutral (USDR)"
-description: "Comprehensive breakdown of Risk Assumptions when depositing into Reflect(s) USDR Protocol"
+title: "Overview of Reflect(s) Risk."
+description: "This page provides overview level descriptions of various forms of risk and methods of dealing with this within the reflect.money ecosystem. "
 ---
 
+### key knowledge for understanding the reflect risk framework.
+
+The reflect risk framework is a four-step solution for ensuring S-Tier collateral assets issued on-chain can be deployed to the most secure and effective financial strategy while simulteanously being tokenised as stablecoins through intermediation. 
+
+<Steps>
+  <Step title="Asset Classification" icon="money-check" iconType="regular" titleSize="p">
+    _A systematic approach to defining the validity of an asset for use as collateral in reflect(s) issuing strategies. _
+
+    <Accordion title="more information on asset classification" icon="info">
+      
+    </Accordion>
+  </Step>
+  <Step title="Economic Security Audits (ESA)" icon="shield">
+    _Academic thesis driven simulation, backtesting and scrutiny of strategies implemented for the creation of new stablecoins._
+
+    <Accordion title="more information on economic security audits" icon="info">
+      
+    </Accordion>
+  </Step>
+  <Step title="Code Security Audits (CSA)" icon="gear">
+    _Rigorous exploitation, penetration and security-practice audits from reputable third-party research vendors._
+
+    <Accordion title="more information on code security audits" icon="info">
+      
+    </Accordion>
+  </Step>
+  <Step title="Global Insurance" icon="globe">
+    _A first-in-industry autonomous insurance protocol powered by consensus networks and restaking pools._
+
+    <Accordion title="more information on global insurance" icon="info">
+      
+    </Accordion>
+  </Step>
+</Steps>
+
+### types of risk facing digital financial products.
+
 <Info>
-  Be Aware | When utilizing financial primitives online, it is paramount to be comfortable with personal management of operational and economic security and understand all of the risks associated with such a product.
+  _Be Aware | When utilizing financial primitives online, it is paramount to be comfortable with personal management of operational and economic security and understand all of the risks associated with such a product. If you are unsure or uncertain in any way in how to approach reflect assets then please consult with your financial advisor._
 </Info>
 
-### Summary of Risk Assumptions
-
-You will find below a brief descriptor of the generalised risk that is associated with depositing into Reflect(s) Single-Sided Delta-Neutral Protocol. Continue scrolling to read the extensive full notice of Risk Assumptions.
-
 <CardGroup cols="2">
-  <Card title="Smart Contract Risk" icon="file-code" color="#00ff00">
-    the nature of smart contracts means they are often targets of cyber theft. This is an inherent risk when depositing funds on the blockchain.
+  <Card title="Smart Contract Risk" icon="file-code" color="#00ff00" img="/images/docs-bar.png">
+    the public & permissionless nature of smart contracts means they are often targets of cyber theft. This is an inherent risk when depositing funds on a public blockchain.
+
+    **_Prevention of Risk:_** Code & Economic Audits
+
+    **_Elimination of Risk:_** Global Insurance
   </Card>
-  <Card title="Exchange Risk" icon="shuffle" color="#00ff00">
-    Reflect utilizes on-chain DEX's to enable its delta-neutral primitive via deposit of collateral - however, this means adopting all risks associated with these external programs.
+  <Card title="Exchange Risk" icon="shuffle" color="#00ff00" img="images/docs-bar.png">
+    Reflect utilizes on-chain DEX's to enable some of its strategy backed products to be capitally efficient, this means onboarding all of the risks associated with these exchanges.
+
+    **_Prevention of Risk:_** Use of Insured DEXs
+
+    **_Elimination of Risk:_** Global Insurance
   </Card>
-  <Card title="Funding Rate Exposure" icon="percent" color="#00ff00">
-    USDR is exposed to the funding rate of its host DEX and, therefore, is exposed to the risks of negative funding days. Our research indicates that LST-based collateral more than rectifies any historical down days amongst exchanges on average.
+  <Card title="Interest Rate Risk" icon="percent" color="#00ff00" img="images/docs-bar.png">
+    Although reflect(s) insurance systems cover 100% all of principal deposits the rates provided by each strategy are not guaranteed and have their own inherent risks such as money market fund rate changes, funding rate swings etc. \
+    \
+    **_Prevention of Risk:_** Economic Strategy Audits
+
+    **_Elimination of Risk:_** Fallbacks in Strategies
   </Card>
-  <Card title="Collateral Risk" icon="sack-dollar" color="#00ff00">
-    Since Reflect supplies the DEX with Liquid-Stake Tokens exclusively as collateral, it is paramount that confidence in these collaterals remains as premier as possible.
+  <Card title="Collateral Risk" icon="sack-dollar" color="#00ff00" img="images/docs-bar.png">
+    Reflect utilises assets issued on-chain as collateral for its strategies and therefore inherents risks associated with centralised and decentralised issuers of tokens. \
+    \
+    **_Prevention of Risk:_** Asset Classification
+
+    **_Elimination of Risk:_** Limitation to S Tier
   </Card>
 </CardGroup>
-
-### Full Length Notice of Risk Assumptions
-
-All Risk Assumptions laid out in the Full-Length Notice are subject to change and review. Depositors acknowledge and accept all potential risks facing their collateral as outlined in the notice.
-
-<Accordion title="Full Notice of Risk Assumptions regarding Reflect Delta-Neutral Protocol." icon="file">
-  Notice of Risk Assumptions for Delta-Neutral Protocol
-
-  Introduction
-
-  The Reflect Delta-Neutral Protocol offers a pioneering approach to creating relatively stable synthetic currencies using liquid stake tokens (LSTs) as collateral. This innovative method enables native yield on the new synthetic currencies, providing potential user benefits. However, the utilization of this product involves several inherent risks. This comprehensive notice aims to detail the risk assumptions associated with the protocol, ensuring that potential depositors are fully informed and capable of making educated decisions.
-
-  1. Smart Contract Risk
-
-  1.1 Overview: The Reflect Delta-Neutral Protocol is fundamentally reliant on smart contracts to function. These self-executing contracts have their terms of agreement directly embedded within the code. While smart contracts offer automation, transparency, and security, they also bring along specific risks that users must consider.
-
-  1.2 Inherent Risk: Smart contracts are often the target of cyber-theft due to their immutable and transparent nature. Despite the implementation of rigorous security audits and continuous monitoring, vulnerabilities may still exist. These vulnerabilities can be exploited by malicious actors, leading to potential loss of funds. Users must acknowledge that when depositing funds on the blockchain, they are exposing their assets to the risk of smart contract exploits, including but not limited to reentrancy attacks, logic errors, and unpatched vulnerabilities.
-
-  1.3 Legal Position: The legal landscape surrounding smart contracts is still evolving. In many jurisdictions, there is limited regulatory clarity on the enforceability and legal standing of smart contracts. This lack of clarity could impact users' ability to seek legal recourse in the event of a dispute or loss resulting from smart contract vulnerabilities.
-
-  1. DEX Risk
-
-  2.1 Overview: The Reflect Delta-Neutral Protocol leverages "S tier" on-chain decentralized exchange (DEX) environments to facilitate its delta-neutral strategies through the deposit of collateral. These DEX platforms provide the necessary infrastructure for trading and liquidity provision but also introduce several risks.
-
-  2.2 Adopted Risks: By utilizing external DEX platforms, the Reflect Protocol inherently adopts all associated risks of these platforms. Such risks include but are not limited to:
-
-  Platform Security Vulnerabilities: DEX platforms are susceptible to hacks and security breaches, which could result in the loss of user funds or disruptions in trading activities.
-
-  Operational Risks: Operational failures, including system downtimes, software bugs, or governance issues, can affect the performance and reliability of the DEX platforms.
-
-  Liquidity Risks: The liquidity available on DEX platforms can fluctuate, potentially leading to slippage, delayed transactions, or inability to execute trades at desired prices.
-
-  2.3 Legal Position: The regulatory environment for DEX platforms varies significantly across different jurisdictions. Users should be aware that the decentralized nature of these platforms may complicate legal recourse in the event of disputes or losses. Furthermore, changes in regulatory policies could impact the operation and legality of these platforms, affecting users' access and use of the Reflect Protocol.
-
-  1. Funding Risk
-
-  3.1 Overview: The Reflect Protocol's performance is influenced by the funding rate of its host DEX. The funding rate is a mechanism designed to balance long and short positions in perpetual futures contracts, ensuring that the contract price converges with the underlying asset price.
-
-  3.2 Risk Exposure: Exposure to the funding rate means that the protocol can experience negative funding days, where the cost of holding positions exceeds the yield generated by the collateral. While our research indicates that using LST-based collateral generally mitigates the impact of historic down days across exchanges on average, there remains a financial risk associated with negative funding rates. This can result in reduced yields or potential losses for depositors.
-
-  3.3 Legal Position: The implications of funding rates and their impact on yields are subject to the terms and conditions of the host DEX platform. Users must thoroughly understand these terms, as well as any regulatory requirements that may affect funding mechanisms. Legal recourse in the event of unfavourable funding conditions may be limited by the terms of service and jurisdictional regulations of the host DEX.
-
-  1. Collateral Risk
-
-  4.1 Overview: The Reflect Protocol exclusively uses liquid stake tokens (LSTs) as collateral to support the creation and stability of synthetic currencies.
-
-  4.2 Confidence in Collateral: Maintaining high confidence in LSTs is crucial for the protocol's stability. Any deterioration in the perceived or actual value, security, or liquidity of LSTs can pose significant risks, including:
-
-  Value Depreciation: A decline in the value of LSTs could undermine the stability of the synthetic currencies, potentially leading to devaluation or insolvency.
-
-  Security Concerns: Any security breaches or vulnerabilities within the LST ecosystem could compromise the collateral's integrity and expose users to losses.
-
-  Liquidity Issues: Insufficient liquidity of LSTs could affect the ability to liquidate positions, manage risks, or fulfil collateral requirements, leading to potential solvency issues.
-
-  4.3 Legal Position: The legal status and regulatory oversight of LSTs can vary by jurisdiction. Users should be aware of the regulatory frameworks governing LSTs, as changes in legislation or regulatory actions could impact their value, security, and liquidity. Legal protections for collateralized assets in decentralized finance (DeFi) environments are still developing, and users may face challenges in seeking recourse in the event of collateral-related issues.
-
-  Conclusion
-
-  While the Reflect Delta-Neutral Protocol offers innovative financial solutions, it is essential for potential depositors to understand the associated risks thoroughly. These include smart contract risk, DEX risk, funding risk, and collateral risk. We strongly encourage all potential users to conduct their own due diligence, understand the legal implications, and carefully consider these risk factors before engaging with the protocol.
-</Accordion>
