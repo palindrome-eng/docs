@@ -59,9 +59,9 @@
       ]
     },
       {
-      "group": "Open Source Technologies",
+      "group": "Developer Kits",
       "pages": [
-        "api-reference/oss-intro"
+        "api-reference/TypescriptSDK"
       ]
     },
       {
