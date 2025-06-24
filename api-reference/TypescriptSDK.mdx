@@ -1,0 +1,47 @@
+---
+title: "ReflectTS SDK"
+description: "Develop next-generation fintech applications with the full power of yield-bearing stablecoins. "
+---
+
+### Integrating with Reflect w/Typescript
+
+<Tip>
+  Ensure you have access to a reliable transaction submission partner for RPC services when interacting with the ReflectTS SDK.
+</Tip>
+
+Before you can interact with Reflect stablecoins through your development environment you must install the SDK via your preferred package managers, _find out how below:_
+
+### Minting USDJ w/TS
+
+```typescript Example.ts  lines
+	const connection = new Connection("https://api.mainnet-beta.solana.com");
+    const jlpStrategy = new JlpStrategy(connection);
+
+    const user = Keypair.generate();
+    const AMOUNT = new BN(1000 * Math.pow(10, 6));
+
+    const ix = await jlpStrategy.mint(
+        user.publicKey,
+        AMOUNT
+    );
+
+    const { blockhash } = await connection.getLatestBlockhash();
+
+    const {
+        value: lookupTable
+    } = await connection.getAddressLookupTable(
+        jlpStrategy.lookupTable
+    );
+
+    const message = new TransactionMessage({
+        instructions: ix,
+        payerKey: user.publicKey,
+        recentBlockhash: blockhash
+    }).compileToV0Message([lookupTable]);
+
+    const transaction = new VersionedTransaction(message);
+
+    // Transaction signature and landing logic, adjust for your needs.
+    transaction.sign([user]);
+    await connection.sendRawTransaction(transaction.serialize());
+```
