@@ -69,4 +69,30 @@ USDC\+ is designed to provide a familiar, safe and low risk-tolerance yield-bear
   </Card>
 </CardGroup>
 
-### Risk Modelling Cross-Margin Strategies
+### Risk Modeling Cross-Margin Strategies
+
+_Integrators should understand the composite risk profile when deploying USDC\+ within their applications, as the strategy inherits risks from all underlying lending venues._
+
+**<u>Primary Risk Considerations</u>**
+
+Since USDC\+ distributes capital across multiple borrow/lend markets, the risk profile combines individual protocol exposures with cross-margin strategy considerations:
+
+<CardGroup cols={2}>
+  <Card title="Protocol Security Risk" img="/images/docs-bar.png">
+    Each lending venue carries distinct smart contract risks, audit histories, and security track records that compound across the strategy.
+  </Card>
+  <Card title="Liquidity & LTV Variance" img="/images/docs-bar.png">
+    Different protocols maintain varying Loan-to-Value ratios and withdrawal capacities that may affect liquidity during market stress.
+  </Card>
+</CardGroup>
+
+**Key Risk Factors for Integration:**
+
+- **Multi-venue exposure**: Smart contract risks compound across all active lending protocols
+- **Liquidity constraints**: Withdrawal capacity dependent on utilization rates across venues
+- **Yield volatility**: Interest rates fluctuate based on market conditions and cross-venue competition
+- **Venue concentration**: Capital allocation methodology may create dependencies on specific protocols
+
+<Info>
+  Integrators should treat USDC\+ as a higher-risk asset compared to native USDC and implement appropriate user disclosures regarding multi-venue exposure and inherited protocol risks.
+</Info>
