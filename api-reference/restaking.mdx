@@ -1,0 +1,196 @@
+---
+title: "Restaking SDK"
+description: "Restake idle assets in RLP to provide security for Reflect Protocol and earn increased yields. Monitor and contribute to Reflect risk management."
+---
+
+### Installation
+To install Reflect Restaking SDK within your development environment, run the following command:
+
+<CodeGroup>
+
+```bash yarn
+yarn add @reflectmoney/restaking
+```
+
+```bash npm
+npm install @reflectmoney/restaking
+```
+
+```bash pnpm
+pnpm install @reflectmoney/restaking
+```
+
+</CodeGroup>
+
+### Core
+
+This SDK allows for permissionless restaking of assets in the RLP, a pool providing liquidity for Reflect Protocol's risk management, rebalancing and internal swaps. 
+
+The SDK exports one simple module called `RLP`. This class exposes methods for restaking (and unstaking) assets from the RLP, as well as monitor the pool's health and manage individual positions.
+
+### Initialization
+
+To initialize the Restaking SDK, simply use the constructor:
+```typescript initialize.ts
+import { RLP } from "@reflectmoney/restaking"
+import { Connection } from "@solana/web3.js"
+
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const rlp = new RLP(connection);
+```
+
+### Monitoring
+
+You can use various methods with `get` prefix to monitor the RLP state. To read the state of all lockups, use `getLockups`:
+```typescript getLockups.ts
+const lockups = rlp.getLockups();
+```
+
+Use `getLockupsByAsset` to view all lockups, filtered by specific asset mint.
+```typescript getLockupsByAsset.ts
+const USDC = new PublicKey("<USDC Mint>");
+const lockups = rlp.getLockupsByAsset(USDC);
+```
+
+`getAssets` allows you to fetch all assets whitelisted in the RLP and their stats.
+```typescript getAssets.ts
+const USDC = new PublicKey("<USDC Mint>");
+const lockups = rlp.getAssets(USDC);
+```
+
+`getDeposits` and `getDepositsByUser` allows you to fetch individual deposits, and filter them by specific user public key.
+```typescript getDeposits.ts
+const me = Keypair.generate().publicKey;
+const myDeposits = rlp.getDepositsByUser(me);
+```
+
+Every withdrawal must go through a cooldown period. Use `getCooldowns`, `getCooldownsByDeposit`, `getCooldownsByUser` to fetch them with specific filters.
+```typescript getCooldowns.ts
+const me = Keypair.generate().publicKey;
+
+// All cooldowns
+const cooldowns = rlp.getCooldowns();
+
+// Cooldowns of specific deposit, filter by ID.
+const depositId = new BN(0);
+const depositCooldown = rlp.getCooldownsByDeposit(depositId);
+
+// Fetch by user address
+const myCooldowns = rlp.getCooldownsByDeposit(me);
+```
+
+### PDAs
+
+The `Restaking` class exposes multiple methods starting with `derive` prefix, allowing to derive different PDAs used within Reflect restaking program.
+```typescript derivePdas.ts
+// Derive settings
+const settings = rlp.deriveSettings();
+
+// Derive admin
+const me = Keypair.generate().publicKey;
+const admin = rlp.deriveAdmin(me);
+
+// Derive asset
+const USDC = new PublicKey("<USDC address>");
+const asset = rlp.deriveAsset(USDC);
+
+// Derive lockup
+const lockupId = new BN(0);
+const lockup = rlp.deriveLockup(lockupId);
+
+// ...
+```
+
+### Restaking
+
+The SDK exposes two methods for managing assets within the RLP - ` restake()` and `withdraw()`. To use them, first initialize the RLP using the script above. Then, use the following snippet:
+```typescript restake.ts lines icon="square-js"
+import { RLP } from "@reflectmoney/restaking"
+import { Connection } from "@solana/web3.js"
+
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const rlp = new RLP(connection);
+
+const signer = Keypair.generate();
+const amount = new BN(1000 * Math.pow(10, 6));
+const lockupId = new BN(0);
+
+const ix = rlp.restake(signer.publicKey, amount, lockupId);
+```
+
+<CodeGroup>
+
+```typescript CreateUSDJ
+	const connection = new Connection("https://api.mainnet-beta.solana.com");
+    const jlpStrategy = new JlpStrategy(connection);
+
+    const user = Keypair.generate();
+    const AMOUNT = new BN(1000 * Math.pow(10, 6));
+
+    const ix = await jlpStrategy.mint(
+        user.publicKey,
+        AMOUNT
+    );
+
+    const { blockhash } = await connection.getLatestBlockhash();
+
+    const {
+        value: lookupTable
+    } = await connection.getAddressLookupTable(
+        jlpStrategy.lookupTable
+    );
+
+    const message = new TransactionMessage({
+        instructions: ix,
+        payerKey: user.publicKey,
+        recentBlockhash: blockhash
+    }).compileToV0Message([lookupTable]);
+
+    const transaction = new VersionedTransaction(message);
+
+    // Transaction signature and landing logic, adjust for your needs.
+    transaction.sign([user]);
+    await connection.sendRawTransaction(transaction.serialize());
+```
+
+
+```typescript RedeemUSDJ
+	const connection = new Connection("https://api.mainnet-beta.solana.com");
+    const jlpStrategy = new JlpStrategy(connection);
+
+    const user = Keypair.generate();
+    const AMOUNT = new BN(1000 * Math.pow(10, 6));
+
+    const ix = await jlpStrategy.redeem(
+        user.publicKey,
+        AMOUNT
+    );
+
+    const { blockhash } = await connection.getLatestBlockhash();
+
+    const {
+        value: lookupTable
+    } = await connection.getAddressLookupTable(
+        jlpStrategy.lookupTable
+    );
+
+    const message = new TransactionMessage({
+        instructions: ix,
+        payerKey: user.publicKey,
+        recentBlockhash: blockhash
+    }).compileToV0Message([lookupTable]);
+
+    const transaction = new VersionedTransaction(message);
+
+    // Transaction signature and landing logic, adjust for your needs.
+    transaction.sign([user]);
+    await connection.sendRawTransaction(transaction.serialize());
+```
+
+</CodeGroup>
+
+### Start earning, claim appreciation w/Typescript
+
+<Info>
+  These features are not yet available until [Reflect.Money](http://Reflect.Money) is out of public-beta. Thank you for your patience. We will announce these features through  [X.com/ReflectMoney](https://x.com/reflectmoney)
+</Info>

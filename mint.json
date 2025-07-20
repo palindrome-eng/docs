@@ -30,7 +30,13 @@
     {
       "name": "Integrating Reflect",
       "url": "api-reference"
-    }
+    },
+    {
+      "name": "Reflect API",
+      "url": "reflect-api",
+      "tab": "API Reference",
+      "openapi": "/api-reference/openapi.json"
+  }
   ],
   "anchors": [
     {
@@ -61,7 +67,8 @@
       {
       "group": "Developer Kits",
       "pages": [
-        "api-reference/TypescriptSDK"
+        "api-reference/stablecoin",
+        "api-reference/restaking"
       ]
     },
       {

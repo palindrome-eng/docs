@@ -1,0 +1,309 @@
+---
+title: "Stablecoin SDK"
+description: "Develop next-generation fintech applications with the full power of yield-bearing stablecoins."
+---
+
+### Installation
+To install Reflect Stablecoin SDK within your development environment, run the following command:
+
+<CodeGroup>
+
+```bash yarn
+yarn add @reflectmoney/stable.ts
+```
+
+```bash npm
+npm install @reflectmoney/stable.ts
+```
+
+```bash pnpm
+pnpm install @reflectmoney/stable.ts
+```
+
+</CodeGroup>
+
+### Core
+The SDK exposes three core modules: 
+- `Reflect`, a general-purpose class for protocol setup and interactions with base functionalities.
+- `ReflectKeeper`, a class exposing keeper-level functions necessary for maintenance and risk management. The majority of these functionalities require authentication at the protocol level.
+- `PdaClient`, a class exposing functions for derivation of PDAs storing state within the Reflect Protocol.
+
+### Stablecoins
+
+In most cases, usage of the three classes above will not be necessary for simple integrations and usage of Reflect stablecoins. For every stablecoin, the SDK exposes a separate class equipped with functions for minting, redemption, and administrative features. All these classes follow the schema of the `Stablecoin` superclass.
+
+```typescript Stablecoin.ts
+abstract class Stablecoin {
+    // Internal index used for derivation.
+    public index: number;
+    // Name of the strategy.
+    public name: string;
+    // RPC connection class.
+    public connection: Connection;
+    // Public key of the controller account.
+    public controller: PublicKey;
+    // List of collateral assets allowed for deposits.
+    public collaterals: Collateral[];
+    // Mint of the stablecoin.
+    public stablecoinMint: PublicKey;
+    // Pyth client used for pricing data.
+    public pythClient: HermesClient;
+    // Drift client, only required for Drift-powered strategies.
+    public driftClient?: DriftClient;
+
+    // Generate user's token accounts if minting for the first time.
+    abstract initializeTokenAccounts(owner: PublicKey, mints: PublicKey[], signer: PublicKey): Promise<TransactionInstruction[]>;
+
+    // Mint a stablecoin to user's wallet.
+    abstract mint(signer: PublicKey, amount: BN | number, minimumReceived: BN | number, ...args: any[]): Promise<TransactionInstruction[]>;
+
+    // Redeem a stablecoin into underlying collateral.
+    abstract redeem(signer: PublicKey, amount: BN | number, minimumReceived: BN | number, ...args: any[]): Promise<TransactionInstruction[]>;
+
+    // Rebalance the strategy internal balances. Currently permissioned, requiring authentication at the protocol level.
+    abstract rebalance(signer: PublicKey): Promise<TransactionInstruction[]>;
+}
+```
+
+Currently, the SDK exposes `Stablecoin` classes for all three Reflect stablecoins:
+- `UsdcPlusStablecoin`, for integration with USDC+ (Index 0) - Live
+- `UsdjStablecoin`, for integration with JLP Hedged (Index 1) - Coming soon
+- `LstStablecoin`, for integration with LST Delta-Neutral (Index 2) - Live
+
+### Creating and redeeming Reflect stablecoins with TypeScript
+
+Follow the scripts below to mint and redeem Reflect stablecoins. All `Stablecoin` subclasses expose methods following the same schema, so the code below works interchangeably with minor changes.
+
+<CodeGroup>
+
+```typescript mintUsdcPlus.ts lines icon="square-js"
+import { UsdcPlusStablecoin } from "@reflectmoney/stable.ts";
+import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import BN from "bn.js";
+
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const stablecoin = new UsdcPlusStablecoin(connection);
+
+// Load controller data for the most up-to-date stablecoin setup.
+await stablecoin.load(connection);
+
+// Use an actual user's public key, read from wallet adapter or local environment.
+const user = Keypair.generate();
+
+// $1000 USD
+const AMOUNT = new BN(1000 * Math.pow(10, 6));
+const MIN_RECEIVED = new BN(999 * Math.pow(10, 6)); // 0.1% slippage protection
+
+const ix = await stablecoin.mint(
+    user.publicKey,
+    AMOUNT,
+    MIN_RECEIVED
+);
+
+const { blockhash } = await connection.getLatestBlockhash();
+
+const {
+    value: lookupTable
+} = await connection.getAddressLookupTable(
+    stablecoin.lookupTable
+);
+
+const message = new TransactionMessage({
+    instructions: ix,
+    payerKey: user.publicKey,
+    recentBlockhash: blockhash
+}).compileToV0Message([lookupTable]);
+
+const transaction = new VersionedTransaction(message);
+
+// Transaction signature and confirmation logic, adjust for your needs.
+transaction.sign([user]);
+await connection.sendRawTransaction(transaction.serialize());
+```
+
+```typescript redeemUsdcPlus.ts lines icon="square-js"
+import { UsdcPlusStablecoin } from "@reflectmoney/stable.ts";
+import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import BN from "bn.js";
+
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const stablecoin = new UsdcPlusStablecoin(connection);
+
+// Load controller data for the most up-to-date stablecoin setup.
+await stablecoin.load(connection);
+
+// Use an actual user's public key, read from wallet adapter or local environment.
+const user = Keypair.generate();
+
+// $999 USD worth of USDC+
+const AMOUNT = new BN(999 * Math.pow(10, 6));
+const MIN_RECEIVED = new BN(1000 * Math.pow(10, 6)); // USDC+ is yield bearing, so you'll receive more USDC over time
+
+const ix = await stablecoin.redeem(
+    user.publicKey,
+    AMOUNT,
+    MIN_RECEIVED
+);
+
+const { blockhash } = await connection.getLatestBlockhash();
+
+const {
+    value: lookupTable
+} = await connection.getAddressLookupTable(
+    stablecoin.lookupTable
+);
+
+const message = new TransactionMessage({
+    instructions: ix,
+    payerKey: user.publicKey,
+    recentBlockhash: blockhash
+}).compileToV0Message([lookupTable]);
+
+const transaction = new VersionedTransaction(message);
+
+// Transaction signature and confirmation logic, adjust for your needs.
+transaction.sign([user]);
+await connection.sendRawTransaction(transaction.serialize());
+```
+
+```typescript mintLst.ts lines icon="square-js"
+import { LstStablecoin } from "@reflectmoney/stable.ts";
+import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import BN from "bn.js";
+
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const stablecoin = new LstStablecoin(connection);
+
+// Load controller data for the most up-to-date stablecoin setup.
+await stablecoin.load(connection);
+
+// Use an actual user's public key, read from wallet adapter or local environment.
+const user = Keypair.generate();
+
+// $1000 USD worth of LST
+const AMOUNT = new BN(1000 * Math.pow(10, 6));
+const MIN_RECEIVED = new BN(999 * Math.pow(10, 6)); // 0.1% slippage protection
+
+const ix = await stablecoin.mint(
+    user.publicKey,
+    AMOUNT,
+    MIN_RECEIVED
+);
+
+const { blockhash } = await connection.getLatestBlockhash();
+
+const {
+    value: lookupTable
+} = await connection.getAddressLookupTable(
+    stablecoin.lookupTable
+);
+
+const message = new TransactionMessage({
+    instructions: ix,
+    payerKey: user.publicKey,
+    recentBlockhash: blockhash
+}).compileToV0Message([lookupTable]);
+
+const transaction = new VersionedTransaction(message);
+
+// Transaction signature and confirmation logic, adjust for your needs.
+transaction.sign([user]);
+await connection.sendRawTransaction(transaction.serialize());
+```
+
+</CodeGroup>
+
+## Yield distribution of the stablecoin
+
+Depending on the selected stablecoin, yield is distributed in one of two ways:
+- Natively, via the base stablecoin appreciating in value
+- Through a "tokenized bond", a yield-bearing receipt token obtained after depositing the base stablecoin in Reflect Tokenized Bonds program
+
+Currently, the USDC+ stablecoin is natively appreciating in value and does not require manual wrapping. All other stablecoins distribute their yield through the yield-bearing receipts.
+
+Yield-bearing receipts are based on the following flow:
+1. Deposit the collateral into a yield-bearing strategy
+2. Mint the base stablecoin
+3. Wrap the base stablecoin into a yield-bearing receipt
+4. Continuously mint more of the base stablecoin against the yield generated from the strategy to keep the price of the base stablecoin at $1 USD
+5. Deposit stablecoins minted in the following steps to the yield distribution program
+
+As a result, the yield-bearing receipts appreciate in value over time, as the underlying pool of the base stablecoin grows, while the amount of receipt tokens stays the same.
+
+### Reflect Tokenized Bond
+
+The Reflect SDK exposes a `ReflectTokenizedBond` class. It is an interface for interacting with the tokenized bond program used for distribution of the yield generated by underlying collateral of the Reflect stablecoins. On a daily basis, Reflect protocol keepers monitor the yield generated by Reflect and move it into the yield distribution program.
+
+#### Usage
+
+To interact with the tokenized bond program, use the following snippets:
+
+<CodeGroup>
+
+```typescript deposit.ts lines icon="square-js"
+import { ReflectTokenizedBond, UsdjStablecoin } from "@reflectmoney/stable.ts";
+import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import BN from "bn.js";
+
+const user = Keypair.generate();
+
+const stablecoin = new UsdjStablecoin(connection);
+const reflectTokenizedBond = new ReflectTokenizedBond(connection);
+
+const AMOUNT = new BN(1000 * 1_000_000);
+
+const instruction = reflectTokenizedBond.deposit(
+    user.publicKey,
+    stablecoin.index,
+    AMOUNT
+);
+
+const { blockhash } = await connection.getLatestBlockhash();
+
+const message = new TransactionMessage({
+    instructions: [instruction],
+    payerKey: user.publicKey,
+    recentBlockhash: blockhash
+}).compileToV0Message();
+
+const transaction = new VersionedTransaction(message);
+
+// Transaction signature and confirmation logic, adjust for your needs.
+transaction.sign([user]);
+await connection.sendRawTransaction(transaction.serialize());
+```
+
+```typescript withdraw.ts lines icon="square-js"
+import { ReflectTokenizedBond, UsdjStablecoin } from "@reflectmoney/stable.ts";
+import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import BN from "bn.js";
+
+const user = Keypair.generate();
+
+const stablecoin = new UsdjStablecoin(connection);
+const reflectTokenizedBond = new ReflectTokenizedBond(connection);
+
+const AMOUNT = new BN(1000 * 1_000_000);
+
+const instruction = reflectTokenizedBond.withdraw(
+    user.publicKey,
+    stablecoin.index,
+    AMOUNT
+);
+
+const { blockhash } = await connection.getLatestBlockhash();
+
+const message = new TransactionMessage({
+    instructions: [instruction],
+    payerKey: user.publicKey,
+    recentBlockhash: blockhash
+}).compileToV0Message();
+
+const transaction = new VersionedTransaction(message);
+
+// Transaction signature and confirmation logic, adjust for your needs.
+transaction.sign([user]);
+await connection.sendRawTransaction(transaction.serialize());
+```
+
+</CodeGroup>

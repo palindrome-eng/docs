@@ -1,61 +1,53 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.3",
   "info": {
-    "title": "Reflect API",
-    "description": "API for interacting with the Reflect Protocol",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "title": "Reflect Protocol API",
+    "description": "API for accessing APY (Annual Percentage Yield) data, funding rates, and access management for the Reflect Protocol",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Reflect Protocol",
+      "url": "https://reflect.money"
+    }
   },
   "servers": [
     {
-      "url": "http://api.reflect.cx"
-    }
-  ],
-  "security": [
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    },
     {
-      "bearerAuth": []
+      "url": "https://api.reflect.money",
+      "description": "Production server"
     }
   ],
   "paths": {
-    "/protocol/metrics": {
+    "/health": {
       "get": {
-        "description": "Fetches Reflect Protocol metrics such as total value locked, USDR supply, and insurance fund size.",
+        "summary": "Health check",
+        "description": "Check if the API is running and healthy",
+        "tags": ["Health"],
         "responses": {
           "200": {
-            "description": "Protocol metrics response",
+            "description": "API is healthy",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "totalValueLocked": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Total value locked in the Reflect Protocol"
+                    "success": {
+                      "type": "boolean",
+                      "example": true
                     },
-                    "usdrSupply": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Current supply of USDR"
+                    "message": {
+                      "type": "string",
+                      "example": "API is running"
                     },
-                    "insuranceFundSize": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Size of the insurance fund"
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-01T00:00:00.000Z"
                     }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  },
+                  "required": ["success", "message", "timestamp"]
                 }
               }
             }
@@ -63,54 +55,82 @@
         }
       }
     },
-    "/usdr/mint": {
+    "/access": {
       "post": {
-        "description": "Builds transaction for depositing Liquid Stake Token into Reflect in exchange for USDR.",
+        "summary": "Redeem access code",
+        "description": "Redeem an access code for a Solana address",
+        "tags": ["Access"],
         "requestBody": {
-          "description": "Data required for minting USDR",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "amount": {
-                    "type": "number",
-                    "format": "float",
-                    "description": "Amount of Liquid Stake Token to deposit"
+                  "code": {
+                    "type": "string",
+                    "description": "8-character access code",
+                    "minLength": 8,
+                    "maxLength": 8,
+                    "example": "ABC12345"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
-                }
+                },
+                "required": ["code", "address"]
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "Transaction built successfully",
+            "description": "Access code redeemed successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "transactionId": {
-                      "type": "string",
-                      "description": "The ID of the transaction"
+                    "success": {
+                      "type": "boolean",
+                      "example": true
                     },
-                    "status": {
+                    "message": {
                       "type": "string",
-                      "description": "Status of the transaction"
+                      "example": "Access code redeemed successfully"
                     }
-                  }
+                  },
+                  "required": ["success", "message"]
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Invalid request data",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Invalid request data: code must be exactly 8 characters"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Failed to redeem access code: Database connection error"
                 }
               }
             }
@@ -118,42 +138,385 @@
         }
       }
     },
-    "/usdr/redeem": {
-      "post": {
-        "description": "Builds transaction for redeeming USDR in exchange for Liquid Stake Tokens.",
-        "requestBody": {
-          "description": "Data required for redeeming USDR",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "format": "float",
-                    "description": "Amount of USDR to redeem"
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        },
+    "/access/check/{address}": {
+      "get": {
+        "summary": "Check access status",
+        "description": "Check if a Solana address has access to the protocol",
+        "tags": ["Access"],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "Solana wallet address to check",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Transaction built successfully",
+            "description": "Access status retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "transactionId": {
-                      "type": "string",
-                      "description": "The ID of the transaction"
+                    "success": {
+                      "type": "boolean",
+                      "example": true
                     },
-                    "status": {
+                    "hasAccess": {
+                      "type": "boolean",
+                      "description": "Whether the address has access",
+                      "example": true
+                    }
+                  },
+                  "required": ["success", "hasAccess"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid address format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Invalid address format: not a valid Solana public key"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Failed to check access status: Database connection error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/funding/rates": {
+      "get": {
+        "summary": "Get funding rates",
+        "description": "Retrieve funding rates data with optional period and market filters",
+        "tags": ["Funding"],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Time period for funding rates data",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["day", "week", "month", "year"],
+              "default": "year"
+            }
+          },
+          {
+            "name": "market",
+            "in": "query",
+            "description": "Specific market to filter by",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "SOL-PERP"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Funding rates data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FundingRateData"
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of data points returned",
+                      "example": 365
+                    },
+                    "period": {
                       "type": "string",
-                      "description": "Status of the transaction"
+                      "enum": ["day", "week", "month", "year"],
+                      "example": "year"
+                    },
+                    "market": {
+                      "type": "string",
+                      "description": "Market filter applied (if any)",
+                      "example": "SOL-PERP"
+                    }
+                  },
+                  "required": ["success", "data", "count", "period"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/funding/markets": {
+      "get": {
+        "summary": "Get available markets",
+        "description": "Retrieve list of available markets for funding rates",
+        "tags": ["Funding"],
+        "responses": {
+          "200": {
+            "description": "Available markets retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["SOL-PERP", "BTC-PERP", "ETH-PERP"]
+                    },
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of available markets",
+                      "example": 3
+                    }
+                  },
+                  "required": ["success", "markets", "count"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/apy": {
+      "get": {
+        "summary": "Get APY for all strategies",
+        "description": "Retrieve APY data for all three investment strategies. Can return either realtime or historical data.",
+        "tags": ["APY"],
+        "parameters": [
+          {
+            "name": "historical",
+            "in": "query",
+            "description": "Set to 'true' for historical data (365 days annualized), omit for realtime data",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["true", "false"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved APY data for all strategies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllStrategiesResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "strategies": {
+                      "0": {
+                        "strategy": 0,
+                        "type": "realtime",
+                        "apy_bps": 500,
+                        "timestamp": "2024-01-01T00:00:00.000Z"
+                      },
+                      "1": {
+                        "strategy": 1,
+                        "type": "realtime",
+                        "apy_bps": 1200,
+                        "jlp_yield_bps": 1000,
+                        "funding_rate_adjustment_bps": 200,
+                        "timestamp": "2024-01-01T00:00:00.000Z",
+                        "funding_rates": {
+                          "SOL-PERP": 150,
+                          "BTC-PERP": 100,
+                          "ETH-PERP": 80
+                        }
+                      },
+                      "2": {
+                        "strategy": 2,
+                        "type": "realtime",
+                        "apy_bps": 600,
+                        "lst_yield_bps": 800,
+                        "sol_funding_rate_bps": 200,
+                        "timestamp": "2024-01-01T00:00:00.000Z"
+                      }
+                    },
+                    "summary": {
+                      "usdc_apy_bps": 500,
+                      "jlp_apy_bps": 1200,
+                      "lst_apy_bps": 600
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No APY data found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apy/{strategy}": {
+      "get": {
+        "summary": "Get APY for specific strategy",
+        "description": "Retrieve APY data for a specific investment strategy. Can return either realtime or historical data.",
+        "tags": ["APY"],
+        "parameters": [
+          {
+            "name": "strategy",
+            "in": "path",
+            "description": "Strategy number (0: USDC Rates, 1: JLP Yields with Funding Rate Hedging, 2: Delta-Neutral LST Strategy)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0, 1, 2]
+            }
+          },
+          {
+            "name": "historical",
+            "in": "query",
+            "description": "Set to 'true' for historical data (365 days annualized), omit for realtime data",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["true", "false"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved APY data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/UsdcApyResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JlpApyResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LstApyResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "usdc_realtime": {
+                    "summary": "USDC Strategy - Realtime",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "strategy": 0,
+                        "type": "realtime",
+                        "apy_bps": 500,
+                        "timestamp": "2024-01-01T00:00:00.000Z"
+                      }
+                    }
+                  },
+                  "jlp_realtime": {
+                    "summary": "JLP Strategy - Realtime",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "strategy": 1,
+                        "type": "realtime",
+                        "apy_bps": 1200,
+                        "jlp_yield_bps": 1000,
+                        "funding_rate_adjustment_bps": 200,
+                        "timestamp": "2024-01-01T00:00:00.000Z",
+                        "funding_rates": {
+                          "SOL-PERP": 150,
+                          "BTC-PERP": 100,
+                          "ETH-PERP": 80
+                        }
+                      }
+                    }
+                  },
+                  "lst_realtime": {
+                    "summary": "LST Strategy - Realtime",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "strategy": 2,
+                        "type": "realtime",
+                        "apy_bps": 600,
+                        "lst_yield_bps": 800,
+                        "sol_funding_rate_bps": 200,
+                        "timestamp": "2024-01-01T00:00:00.000Z"
+                      }
                     }
                   }
                 }
@@ -161,11 +524,471 @@
             }
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Invalid strategy parameter",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Invalid strategy. Must be 0, 1, or 2"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No APY data found for the specified strategy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "No USDC rate data found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apy/{strategy}/historical": {
+      "get": {
+        "summary": "Get historical APY for specific strategy",
+        "description": "Retrieve historical APY data for a specific investment strategy (365 days annualized).",
+        "tags": ["APY"],
+        "parameters": [
+          {
+            "name": "strategy",
+            "in": "path",
+            "description": "Strategy number (0: USDC Rates, 1: JLP Yields with Funding Rate Hedging, 2: Delta-Neutral LST Strategy)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0, 1, 2]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved historical APY data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/UsdcHistoricalResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JlpHistoricalResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/LstHistoricalResponse"
+                    }
+                  ]
+                },
+                "examples": {
+                  "usdc_historical": {
+                    "summary": "USDC Strategy - Historical",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "strategy": 0,
+                        "type": "historical",
+                        "apy_bps": 450,
+                        "data_points": 365,
+                        "start_date": "2023-01-01T00:00:00.000Z",
+                        "end_date": "2024-01-01T00:00:00.000Z"
+                      }
+                    }
+                  },
+                  "jlp_historical": {
+                    "summary": "JLP Strategy - Historical",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "strategy": 1,
+                        "type": "historical",
+                        "apy_bps": 1150,
+                        "jlp_yield_bps": 950,
+                        "funding_rate_adjustment_bps": 200,
+                        "data_points": 365,
+                        "start_date": "2023-01-01T00:00:00.000Z",
+                        "end_date": "2024-01-01T00:00:00.000Z",
+                        "funding_rates": {
+                          "SOL-PERP": 140,
+                          "BTC-PERP": 95,
+                          "ETH-PERP": 75
+                        }
+                      }
+                    }
+                  },
+                  "lst_historical": {
+                    "summary": "LST Strategy - Historical",
+                    "value": {
+                      "success": true,
+                      "data": {
+                        "strategy": 2,
+                        "type": "historical",
+                        "apy_bps": 550,
+                        "lst_yield_bps": 750,
+                        "sol_funding_rate_bps": 200,
+                        "data_points": 365,
+                        "start_date": "2023-01-01T00:00:00.000Z",
+                        "end_date": "2024-01-01T00:00:00.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid strategy parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Invalid strategy. Must be 0, 1, or 2"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No historical APY data found for the specified strategy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "No historical APY data found for strategy 1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Failed to retrieve historical APY data: Service unavailable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/mint": {
+      "post": {
+        "summary": "Generate mint transaction",
+        "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK",
+        "tags": ["Stablecoin"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+, 2: LST)",
+                    "enum": [0, 2],
+                    "example": 2
+                  },
+                  "depositAmount": {
+                    "type": "number",
+                    "description": "Amount to mint in smallest unit",
+                    "example": 1000000
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "User's Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "minimumReceived": {
+                    "type": "number",
+                    "description": "Minimum amount to receive (slippage protection)",
+                    "example": 999000
+                  },
+                  "collateralMint": {
+                    "type": "string",
+                    "description": "Collateral mint address (required only when stablecoinIndex is 2 for LST stablecoin)",
+                    "example": "RSoLp7kddnNwvvvaz4b1isQy8vcqdSwXjgm1wXaMhD8"
+                  }
+                },
+                "required": ["stablecoinIndex", "depositAmount", "signer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mint transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Invalid request data: depositAmount must be positive"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Failed to generate mint transaction: Collateral mint address is required for LST stablecoin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/burn": {
+      "post": {
+        "summary": "Generate burn transaction",
+        "description": "Generate a burn transaction for stablecoins using the Reflect Money SDK",
+        "tags": ["Stablecoin"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+, 2: LST)",
+                    "enum": [0, 2],
+                    "example": 0
+                  },
+                  "depositAmount": {
+                    "type": "number",
+                    "description": "Amount to burn in smallest unit",
+                    "example": 1000000
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "User's Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "minimumReceived": {
+                    "type": "number",
+                    "description": "Minimum amount to receive (slippage protection)",
+                    "example": 999000
+                  },
+                  "collateralMint": {
+                    "type": "string",
+                    "description": "Collateral mint address (required only when stablecoinIndex is 2 for LST stablecoin)",
+                    "example": "RSoLp7kddnNwvvvaz4b1isQy8vcqdSwXjgm1wXaMhD8"
+                  }
+                },
+                "required": ["stablecoinIndex", "depositAmount", "signer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Burn transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Invalid request data: depositAmount must be positive"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Failed to generate burn transaction: Collateral mint address is required for LST stablecoin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/types": {
+      "get": {
+        "summary": "Get available stablecoin types",
+        "description": "Retrieve list of available stablecoin types",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Available stablecoin types retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer",
+                            "description": "Stablecoin index",
+                            "example": 0
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Stablecoin name",
+                            "example": "USDC+"
+                          }
+                        },
+                        "required": ["index", "name"]
+                      },
+                      "example": [
+                        { "index": 0, "name": "USDC+" },
+                        { "index": 2, "name": "LST" }
+                      ]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/limits": {
+      "get": {
+        "summary": "Get supply cap information for all stablecoins",
+        "description": "Retrieve supply caps, current supply, and remaining capacity for all stablecoins",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Supply cap information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "0": {
+                          "$ref": "#/components/schemas/SupplyCapInfo"
+                        },
+                        "2": {
+                          "$ref": "#/components/schemas/SupplyCapInfo"
+                        }
+                      },
+                      "example": {
+                        "0": {
+                          "supplyCap": 1000000000,
+                          "currentSupply": 500000000,
+                          "remainingCapacity": 500000000,
+                          "utilizationPercentage": 50.0
+                        },
+                        "2": {
+                          "supplyCap": 500000000,
+                          "currentSupply": 300000000,
+                          "remainingCapacity": 200000000,
+                          "utilizationPercentage": 60.0
+                        }
+                      }
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Failed to retrieve supply cap information: RPC connection error"
                 }
               }
             }
@@ -176,28 +999,415 @@
   },
   "components": {
     "schemas": {
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "BaseResponse": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was successful"
+          }
+        },
+        "required": ["success"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was successful",
+            "example": false
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "description": "Error message describing what went wrong",
+            "example": "Invalid request data: depositAmount must be positive"
           }
-        }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+        },
+        "required": ["success", "message"]
+      },
+      "FundingRateData": {
+        "type": "object",
+        "properties": {
+          "market": {
+            "type": "string",
+            "description": "Market identifier",
+            "example": "SOL-PERP"
+          },
+          "funding_rate_bps": {
+            "type": "integer",
+            "description": "Funding rate in basis points",
+            "example": 150
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the funding rate",
+            "example": "2024-01-01T00:00:00.000Z"
+          }
+        },
+        "required": ["market", "funding_rate_bps", "timestamp"]
+      },
+      "UsdcApyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsdcApyData"
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "UsdcApyData": {
+        "type": "object",
+        "properties": {
+          "strategy": {
+            "type": "integer",
+            "enum": [0],
+            "description": "Strategy number (0: USDC Rates)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["realtime", "historical"],
+            "description": "Type of data returned"
+          },
+          "apy_bps": {
+            "type": "integer",
+            "description": "APY in basis points (100 bps = 1%)"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the data point (for realtime data)"
+          },
+          "data_points": {
+            "type": "integer",
+            "description": "Number of data points used in calculation (for historical data)"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of the historical period (for historical data)"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End date of the historical period (for historical data)"
+          }
+        },
+        "required": ["strategy", "type", "apy_bps"]
+      },
+      "JlpApyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/JlpApyData"
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "JlpApyData": {
+        "type": "object",
+        "properties": {
+          "strategy": {
+            "type": "integer",
+            "enum": [1],
+            "description": "Strategy number (1: JLP Yields with Funding Rate Hedging)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["realtime", "historical"],
+            "description": "Type of data returned"
+          },
+          "apy_bps": {
+            "type": "integer",
+            "description": "APY in basis points (100 bps = 1%)"
+          },
+          "jlp_yield_bps": {
+            "type": "integer",
+            "description": "Base JLP yield in basis points"
+          },
+          "funding_rate_adjustment_bps": {
+            "type": "integer",
+            "description": "Funding rate adjustment in basis points"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the data point (for realtime data)"
+          },
+          "funding_rates": {
+            "type": "object",
+            "description": "Funding rates by market",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          "data_points": {
+            "type": "integer",
+            "description": "Number of data points used in calculation (for historical data)"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of the historical period (for historical data)"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End date of the historical period (for historical data)"
+          }
+        },
+        "required": ["strategy", "type", "apy_bps", "jlp_yield_bps", "funding_rate_adjustment_bps"]
+      },
+      "LstApyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/LstApyData"
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "LstApyData": {
+        "type": "object",
+        "properties": {
+          "strategy": {
+            "type": "integer",
+            "enum": [2],
+            "description": "Strategy number (2: Delta-Neutral LST Strategy)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["realtime", "historical"],
+            "description": "Type of data returned"
+          },
+          "apy_bps": {
+            "type": "integer",
+            "description": "APY in basis points (100 bps = 1%)"
+          },
+          "lst_yield_bps": {
+            "type": "integer",
+            "description": "LST yield in basis points"
+          },
+          "sol_funding_rate_bps": {
+            "type": "integer",
+            "description": "SOL funding rate in basis points"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the data point (for realtime data)"
+          },
+          "data_points": {
+            "type": "integer",
+            "description": "Number of data points used in calculation (for historical data)"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start date of the historical period (for historical data)"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End date of the historical period (for historical data)"
+          }
+        },
+        "required": ["strategy", "type", "apy_bps", "lst_yield_bps", "sol_funding_rate_bps"]
+      },
+      "UsdcHistoricalResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsdcApyData"
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "JlpHistoricalResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/JlpApyData"
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "LstHistoricalResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/LstApyData"
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "AllStrategiesResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "strategies": {
+                    "type": "object",
+                    "properties": {
+                      "0": {
+                        "$ref": "#/components/schemas/UsdcApyData"
+                      },
+                      "1": {
+                        "$ref": "#/components/schemas/JlpApyData"
+                      },
+                      "2": {
+                        "$ref": "#/components/schemas/LstApyData"
+                      }
+                    },
+                    "required": ["0", "1", "2"]
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "usdc_apy_bps": {
+                        "type": "integer",
+                        "description": "USDC strategy APY in basis points"
+                      },
+                      "jlp_apy_bps": {
+                        "type": "integer",
+                        "description": "JLP strategy APY in basis points"
+                      },
+                      "lst_apy_bps": {
+                        "type": "integer",
+                        "description": "LST strategy APY in basis points"
+                      }
+                    },
+                    "required": ["usdc_apy_bps", "jlp_apy_bps", "lst_apy_bps"]
+                  }
+                },
+                "required": ["strategies", "summary"]
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "TransactionResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "transaction": {
+                    "type": "string",
+                    "description": "Base64 encoded transaction",
+                    "example": "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAED..."
+                  }
+                },
+                "required": ["transaction"]
+              }
+            },
+            "required": ["data"]
+          }
+        ]
+      },
+      "SupplyCapInfo": {
+        "type": "object",
+        "properties": {
+          "supplyCap": {
+            "type": "integer",
+            "description": "Total supply cap in smallest units",
+            "example": 1000000000
+          },
+          "currentSupply": {
+            "type": "integer",
+            "description": "Current supply in smallest units",
+            "example": 500000000
+          },
+          "remainingCapacity": {
+            "type": "integer",
+            "description": "Remaining capacity before hitting cap",
+            "example": 500000000
+          },
+          "utilizationPercentage": {
+            "type": "number",
+            "format": "float",
+            "description": "Percentage of cap currently utilized",
+            "example": 50.0
+          }
+        },
+        "required": ["supplyCap", "currentSupply", "remainingCapacity", "utilizationPercentage"]
       }
     }
-  }
-}
+  },
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Health check endpoints"
+    },
+    {
+      "name": "Access",
+      "description": "Access management endpoints for protocol access control"
+    },
+    {
+      "name": "Funding",
+      "description": "Funding rates endpoints for perp markets"
+    },
+    {
+      "name": "APY",
+      "description": "APY (Annual Percentage Yield) endpoints for different investment strategies"
+    },
+    {
+      "name": "Stablecoin",
+      "description": "Stablecoin mint and burn transaction generation endpoints"
+    }
+  ]
+} 
