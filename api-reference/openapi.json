@@ -995,6 +995,189 @@
           }
         }
       }
+    },
+    "/stablecoin/exchange-rates/historical": {
+      "get": {
+        "summary": "Get historical exchange rates for a stablecoin strategy",
+        "description": "Retrieve historical base and receipt exchange rates for a specific stablecoin strategy (0: USDC+, 2: LST) and period (day, week, month, year).",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "strategy",
+            "in": "query",
+            "description": "Stablecoin strategy index (0: USDC+, 2: LST)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0, 2]
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Time period for historical data",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["day", "week", "month", "year"],
+              "default": "year"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical exchange rates retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "stablecoin": { "type": "integer", "enum": [0, 2] },
+                          "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
+                          "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
+                          "timestamp": { "type": "string", "format": "date-time" }
+                        },
+                        "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
+                      }
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/exchange-rates/realtime": {
+      "get": {
+        "summary": "Get real-time exchange rate for a stablecoin strategy",
+        "description": "Retrieve the latest base and receipt exchange rates for a specific stablecoin strategy (0: USDC+, 2: LST).",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "strategy",
+            "in": "query",
+            "description": "Stablecoin strategy index (0: USDC+, 2: LST)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0, 2]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Latest exchange rate retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "stablecoin": { "type": "integer", "enum": [0, 2] },
+                        "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
+                        "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
+                        "timestamp": { "type": "string", "format": "date-time" }
+                      },
+                      "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/exchange-rates": {
+      "get": {
+        "summary": "Get latest exchange rates for all stablecoins",
+        "description": "Retrieve the latest base and receipt exchange rates for all supported stablecoins (USDC+, LST).",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Latest exchange rates for all stablecoins retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "stablecoin": { "type": "integer", "enum": [0, 2] },
+                          "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
+                          "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
+                          "timestamp": { "type": "string", "format": "date-time" }
+                        },
+                        "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
+                      }
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
