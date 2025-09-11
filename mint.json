@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Reflect Protocol",
+  "name": "Reflect Money",
   "backgroundImage": "/images/docs-bg.png",
   "logo": {
     "dark": "/logo/logo-light.svg",
@@ -8,11 +8,11 @@
   },
   "favicon": "/logo/logo-dark.svg",
   "colors": {
-    "primary": "#00ff00",
-    "light": "#00ff00",
-    "dark": "#00ff00",
+    "primary": "#09D175",
+    "light": "#09D175",
+    "dark": "#09D175",
     "anchors": {
-      "from": "#00ff00",
+      "from": "#09D175",
       "to": "#FF48F9"
     }
   },
