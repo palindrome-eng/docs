@@ -3,7 +3,10 @@ title: "Stablecoin SDK"
 description: "Develop next-generation fintech applications with the full power of yield-bearing stablecoins."
 ---
 
+![Docs Stablets Image Pn](https://github.com/palindrome-eng/docs/blob/main/images/docs-stablets-image.png?raw=true)
+
 ### Installation
+
 To install Reflect Stablecoin SDK within your development environment, run the following command:
 
 <CodeGroup>
@@ -12,9 +15,11 @@ To install Reflect Stablecoin SDK within your development environment, run the f
 yarn add @reflectmoney/stable.ts
 ```
 
+
 ```bash npm
 npm install @reflectmoney/stable.ts
 ```
+
 
 ```bash pnpm
 pnpm install @reflectmoney/stable.ts
@@ -23,7 +28,9 @@ pnpm install @reflectmoney/stable.ts
 </CodeGroup>
 
 ### Core
-The SDK exposes three core modules: 
+
+The SDK exposes three core modules:
+
 - `Reflect`, a general-purpose class for protocol setup and interactions with base functionalities.
 - `ReflectKeeper`, a class exposing keeper-level functions necessary for maintenance and risk management. The majority of these functionalities require authentication at the protocol level.
 - `PdaClient`, a class exposing functions for derivation of PDAs storing state within the Reflect Protocol.
@@ -66,7 +73,8 @@ abstract class Stablecoin {
 ```
 
 Currently, the SDK exposes `Stablecoin` classes for all three Reflect stablecoins:
-- `UsdcPlusStablecoin`, for integration with USDC+ (Index 0) - Live
+
+- `UsdcPlusStablecoin`, for integration with USDC\+ (Index 0) - Live
 - `UsdjStablecoin`, for integration with JLP Hedged (Index 1) - Coming soon
 - `LstStablecoin`, for integration with LST Delta-Neutral (Index 2) - Live
 
@@ -76,7 +84,7 @@ Follow the scripts below to mint and redeem Reflect stablecoins. All `Stablecoin
 
 <CodeGroup>
 
-```typescript mintUsdcPlus.ts lines icon="square-js"
+```typescript mintUsdcPlus.ts icon=square-js lines
 import { UsdcPlusStablecoin } from "@reflectmoney/stable.ts";
 import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import BN from "bn.js";
@@ -121,7 +129,8 @@ transaction.sign([user]);
 await connection.sendRawTransaction(transaction.serialize());
 ```
 
-```typescript redeemUsdcPlus.ts lines icon="square-js"
+
+```typescript redeemUsdcPlus.ts icon=square-js lines
 import { UsdcPlusStablecoin } from "@reflectmoney/stable.ts";
 import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import BN from "bn.js";
@@ -166,7 +175,8 @@ transaction.sign([user]);
 await connection.sendRawTransaction(transaction.serialize());
 ```
 
-```typescript mintLst.ts lines icon="square-js"
+
+```typescript mintLst.ts icon=square-js lines
 import { LstStablecoin } from "@reflectmoney/stable.ts";
 import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import BN from "bn.js";
@@ -216,16 +226,18 @@ await connection.sendRawTransaction(transaction.serialize());
 ## Yield distribution of the stablecoin
 
 Depending on the selected stablecoin, yield is distributed in one of two ways:
+
 - Natively, via the base stablecoin appreciating in value
 - Through a "tokenized bond", a yield-bearing receipt token obtained after depositing the base stablecoin in Reflect Tokenized Bonds program
 
-Currently, the USDC+ stablecoin is natively appreciating in value and does not require manual wrapping. All other stablecoins distribute their yield through the yield-bearing receipts.
+Currently, the USDC\+ stablecoin is natively appreciating in value and does not require manual wrapping. All other stablecoins distribute their yield through the yield-bearing receipts.
 
 Yield-bearing receipts are based on the following flow:
+
 1. Deposit the collateral into a yield-bearing strategy
 2. Mint the base stablecoin
 3. Wrap the base stablecoin into a yield-bearing receipt
-4. Continuously mint more of the base stablecoin against the yield generated from the strategy to keep the price of the base stablecoin at $1 USD
+4. Continuously mint more of the base stablecoin against the yield generated from the strategy to keep the price of the base stablecoin at \$1 USD
 5. Deposit stablecoins minted in the following steps to the yield distribution program
 
 As a result, the yield-bearing receipts appreciate in value over time, as the underlying pool of the base stablecoin grows, while the amount of receipt tokens stays the same.
@@ -240,7 +252,7 @@ To interact with the tokenized bond program, use the following snippets:
 
 <CodeGroup>
 
-```typescript deposit.ts lines icon="square-js"
+```typescript deposit.ts icon=square-js lines
 import { ReflectTokenizedBond, UsdjStablecoin } from "@reflectmoney/stable.ts";
 import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import BN from "bn.js";
@@ -273,7 +285,8 @@ transaction.sign([user]);
 await connection.sendRawTransaction(transaction.serialize());
 ```
 
-```typescript withdraw.ts lines icon="square-js"
+
+```typescript withdraw.ts icon=square-js lines
 import { ReflectTokenizedBond, UsdjStablecoin } from "@reflectmoney/stable.ts";
 import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import BN from "bn.js";
