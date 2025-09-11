@@ -74,7 +74,8 @@
       {
       "group": "Risk Management",
       "pages": [
-        "risk-management/notice"
+        "risk-management/notice",
+        "risk-management/codeaudits"
       ]
     },
     {
