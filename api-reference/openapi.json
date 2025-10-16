@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Reflect Money API",
-    "description": "API for accessing Reflect Protocol data.\n\n## Rate Limiting\n- **Unauthenticated users**: 30 requests per minute\n- **Authenticated integrators**: 600 requests per minute\n\n## Authentication\nTo access higher rate limits, include your API key in the `X-API-Key` header. API keys can be obtained through the integration management endpoints.",
-    "version": "1.1.0",
+    "description": "Interact with the Reflect Money infrastructure via API. Retrieve stablecoin and protocol stats. Generate transactions for minting and redeeming stablecoins. Manage integrations and issue whitelabel stablecoins.\n\n## Rate Limiting\n- **Unauthenticated users**: 100 requests per minute\n- **Authenticated integrators**: 500 requests per minute\n\n## Authentication\nTo access higher rate limits, include your API key in the `X-API-Key` header. API keys can be obtained through the integration management endpoints.",
+    "version": "1.0.0",
     "contact": {
       "name": "Reflect Money",
       "url": "https://reflect.money"
@@ -11,8 +11,8 @@
   },
   "servers": [
     {
-      "url": "https://api.reflect.money",
-      "description": "Production server"
+      "url": "https://prod.api.reflect.money",
+      "description": "Production environment"
     }
   ],
   "security": [
@@ -24,11 +24,11 @@
     "/health": {
       "get": {
         "summary": "Health check",
-        "description": "Check if the API is running and healthy. Rate limit: 30 requests per minute (unauthenticated), 600 requests per minute (authenticated).",
+        "description": "Check if the is operational and healthy.",
         "tags": ["Health"],
         "responses": {
           "200": {
-            "description": "API is healthy",
+            "description": "API is operational",
             "content": {
               "application/json": {
                 "schema": {
@@ -52,41 +52,237 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "API is down",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error."
+                    }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
           }
         }
       }
     },
-    "/funding/rates": {
+    "/stablecoin/apy": {
       "get": {
-        "summary": "Get funding rates",
-        "description": "Retrieve funding rates data with optional period and market filters. Rate limit: 30 requests per minute (unauthenticated), 600 requests per minute (authenticated).",
-        "tags": ["Funding"],
-        "parameters": [
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Time period for funding rates data",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["day", "week", "month", "year"],
-              "default": "year"
+        "summary": "Get APY for all stablecoins",
+        "description": "Retrieve realtime APY data for all available stablecoins.",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved APY data for all stablecoins",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllStablecoinsResponse"
+                }
+              }
             }
           },
+          "404": {
+            "description": "No APY data found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/{index}/apy": {
+      "get": {
+        "summary": "Get APY for specific stablecoin",
+        "description": "Retrieve APY data for a specific stablecoin (realtime data).",
+        "tags": ["Stablecoin"],
+        "parameters": [
           {
-            "name": "market",
-            "in": "query",
-            "description": "Specific market to filter by",
-            "required": false,
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0: USDC+)",
+            "required": true,
             "schema": {
-              "type": "string"
-            },
-            "example": "SOL-PERP"
+              "type": "integer",
+              "enum": [0]
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Funding rates data retrieved successfully",
+            "description": "Successfully retrieved APY data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsdcApyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid stablecoin index parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No APY data found for the specified stablecoin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/{index}/apy/historical": {
+      "get": {
+        "summary": "Get historical APY data for specific stablecoin",
+        "description": "Retrieve historical APY data for a specific stablecoin over a specified number of days.",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0: USDC+)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0]
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days for historical data (default: 365)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 365
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved historical APY data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsdcApyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid stablecoin index parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/quote/{type}": {
+      "post": {
+        "summary": "Get quote for mint or redeem",
+        "description": "Get a quote for minting or redeeming stablecoins",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Quote type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["mint", "redeem"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)",
+                    "enum": [0],
+                    "example": 0
+                  },
+                  "depositAmount": {
+                    "type": "number",
+                    "description": "Amount to quote",
+                    "example": 1000000
+                  }
+                },
+                "required": ["stablecoinIndex", "depositAmount"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -97,303 +293,32 @@
                       "example": true
                     },
                     "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/FundingRateData"
-                      }
-                    },
-                    "count": {
-                      "type": "integer",
-                      "description": "Number of data points returned",
-                      "example": 365
-                    },
-                    "period": {
-                      "type": "string",
-                      "enum": ["day", "week", "month", "year"],
-                      "example": "year"
-                    },
-                    "market": {
-                      "type": "string",
-                      "description": "Market filter applied (if any)",
-                      "example": "SOL-PERP"
+                      "type": "number",
+                      "description": "Quote amount",
+                      "example": 999000
                     }
                   },
-                  "required": ["success", "data", "count", "period"]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/funding/markets": {
-      "get": {
-        "summary": "Get available markets",
-        "description": "Retrieve list of available markets for funding rates",
-        "tags": ["Funding"],
-        "responses": {
-          "200": {
-            "description": "Available markets retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "markets": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "example": ["SOL-PERP", "BTC-PERP", "ETH-PERP"]
-                    },
-                    "count": {
-                      "type": "integer",
-                      "description": "Number of available markets",
-                      "example": 3
-                    }
-                  },
-                  "required": ["success", "markets", "count"]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/apy": {
-      "get": {
-        "summary": "Get APY for all stablecoins",
-        "description": "Retrieve APY data for all three stablecoins. Can return either realtime or historical data. Rate limit: 30 requests per minute (unauthenticated), 600 requests per minute (authenticated).",
-        "tags": ["APY"],
-        "parameters": [
-          {
-            "name": "historical",
-            "in": "query",
-            "description": "Set to 'true' for historical data (365 days annualized), omit for realtime data",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["true", "false"]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved APY data for all stablecoins",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AllStablecoinsResponse"
-                },
-                "example": {
-                  "success": true,
-                  "data": {
-                    "stablecoins": {
-                      "0": {
-                        "stablecoin": 0,
-                        "type": "realtime",
-                        "apy_bps": 500,
-                        "timestamp": "2024-01-01T00:00:00.000Z"
-                      },
-                      "1": {
-                        "stablecoin": 1,
-                        "type": "realtime",
-                        "apy_bps": 1200,
-                        "jlp_yield_bps": 1000,
-                        "funding_rate_adjustment_bps": 200,
-                        "timestamp": "2024-01-01T00:00:00.000Z",
-                        "funding_rates": {
-                          "SOL-PERP": 150,
-                          "BTC-PERP": 100,
-                          "ETH-PERP": 80
-                        }
-                      },
-                      "2": {
-                        "stablecoin": 2,
-                        "type": "realtime",
-                        "apy_bps": 600,
-                        "lst_yield_bps": 800,
-                        "sol_funding_rate_bps": 200,
-                        "timestamp": "2024-01-01T00:00:00.000Z"
-                      }
-                    },
-                    "summary": {
-                      "usdc_apy_bps": 500,
-                      "jlp_apy_bps": 1200,
-                      "lst_apy_bps": 600
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No APY data found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/apy/{stablecoin}": {
-      "get": {
-        "summary": "Get APY for specific stablecoin",
-        "description": "Retrieve APY data for a specific stablecoin. Can return either realtime or historical data.",
-        "tags": ["APY"],
-        "parameters": [
-          {
-            "name": "stablecoin",
-            "in": "path",
-            "description": "Stablecoin number (0: USDC Rates, 1: JLP Yields with Funding Rate Hedging, 2: Delta-Neutral LST Stablecoin)",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "enum": [0, 1, 2]
-            }
-          },
-          {
-            "name": "historical",
-            "in": "query",
-            "description": "Set to 'true' for historical data (365 days annualized), omit for realtime data",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["true", "false"]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved APY data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/UsdcApyResponse"
-                    },
-                    {
-                      "$ref": "#/components/schemas/JlpApyResponse"
-                    },
-                    {
-                      "$ref": "#/components/schemas/LstApyResponse"
-                    }
-                  ]
-                },
-                "examples": {
-                  "usdc_realtime": {
-                    "summary": "USDC Stablecoin - Realtime",
-                    "value": {
-                      "success": true,
-                      "data": {
-                        "stablecoin": 0,
-                        "type": "realtime",
-                        "apy_bps": 500,
-                        "timestamp": "2024-01-01T00:00:00.000Z"
-                      }
-                    }
-                  },
-                  "jlp_realtime": {
-                    "summary": "JLP Stablecoin - Realtime",
-                    "value": {
-                      "success": true,
-                      "data": {
-                        "stablecoin": 1,
-                        "type": "realtime",
-                        "apy_bps": 1200,
-                        "jlp_yield_bps": 1000,
-                        "funding_rate_adjustment_bps": 200,
-                        "timestamp": "2024-01-01T00:00:00.000Z",
-                        "funding_rates": {
-                          "SOL-PERP": 150,
-                          "BTC-PERP": 100,
-                          "ETH-PERP": 80
-                        }
-                      }
-                    }
-                  },
-                  "lst_realtime": {
-                    "summary": "LST Stablecoin - Realtime",
-                    "value": {
-                      "success": true,
-                      "data": {
-                        "stablecoin": 2,
-                        "type": "realtime",
-                        "apy_bps": 600,
-                        "lst_yield_bps": 800,
-                        "sol_funding_rate_bps": 200,
-                        "timestamp": "2024-01-01T00:00:00.000Z"
-                      }
-                    }
-                  }
+                  "required": ["success", "data"]
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid stablecoin parameter",
+            "description": "Invalid request data",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Invalid stablecoin. Must be 0, 1, or 2"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
           },
           "404": {
-            "description": "No APY data found for the specified stablecoin",
+            "description": "Stablecoin with the specified index not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "No USDC rate data found"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -403,143 +328,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/apy/{stablecoin}/historical": {
-      "get": {
-        "summary": "Get historical APY for specific stablecoin",
-        "description": "Retrieve historical APY data for a specific stablecoin (365 days annualized).",
-        "tags": ["APY"],
-        "parameters": [
-          {
-            "name": "stablecoin",
-            "in": "path",
-            "description": "Stablecoin number (0: USDC Rates, 1: JLP Yields with Funding Rate Hedging, 2: Delta-Neutral LST Stablecoin)",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "enum": [0, 1, 2]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved historical APY data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/UsdcHistoricalResponse"
-                    },
-                    {
-                      "$ref": "#/components/schemas/JlpHistoricalResponse"
-                    },
-                    {
-                      "$ref": "#/components/schemas/LstHistoricalResponse"
-                    }
-                  ]
-                },
-                "examples": {
-                  "usdc_historical": {
-                    "summary": "USDC Stablecoin - Historical",
-                    "value": {
-                      "success": true,
-                      "data": {
-                        "stablecoin": 0,
-                        "type": "historical",
-                        "apy_bps": 450,
-                        "data_points": 365,
-                        "start_date": "2023-01-01T00:00:00.000Z",
-                        "end_date": "2024-01-01T00:00:00.000Z"
-                      }
-                    }
-                  },
-                  "jlp_historical": {
-                    "summary": "JLP Stablecoin - Historical",
-                    "value": {
-                      "success": true,
-                      "data": {
-                        "stablecoin": 1,
-                        "type": "historical",
-                        "apy_bps": 1150,
-                        "jlp_yield_bps": 950,
-                        "funding_rate_adjustment_bps": 200,
-                        "data_points": 365,
-                        "start_date": "2023-01-01T00:00:00.000Z",
-                        "end_date": "2024-01-01T00:00:00.000Z",
-                        "funding_rates": {
-                          "SOL-PERP": 140,
-                          "BTC-PERP": 95,
-                          "ETH-PERP": 75
-                        }
-                      }
-                    }
-                  },
-                  "lst_historical": {
-                    "summary": "LST Stablecoin - Historical",
-                    "value": {
-                      "success": true,
-                      "data": {
-                        "stablecoin": 2,
-                        "type": "historical",
-                        "apy_bps": 550,
-                        "lst_yield_bps": 750,
-                        "sol_funding_rate_bps": 200,
-                        "data_points": 365,
-                        "start_date": "2023-01-01T00:00:00.000Z",
-                        "end_date": "2024-01-01T00:00:00.000Z"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid stablecoin parameter",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                                  "example": {
-                    "success": false,
-                    "message": "Invalid stablecoin. Must be 0, 1, or 2"
-                  }
-              }
-            }
-          },
-          "404": {
-            "description": "No historical APY data found for the specified stablecoin",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "No historical APY data found for stablecoin 1"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Failed to retrieve historical APY data: Service unavailable"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -550,7 +339,7 @@
     "/stablecoin/mint": {
       "post": {
         "summary": "Generate mint transaction",
-        "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK. Rate limit: 30 requests per minute (unauthenticated), 600 requests per minute (authenticated).",
+        "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK.",
         "tags": ["Stablecoin"],
         "requestBody": {
           "required": true,
@@ -561,9 +350,9 @@
                 "properties": {
                   "stablecoinIndex": {
                     "type": "integer",
-                    "description": "Stablecoin index (0: USDC+, 2: LST)",
-                    "enum": [0, 2],
-                    "example": 2
+                    "description": "Stablecoin index (0: USDC+)",
+                    "enum": [0],
+                    "example": 0
                   },
                   "depositAmount": {
                     "type": "number",
@@ -582,8 +371,8 @@
                   },
                   "collateralMint": {
                     "type": "string",
-                    "description": "Collateral mint address (required only when stablecoinIndex is 2 for LST stablecoin)",
-                    "example": "RSoLp7kddnNwvvvaz4b1isQy8vcqdSwXjgm1wXaMhD8"
+                    "description": "Optional collateral mint address",
+                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
                   }
                 },
                 "required": ["stablecoinIndex", "depositAmount", "signer"]
@@ -607,11 +396,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Invalid request data: depositAmount must be positive"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stablecoin with the specified index not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -621,11 +416,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Failed to generate mint transaction: Collateral mint address is required for LST stablecoin"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -647,8 +438,8 @@
                 "properties": {
                   "stablecoinIndex": {
                     "type": "integer",
-                    "description": "Stablecoin index (0: USDC+, 2: LST)",
-                    "enum": [0, 2],
+                    "description": "Stablecoin index (0: USDC+)",
+                    "enum": [0],
                     "example": 0
                   },
                   "depositAmount": {
@@ -668,8 +459,8 @@
                   },
                   "collateralMint": {
                     "type": "string",
-                    "description": "Collateral mint address (required only when stablecoinIndex is 2 for LST stablecoin)",
-                    "example": "RSoLp7kddnNwvvvaz4b1isQy8vcqdSwXjgm1wXaMhD8"
+                    "description": "Optional collateral mint address",
+                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
                   }
                 },
                 "required": ["stablecoinIndex", "depositAmount", "signer"]
@@ -693,11 +484,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Invalid request data: depositAmount must be positive"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stablecoin with the specified index not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -707,11 +504,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Failed to generate burn transaction: Collateral mint address is required for LST stablecoin"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -755,8 +548,7 @@
                         "required": ["index", "name"]
                       },
                       "example": [
-                        { "index": 0, "name": "USDC+" },
-                        { "index": 2, "name": "LST" }
+                        { "index": 0, "name": "USDC+" }
                       ]
                     }
                   },
@@ -770,7 +562,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -796,29 +588,34 @@
                       "example": true
                     },
                     "data": {
-                      "type": "object",
-                      "properties": {
-                        "0": {
-                          "$ref": "#/components/schemas/SupplyCapInfo"
-                        },
-                        "2": {
-                          "$ref": "#/components/schemas/SupplyCapInfo"
-                        }
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "index": {
+                                "type": "integer",
+                                "description": "Stablecoin index",
+                                "example": 0
+                              }
+                            },
+                            "required": ["index"]
+                          },
+                          {
+                            "$ref": "#/components/schemas/SupplyCapInfo"
+                          }
+                        ]
                       },
-                      "example": {
-                        "0": {
+                      "example": [
+                        {
+                          "index": 0,
                           "supplyCap": 1000000000,
                           "currentSupply": 500000000,
                           "remainingCapacity": 500000000,
                           "utilizationPercentage": 50.0
-                        },
-                        "2": {
-                          "supplyCap": 500000000,
-                          "currentSupply": 300000000,
-                          "remainingCapacity": 200000000,
-                          "utilizationPercentage": 60.0
                         }
-                      }
+                      ]
                     }
                   },
                   "required": ["success", "data"]
@@ -831,12 +628,53 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "message": "Failed to retrieve supply cap information: RPC connection error"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/exchange-rates": {
+      "get": {
+        "summary": "Get latest exchange rates for all stablecoins",
+        "description": "Retrieve the latest base and receipt exchange rates for all supported stablecoins (USDC+).",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Latest exchange rates for all stablecoins retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "stablecoin": { "type": "integer", "enum": [0] },
+                          "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
+                          "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
+                          "timestamp": { "type": "string", "format": "date-time" }
+                        },
+                        "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
+                      }
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" }
               }
             }
           }
@@ -846,28 +684,28 @@
     "/stablecoin/exchange-rates/historical": {
       "get": {
         "summary": "Get historical exchange rates for a stablecoin",
-        "description": "Retrieve historical base and receipt exchange rates for a specific stablecoin (0: USDC+, 2: LST) and period (day, week, month, year).",
+        "description": "Retrieve historical base and receipt exchange rates for a specific stablecoin (0: USDC+) and a number of days.",
         "tags": ["Stablecoin"],
         "parameters": [
           {
             "name": "stablecoin",
             "in": "query",
-            "description": "Stablecoin index (0: USDC+, 2: LST)",
+            "description": "Stablecoin index (0: USDC+)",
             "required": true,
             "schema": {
               "type": "integer",
-              "enum": [0, 2]
+              "enum": [0]
             }
           },
           {
-            "name": "period",
+            "name": "days",
             "in": "query",
-            "description": "Time period for historical data",
+            "description": "Number of days for historical data (default: 365)",
             "required": false,
             "schema": {
-              "type": "string",
-              "enum": ["day", "week", "month", "year"],
-              "default": "year"
+              "type": "integer",
+              "minimum": 1,
+              "default": 365
             }
           }
         ],
@@ -886,7 +724,7 @@
                         "type": "object",
                         "properties": {
                           "id": { "type": "integer" },
-                          "stablecoin": { "type": "integer", "enum": [0, 2] },
+                          "stablecoin": { "type": "integer", "enum": [0] },
                           "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
                           "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
                           "timestamp": { "type": "string", "format": "date-time" }
@@ -904,7 +742,15 @@
             "description": "Invalid request parameters",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Stablecoin with the specified index not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" }
               }
             }
           },
@@ -912,50 +758,37 @@
             "description": "Internal server error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" }
               }
             }
           }
         }
       }
     },
-    "/stablecoin/exchange-rates/realtime": {
+    "/stablecoin/{index}/exchange-rate": {
       "get": {
-        "summary": "Get real-time exchange rate for a stablecoin",
-        "description": "Retrieve the latest base and receipt exchange rates for a specific stablecoin (0: USDC+, 2: LST).",
+        "summary": "Get realtime exchange rate for a stablecoin",
+        "description": "Retrieve the current exchange rate for the specified stablecoin.",
         "tags": ["Stablecoin"],
         "parameters": [
           {
-            "name": "stablecoin",
-            "in": "query",
-            "description": "Stablecoin index (0: USDC+, 2: LST)",
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0: USDC+)",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "enum": [0, 2]
-            }
+            "schema": { "type": "integer", "enum": [0] }
           }
         ],
         "responses": {
           "200": {
-            "description": "Latest exchange rate retrieved successfully",
+            "description": "Realtime exchange rate retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "success": { "type": "boolean", "example": true },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "integer" },
-                        "stablecoin": { "type": "integer", "enum": [0, 2] },
-                        "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
-                        "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
-                        "timestamp": { "type": "string", "format": "date-time" }
-                      },
-                      "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
-                    }
+                    "data": { "type": "object", "additionalProperties": true }
                   },
                   "required": ["success", "data"]
                 }
@@ -963,64 +796,15 @@
             }
           },
           "400": {
-            "description": "Invalid request parameters",
+            "description": "Invalid stablecoin index",
             "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
-              }
+              "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } }
             }
           },
           "500": {
             "description": "Internal server error",
             "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stablecoin/exchange-rates": {
-      "get": {
-        "summary": "Get latest exchange rates for all stablecoins",
-        "description": "Retrieve the latest base and receipt exchange rates for all supported stablecoins (USDC+, LST).",
-        "tags": ["Stablecoin"],
-        "responses": {
-          "200": {
-            "description": "Latest exchange rates for all stablecoins retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "integer" },
-                          "stablecoin": { "type": "integer", "enum": [0, 2] },
-                          "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
-                          "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
-                          "timestamp": { "type": "string", "format": "date-time" }
-                        },
-                        "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
-                      }
-                    }
-                  },
-                  "required": ["success", "data"]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
-              }
+              "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } }
             }
           }
         }
@@ -1058,7 +842,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -1068,7 +852,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -1079,7 +863,7 @@
     "/integration/mint": {
       "post": {
         "summary": "Generate mint transaction",
-        "description": "Generate a mint transaction for integration stablecoins. Rate limit: 30 requests per minute (unauthenticated), 600 requests per minute (authenticated).",
+        "description": "Generate a mint transaction for integration stablecoins.",
         "tags": ["Integration"],
         "requestBody": {
           "required": true,
@@ -1125,7 +909,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -1135,7 +919,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -1192,7 +976,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -1202,276 +986,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/{id}/stats": {
-      "get": {
-        "summary": "Get integration statistics",
-        "description": "Retrieve statistics for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Integration statistics retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IntegrationStatsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/{id}/stats/historical": {
-      "get": {
-        "summary": "Get historical integration statistics",
-        "description": "Retrieve historical statistics for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Time period for historical data",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["7d", "30d", "90d", "1y"],
-              "default": "30d"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Historical integration statistics retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HistoricalStatsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/{id}/config": {
-      "get": {
-        "summary": "Get integration configuration",
-        "description": "Retrieve configuration for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Integration configuration retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IntegrationConfigResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Update integration configuration",
-        "description": "Update configuration for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateConfigRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Integration configuration updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IntegrationConfigResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/{id}/exchange-rate": {
-      "get": {
-        "summary": "Get current exchange rate",
-        "description": "Retrieve current exchange rate for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Exchange rate retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExchangeRateResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -1523,7 +1038,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -1533,7 +1048,605 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/initialize": {
+      "post": {
+        "summary": "Initialize an integration",
+        "description": "Initialize a new integration with branded mint and fee configuration.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "signer": { "type": "string", "description": "Initializer's Solana address" },
+                  "authority": { "type": "string", "description": "Authority Solana address" },
+                  "stablecoin": { "type": "integer", "enum": [0], "description": "Stablecoin index (0: USDC+)" },
+                  "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
+                  "brandedMint": { "type": "string", "description": "Branded token mint address" }
+                },
+                "required": ["signer", "authority", "stablecoin", "feeBps", "brandedMint"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Initialization transaction generated successfully",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } }
+          },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/initialize-vault": {
+      "post": {
+        "summary": "Initialize integration vault",
+        "description": "Initialize the proxy vault for an integration (admin-only).",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
+                  "signer": { "type": "string", "description": "Admin Solana address" }
+                },
+                "required": ["integrationId", "signer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Initialize vault transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/initialize-user-account": {
+      "post": {
+        "summary": "Initialize user branded token account",
+        "description": "Generate a transaction to initialize a user's branded token account.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
+                  "userAddress": { "type": "string", "description": "User's Solana address" }
+                },
+                "required": ["integrationId", "userAddress"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Initialize user account transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/events/all/{limit}": {
+      "get": {
+        "summary": "Get recent events",
+        "description": "Retrieve the most recent protocol events up to a limit.",
+        "tags": ["Events"],
+        "parameters": [
+          { "name": "limit", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Max events to return" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+                  },
+                  "required": ["success", "events"]
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/events/{signer}": {
+      "get": {
+        "summary": "Get events by signer",
+        "description": "Retrieve protocol events associated with a signer address.",
+        "tags": ["Events"],
+        "parameters": [
+          { "name": "signer", "in": "path", "required": true, "schema": { "type": "string" }, "description": "Signer Solana address" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+                  },
+                  "required": ["success", "events"]
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid signer address", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/{id}/stats": {
+      "get": {
+        "summary": "Get integration statistics",
+        "description": "Retrieve statistics for a specific integration",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Integration ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Integration statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntegrationStatsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid integration ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/{id}/stats/historical": {
+      "get": {
+        "summary": "Get historical integration statistics",
+        "description": "Retrieve historical statistics for a specific integration",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Integration ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Time period for historical data",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["7d", "30d", "90d", "1y"],
+              "default": "30d"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical integration statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoricalStatsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid integration ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/{id}/config": {
+      "get": {
+        "summary": "Get integration configuration",
+        "description": "Retrieve configuration for a specific integration",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Integration ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Integration configuration retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntegrationConfigResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid integration ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update integration configuration",
+        "description": "Update configuration for a specific integration",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Integration ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateConfigRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Integration configuration updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntegrationConfigResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/{id}/exchange-rate": {
+      "get": {
+        "summary": "Get current exchange rate",
+        "description": "Retrieve current exchange rate for a specific integration",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Integration ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exchange rate retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExchangeRateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid integration ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "summary": "Get protocol statistics",
+        "description": "Retrieve overall protocol statistics",
+        "tags": ["Stats"],
+        "responses": {
+          "200": {
+            "description": "Protocol statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "integer",
+                          "description": "Total number of users/holders",
+                          "example": 1250
+                        },
+                        "supply": {
+                          "type": "string",
+                          "description": "Total supply as string",
+                          "example": "50000000000000"
+                        },
+                        "cumulativeVolume": {
+                          "type": "string",
+                          "description": "Cumulative volume as string",
+                          "example": "100000000000000"
+                        },
+                        "tvl": {
+                          "type": "number",
+                          "description": "Total Value Locked in USD",
+                          "example": 50000000
+                        },
+                        "totalYieldDistributed": {
+                          "type": "number",
+                          "description": "Total yield distributed to users",
+                          "example": 2500000
+                        }
+                      },
+                      "required": ["users", "supply", "cumulativeVolume", "tvl", "totalYieldDistributed"]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/historical": {
+      "get": {
+        "summary": "Get historical TVL and volume data",
+        "description": "Retrieve historical Total Value Locked (TVL) and volume data. By default returns last 7 days of data, customise by using the `period` parameter (in days).",
+        "tags": ["Stats"],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Number of days of historical data to retrieve (default: 7)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 7,
+              "example": 7
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tvlHistory": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "description": "Unique identifier for the TVL record",
+                                "example": 12345
+                              },
+                              "usd_value": {
+                                "type": "integer",
+                                "description": "Total Value Locked amount in USD",
+                                "example": 50000000
+                              },
+                              "timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp of the TVL data point",
+                                "example": "2024-01-01T12:00:00.000Z"
+                              }
+                            },
+                            "required": ["id", "usd_value", "timestamp"]
+                          },
+                          "description": "Historical TVL data points"
+                        },
+                        "volumeHistory": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "description": "Unique identifier for the volume record",
+                                "example": 67890
+                              },
+                              "volume_usd_24h": {
+                                "type": "string",
+                                "description": "24-hour volume in USD (BigInt as string)",
+                                "example": "1000000000000"
+                              },
+                              "date": {
+                                "type": "string",
+                                "format": "date",
+                                "description": "Date of the volume data point",
+                                "example": "2024-01-01"
+                              },
+                              "volume_usd_cumulative": {
+                                "type": "string",
+                                "description": "Cumulative volume in USD (BigInt as string)",
+                                "example": "50000000000000"
+                              },
+                              "last_event_processed_tx_id": {
+                                "type": "string",
+                                "description": "Transaction ID of the last processed event",
+                                "example": "tx_abc123"
+                              }
+                            },
+                            "required": ["id", "volume_usd_24h", "date", "volume_usd_cumulative", "last_event_processed_tx_id"]
+                          },
+                          "description": "Historical volume data points"
+                        }
+                      },
+                      "required": ["tvlHistory", "volumeHistory"]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
                 }
               }
             }
@@ -1548,7 +1661,13 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key",
-        "description": "API key for authenticated integrators. Unauthenticated users are limited to 30 requests per minute, authenticated integrators are limited to 600 requests per minute."
+        "description": "API key for authenticated integrators. Unauthenticated users are limited to 100 requests per minute, authenticated integrators are limited to 500 requests per minute."
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT token for authenticated users"
       }
     },
     "schemas": {
@@ -1562,7 +1681,7 @@
         },
         "required": ["success"]
       },
-      "ErrorResponse": {
+      "BadRequestErrorResponse": {
         "type": "object",
         "properties": {
           "success": {
@@ -1572,33 +1691,27 @@
           },
           "message": {
             "type": "string",
-            "description": "Error message describing what went wrong",
+            "description": "Error message describing what went wrong with the request",
             "example": "Invalid request data: depositAmount must be positive"
           }
         },
         "required": ["success", "message"]
       },
-      "FundingRateData": {
+      "InternalServerErrorResponse": {
         "type": "object",
         "properties": {
-          "market": {
-            "type": "string",
-            "description": "Market identifier",
-            "example": "SOL-PERP"
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was successful",
+            "example": false
           },
-          "funding_rate_bps": {
-            "type": "integer",
-            "description": "Funding rate in basis points",
-            "example": 150
-          },
-          "timestamp": {
+          "message": {
             "type": "string",
-            "format": "date-time",
-            "description": "Timestamp of the funding rate",
-            "example": "2024-01-01T00:00:00.000Z"
+            "description": "Error message describing the server error",
+            "example": "Internal server error"
           }
         },
-        "required": ["market", "funding_rate_bps", "timestamp"]
+        "required": ["success", "message"]
       },
       "UsdcApyResponse": {
         "allOf": [
@@ -1619,10 +1732,10 @@
       "UsdcApyData": {
         "type": "object",
         "properties": {
-          "stablecoin": {
+          "strategy": {
             "type": "integer",
             "enum": [0],
-            "description": "Stablecoin number (0: USDC Rates)"
+            "description": "Stablecoin index (0: USDC+)"
           },
           "type": {
             "type": "string",
@@ -1653,188 +1766,7 @@
             "description": "End date of the historical period (for historical data)"
           }
         },
-        "required": ["stablecoin", "type", "apy_bps"]
-      },
-      "JlpApyResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/JlpApyData"
-              }
-            },
-            "required": ["data"]
-          }
-        ]
-      },
-      "JlpApyData": {
-        "type": "object",
-        "properties": {
-          "stablecoin": {
-            "type": "integer",
-            "enum": [1],
-            "description": "Stablecoin number (1: JLP Yields with Funding Rate Hedging)"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["realtime", "historical"],
-            "description": "Type of data returned"
-          },
-          "apy_bps": {
-            "type": "integer",
-            "description": "APY in basis points (100 bps = 1%)"
-          },
-          "jlp_yield_bps": {
-            "type": "integer",
-            "description": "Base JLP yield in basis points"
-          },
-          "funding_rate_adjustment_bps": {
-            "type": "integer",
-            "description": "Funding rate adjustment in basis points"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp of the data point (for realtime data)"
-          },
-          "funding_rates": {
-            "type": "object",
-            "description": "Funding rates by market",
-            "additionalProperties": {
-              "type": "integer"
-            }
-          },
-          "data_points": {
-            "type": "integer",
-            "description": "Number of data points used in calculation (for historical data)"
-          },
-          "start_date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Start date of the historical period (for historical data)"
-          },
-          "end_date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "End date of the historical period (for historical data)"
-          }
-        },
-        "required": ["stablecoin", "type", "apy_bps", "jlp_yield_bps", "funding_rate_adjustment_bps"]
-      },
-      "LstApyResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/LstApyData"
-              }
-            },
-            "required": ["data"]
-          }
-        ]
-      },
-      "LstApyData": {
-        "type": "object",
-        "properties": {
-          "stablecoin": {
-            "type": "integer",
-            "enum": [2],
-            "description": "Stablecoin number (2: Delta-Neutral LST Stablecoin)"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["realtime", "historical"],
-            "description": "Type of data returned"
-          },
-          "apy_bps": {
-            "type": "integer",
-            "description": "APY in basis points (100 bps = 1%)"
-          },
-          "lst_yield_bps": {
-            "type": "integer",
-            "description": "LST yield in basis points"
-          },
-          "sol_funding_rate_bps": {
-            "type": "integer",
-            "description": "SOL funding rate in basis points"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp of the data point (for realtime data)"
-          },
-          "data_points": {
-            "type": "integer",
-            "description": "Number of data points used in calculation (for historical data)"
-          },
-          "start_date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Start date of the historical period (for historical data)"
-          },
-          "end_date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "End date of the historical period (for historical data)"
-          }
-        },
-        "required": ["stablecoin", "type", "apy_bps", "lst_yield_bps", "sol_funding_rate_bps"]
-      },
-      "UsdcHistoricalResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/UsdcApyData"
-              }
-            },
-            "required": ["data"]
-          }
-        ]
-      },
-      "JlpHistoricalResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/JlpApyData"
-              }
-            },
-            "required": ["data"]
-          }
-        ]
-      },
-      "LstHistoricalResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/BaseResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/LstApyData"
-              }
-            },
-            "required": ["data"]
-          }
-        ]
+        "required": ["strategy", "type", "apy_bps"]
       },
       "AllStablecoinsResponse": {
         "allOf": [
@@ -1845,43 +1777,11 @@
             "type": "object",
             "properties": {
               "data": {
-                "type": "object",
-                "properties": {
-                  "stablecoins": {
-                    "type": "object",
-                    "properties": {
-                      "0": {
-                        "$ref": "#/components/schemas/UsdcApyData"
-                      },
-                      "1": {
-                        "$ref": "#/components/schemas/JlpApyData"
-                      },
-                      "2": {
-                        "$ref": "#/components/schemas/LstApyData"
-                      }
-                    },
-                    "required": ["0", "1", "2"]
-                  },
-                  "summary": {
-                    "type": "object",
-                    "properties": {
-                      "usdc_apy_bps": {
-                        "type": "integer",
-                        "description": "USDC stablecoin APY in basis points"
-                      },
-                      "jlp_apy_bps": {
-                        "type": "integer",
-                        "description": "JLP stablecoin APY in basis points"
-                      },
-                      "lst_apy_bps": {
-                        "type": "integer",
-                        "description": "LST stablecoin APY in basis points"
-                      }
-                    },
-                    "required": ["usdc_apy_bps", "jlp_apy_bps", "lst_apy_bps"]
-                  }
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UsdcApyData"
                 },
-                "required": ["stablecoins", "summary"]
+                "description": "Array of stablecoin APY data"
               }
             },
             "required": ["data"]
@@ -2323,20 +2223,20 @@
       "description": "Health check endpoints"
     },
     {
-      "name": "Funding",
-      "description": "Funding rates endpoints for perp markets"
-    },
-    {
-      "name": "APY",
-      "description": "APY (Annual Percentage Yield) endpoints for different stablecoins"
-    },
-    {
       "name": "Stablecoin",
-      "description": "Stablecoin mint and burn transaction generation endpoints"
+      "description": "Reflect stablecoins interaction endpoints."
     },
     {
       "name": "Integration",
-      "description": "Integration management endpoints for custom stablecoin integrations"
+      "description": "Custom integration management endpoints."
+    },
+    {
+      "name": "Stats",
+      "description": "Protocol statistics endpoints"
+    },
+    {
+      "name": "Events",
+      "description": "Protocol events endpoints"
     }
   ]
-} 
+}
