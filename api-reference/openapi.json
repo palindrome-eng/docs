@@ -1143,6 +1143,140 @@
         }
       }
     },
+    "/integration/flow/mint": {
+      "post": {
+        "summary": "Mint stablecoin and whitelabel in single transaction",
+        "description": "Generate a combined transaction that mints the underlying stablecoin and then whitelabels it in a single call. This combines the functionality of /stablecoin/mint and /integration/mint.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to mint",
+                    "example": 1000000
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Recipient Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "int_12345"
+                  }
+                },
+                "required": ["amount", "recipient", "integrationId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Combined mint and whitelabel transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/flow/redeem": {
+      "post": {
+        "summary": "Redeem whitelabeled stablecoin in single transaction",
+        "description": "Generate a combined transaction that redeems the whitelabeled stablecoin and burns the underlying stablecoin in a single call. This combines the functionality of /integration/redeem and /stablecoin/burn.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to redeem",
+                    "example": 1000000
+                  },
+                  "redeemer": {
+                    "type": "string",
+                    "description": "Redeemer Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "int_12345"
+                  }
+                },
+                "required": ["amount", "redeemer", "integrationId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Combined redeem and burn transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/events/all/{limit}": {
       "get": {
         "summary": "Get recent events",
