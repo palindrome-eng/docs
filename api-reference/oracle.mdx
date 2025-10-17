@@ -1,0 +1,127 @@
+---
+title: "Oracle SDK"
+description: "TypeScript SDK for Doppler, the efficient oracle used by Reflect."
+---
+
+### Installation
+
+To install the Reflect Oracle SDK within your development environment, run one of the following commands:
+
+<CodeGroup>
+
+```bash yarn
+yarn add @reflectmoney/oracle.ts
+```
+
+```bash npm
+npm install @reflectmoney/oracle.ts
+```
+
+```bash pnpm
+pnpm install @reflectmoney/oracle.ts
+```
+
+</CodeGroup>
+
+### Overview
+
+Doppler is the oracle solution used by Reflect. It enables extremely efficient oracle updates on Solana, requiring as little as 21 compute units per update. We use a fork of Doppler that uses 32 CUs due to additional call to Clock sysvar.
+
+- **Program ID**: `PRicevBH6BaeaE8qmrxrwGBZ5hSZ9vjBNue5Ygot1ML`
+
+The SDK exposes the `Doppler` class for interacting with oracle accounts: creating new oracle accounts, updating their payloads, and reading the latest data.
+
+### Quick Start
+
+Initialize a `Doppler` instance with a Solana connection and an authority keypair.
+
+```typescript initialize.ts
+import { Doppler } from "@reflectmoney/oracle.ts";
+import { Connection, Keypair } from "@solana/web3.js";
+
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const admin = Keypair.fromSecretKey(/* admin secret key bytes */);
+
+const doppler = new Doppler(connection, admin);
+```
+
+### Updating an Oracle
+
+Create an 8-byte payload (u64) and submit an update for an existing oracle account.
+
+```typescript updateOracle.ts
+import { PublicKey } from "@solana/web3.js";
+import { createPricePayload, U8Array8Serializer } from "@reflectmoney/oracle.ts";
+
+const oraclePublicKey = new PublicKey("ORACLE_ADDRESS");
+
+// 8-byte payload representing a u64 value (e.g., 1_000_000 for 1 USDC with 6 decimals)
+const pricePayload = createPricePayload(BigInt(1_000_000));
+
+await doppler.updateOracle(
+    oraclePublicKey,
+    {
+        slot: BigInt(Date.now()),
+        payload: pricePayload,
+    },
+    new U8Array8Serializer(),
+);
+```
+
+### Fetching Oracle Data
+
+Read the latest oracle state and decode the price from the 8-byte payload.
+
+```typescript fetchOracle.ts
+import { PublicKey } from "@solana/web3.js";
+import { U8Array8Serializer, readPriceFromPayload } from "@reflectmoney/oracle.ts";
+
+const oraclePublicKey = new PublicKey("ORACLE_ADDRESS");
+
+const oracleData = await doppler.fetchOracle(
+    oraclePublicKey,
+    new U8Array8Serializer(),
+);
+
+if (oracleData) {
+    console.log("Slot:", oracleData.slot);
+    const price = readPriceFromPayload(oracleData.payload);
+    console.log("Price:", price);
+}
+// Example output:
+// Slot: 1728662400000n
+// Price: 1000000n
+```
+
+### Creating an Oracle Account
+
+Create a new oracle account with an initial payload and slot.
+
+```typescript createOracle.ts
+import { U8Array8Serializer, createPricePayload } from "@reflectmoney/oracle.ts";
+
+const oracleAccount = await doppler.createOracleAccount(
+    "my-oracle-seed",
+    new U8Array8Serializer(),
+    {
+        slot: 0n,
+        payload: createPricePayload(BigInt(1_000_000)),
+    }
+);
+```
+
+### Payloads and Serializers
+
+- **Payload format**: 8-byte array representing a u64. For prices, this commonly encodes fixed-point integers (e.g., micro-units for 6-decimal tokens).
+- **Helpers**: `createPricePayload(u64)` and `readPriceFromPayload(payload)` provide convenient encoding/decoding for price data.
+- **Serializer**: Use `U8Array8Serializer` to serialize and deserialize the 8-byte payloads when calling `updateOracle` and `fetchOracle`.
+
+## Links
+
+- **Reflect**: [https://reflect.money](https://reflect.money)
+
+## License
+
+MIT
+
+
