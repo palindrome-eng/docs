@@ -1,0 +1,234 @@
+---
+title: "Whitelabel SDK"
+description: "Issue your own branded stablecoins backed by collateral in Reflect. Just select underlying asset, define yield split and upload metadata."
+---
+
+### Installation
+To install Reflect Whitelabel SDK within your development environment, run the following command:
+
+<CodeGroup>
+
+```bash yarn
+yarn add @reflectmoney/proxy.ts
+```
+
+```bash npm
+npm install @reflectmoney/proxy.ts
+```
+
+```bash pnpm
+pnpm install @reflectmoney/proxy.ts
+```
+
+</CodeGroup>
+
+### Overview
+
+Use this SDK to interact with Reflect Proxy Program, an on-chain infrastructure for minting and redeeming whitelabel yield-bearing stablecoins backed by collateral in Reflect. This SDK offers high-level functionality for creating new proxy, issuing a branded stablecoin, minting, redeeming and managing the integration.
+
+### Quick Start
+
+To create new proxy, use the static `initialize` method on the `Proxy` class exported from the SDK. When creating new proxy instance via constructor, SDK expects on-chain accounts to be already initialized and loads them silently. Only use the constructor after setting up the on-chain proxy first.
+
+```typescript initialize.ts
+import { Proxy, USDC_PLUS_MINT } from "@reflectmoney/proxy.ts";
+import { createSolanaRpc, address } from "@solana/kit";
+
+// Initialize connection
+const connection = createSolanaRpc("https://api.mainnet-beta.solana.com");
+
+// Create a new proxy
+const createProxyIx = await Proxy.initialize({
+    signer,
+    brandedMint: address("<branded mint address>"),
+    feeBps: 100, // 1% fee
+    stablecoinMint: address(USDC_PLUS_MINT)
+});
+
+// Transaction sign & send logic
+```
+
+To load existing proxy, just use the constructor. In the background, SDK will lazy-load all the necessary on-chain state.
+
+```typescript load.ts
+import { Proxy } from "@reflectmoney/proxy.ts";
+import { createSolanaRpc, address } from "@solana/kit";
+
+// Initialize connection
+const connection = createSolanaRpc("https://api.mainnet-beta.solana.com");
+
+// Create an instance of existing proxy
+const proxy = new Proxy({ 
+    connection, 
+    proxyStateAddress: address("<your proxy account address>")
+});
+```
+
+If you don't know the proxy account address, use loadFromMint method that will load your Proxy being provided with the mint address of your branded stablecoin.
+
+```typescript loadFromMint.ts
+import { Proxy } from "@reflectmoney/proxy.ts";
+import { createSolanaRpc, address } from "@solana/kit";
+
+// Initialize connection
+const connection = createSolanaRpc("https://api.mainnet-beta.solana.com");
+
+// Create an instance of existing proxy from mint
+const proxy = Proxy.loadFromMint({ 
+    connection, 
+    brandedMint: address("<your branded stablecoin mint address>")
+});
+```
+
+## Proxy Methods
+
+##### `initialize(params)`
+Creates a new proxy state account with the specified configuration.
+
+**Parameters:**
+- `signer: TransactionSigner` - The transaction signer who will pay for the transaction
+- `authority?: Address` - Optional authority address (defaults to signer address)
+- `brandedMint: Address` - The mint address of the branded token
+- `feeBps: number` - The fee in basis points (e.g., 100 = 1%)
+- `stablecoinMint: Address` - The mint address of the underlying stablecoin
+
+**Returns:** `Promise<Instruction>` - A create proxy instruction
+
+##### `loadFromMint(params)`
+Creates a new Proxy instance by deriving the proxy state address from a branded mint.
+
+**Parameters:**
+- `connection: Rpc<SolanaRpcApi>` - The Solana RPC connection
+- `brandedMint: Address` - The address of the branded mint
+
+**Returns:** `Promise<Proxy>` - A new Proxy instance with loaded state data
+
+##### `load()`
+Reloads the proxy state data from the blockchain. It is lazily loaded when Proxy instance is initially created. Call to refresh the data.
+
+**Returns:** `Promise<void>`
+
+##### `deposit(params)`
+Creates a deposit instruction that converts stablecoins to branded tokens.
+
+**Parameters:**
+- `signer: TransactionSigner` - The transaction signer who owns the tokens being deposited
+- `amount: number` - The amount of stablecoins to deposit
+
+**Returns:** `Promise<Instruction>` - A deposit instruction
+
+##### `withdraw(params)`
+Creates a withdraw instruction that converts branded tokens back to stablecoins.
+
+**Parameters:**
+- `signer: TransactionSigner` - The transaction signer who owns the branded tokens
+- `amount: number` - The amount of branded tokens to withdraw
+
+**Returns:** `Promise<Instruction>` - A withdraw instruction
+
+##### `claimFees()`
+Creates a claim fees instruction for the proxy authority to collect accumulated fees.
+
+**Returns:** `Promise<Instruction>` - A claim fees instruction
+
+### PdaClient
+
+Utility class for finding PDAs.
+
+##### `deriveProxyState(brandedMint)`
+Derives the proxy state PDA from a branded mint address.
+
+**Parameters:**
+- `brandedMint: Address` - The branded mint address
+
+**Returns:** `Promise<[Address, number]>` - A tuple containing the PDA address and bump seed
+
+## Usage Examples
+
+### Creating a New Proxy
+
+```typescript
+import { Proxy, USDC_PLUS_MINT } from "@reflectmoney/proxy.ts";
+import { address } from "@solana/kit";
+
+const createInstruction = await Proxy.initialize({
+    signer: myWallet,
+    authority: address("AuthorityAddress"),
+    brandedMint: address("BrandedTokenMint"),
+    feeBps: 50, // 0.5% fee
+    stablecoinMint: address(USDC_PLUS_MINT) // USDC+
+});
+```
+
+### Loading and Using an Existing Proxy
+
+```typescript
+// Method 1: Load from mint address
+const proxy = await Proxy.loadFromMint({
+    connection: myConnection,
+    brandedMint: address("BrandedTokenMint")
+});
+
+// Method 2: Create instance and re-load manually
+const proxy2 = new Proxy({
+    connection: myConnection,
+    proxyAddress: address("ProxyStateAddress")
+});
+await proxy2.load();
+```
+
+### Depositing Stablecoins
+
+```typescript
+const depositInstruction = await proxy.deposit({
+    signer: myWallet,
+    amount: 1_000_000 // 1 USDC+ (6 decimals)
+});
+```
+
+### Withdrawing to Stablecoins
+
+```typescript
+const withdrawInstruction = await proxy.withdraw({
+    signer: myWallet,
+    amount: 1_000_000 // 1 branded token (6 decimals)
+});
+
+```
+
+### Claiming Fees (Authority Only)
+
+```typescript
+const claimFeesInstruction = await proxy.claimFees();
+```
+
+### Working with PDAs
+
+```typescript
+import { PdaClient } from "@reflectmoney/proxy.ts";
+
+const [proxyStateAddress, bump] = await PdaClient.deriveProxyState(
+    address("<branded token mint>")
+);
+
+console.log("Proxy State PDA:", proxyStateAddress);
+console.log("Bump seed:", bump);
+```
+
+## Constants
+
+The SDK exports the following constants:
+
+- `PROXY_STATE_SEED` - The seed used for proxy state PDA derivation
+- `USDC_PLUS_ORACLE` - The oracle address tracking the real-time USDC+ exchange rate
+- `REFLECT_PROXY_PROGRAM_PROGRAM_ADDRESS` - The program ID
+
+## Support
+
+For issues, questions, or contributions:
+- **Repository:** [https://github.com/palindrome-eng/reflect-proxy-program](https://github.com/palindrome-eng/reflect-proxy-program)
+- **Authors:** L0STE, stablecoinjesus @ Palindrome Engineering
+
+## License
+
+MIT License
