@@ -63,7 +63,8 @@
       "group": "Developer Kits",
       "pages": [
         "api-reference/stablecoin",
-        "api-reference/restaking"
+        "api-reference/restaking",
+        "api-reference/proxy"
       ]
     },
       {
