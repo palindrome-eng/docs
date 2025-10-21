@@ -15,11 +15,6 @@
       "description": "Production environment"
     }
   ],
-  "security": [
-    {
-      "authenticatedIntegrator": []
-    }
-  ],
   "paths": {
     "/health": {
       "get": {
@@ -77,85 +72,74 @@
         }
       }
     },
-    "/stablecoin/apy": {
-      "get": {
-        "summary": "Get APY for all stablecoins",
-        "description": "Retrieve realtime APY data for all available stablecoins.",
-        "tags": ["Stablecoin"],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved APY data for all stablecoins",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AllStablecoinsResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No APY data found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
+    "/integration/initialize": {
+      "post": {
+        "summary": "Initialize an integration",
+        "description": "Initialize a new integration with branded mint and fee configuration.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "signer": { "type": "string", "description": "Initializer's Solana address" },
+                  "authority": { "type": "string", "description": "Authority Solana address" },
+                  "stablecoin": { "type": "integer", "enum": [0], "description": "Stablecoin index (0: USDC+)" },
+                  "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
+                  "brandedMint": { "type": "string", "description": "Branded token mint address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                },
+                "required": ["signer", "authority", "stablecoin", "feeBps", "brandedMint", "feePayer"]
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Initialization transaction generated successfully",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } }
+          },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
         }
       }
     },
-    "/stablecoin/{index}/apy": {
+    "/integration/{id}/stats": {
       "get": {
-        "summary": "Get APY for specific stablecoin",
-        "description": "Retrieve APY data for a specific stablecoin (realtime data).",
-        "tags": ["Stablecoin"],
+        "summary": "Get integration statistics",
+        "description": "Retrieve statistics for a specific integration",
+        "tags": ["Integration"],
+        "security": [
+          {
+            "authenticatedIntegrator": []
+          }
+        ],
         "parameters": [
           {
-            "name": "index",
+            "name": "id",
             "in": "path",
-            "description": "Stablecoin index (0: USDC+)",
+            "description": "Integration ID",
             "required": true,
             "schema": {
-              "type": "integer",
-              "enum": [0]
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved APY data",
+            "description": "Integration statistics retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UsdcApyResponse"
+                  "$ref": "#/components/schemas/IntegrationStatsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid stablecoin index parameter",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No APY data found for the specified stablecoin",
+            "description": "Invalid integration ID",
             "content": {
               "application/json": {
                 "schema": {
@@ -177,51 +161,641 @@
         }
       }
     },
-    "/stablecoin/{index}/apy/historical": {
+    "/integration/{id}/stats/historical": {
       "get": {
-        "summary": "Get historical APY data for specific stablecoin",
-        "description": "Retrieve historical APY data for a specific stablecoin over a specified number of days.",
-        "tags": ["Stablecoin"],
+        "summary": "Get historical integration statistics",
+        "description": "Retrieve historical statistics for a specific integration",
+        "tags": ["Integration"],
+        "security": [
+          {
+            "authenticatedIntegrator": []
+          }
+        ],
         "parameters": [
           {
-            "name": "index",
+            "name": "id",
             "in": "path",
-            "description": "Stablecoin index (0: USDC+)",
+            "description": "Integration ID",
             "required": true,
             "schema": {
-              "type": "integer",
-              "enum": [0]
+              "type": "string"
             }
           },
           {
-            "name": "days",
+            "name": "period",
             "in": "query",
-            "description": "Number of days for historical data (default: 365)",
+            "description": "Time period for historical data",
             "required": false,
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 365
+              "type": "string",
+              "enum": ["7d", "30d", "90d", "1y"],
+              "default": "30d"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved historical APY data",
+            "description": "Historical integration statistics retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UsdcApyResponse"
+                  "$ref": "#/components/schemas/HistoricalStatsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid stablecoin index parameter",
+            "description": "Invalid integration ID",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/{id}/exchange-rate": {
+      "get": {
+        "summary": "Get current exchange rate",
+        "description": "Retrieve current exchange rate for a specific integration",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Integration ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exchange rate retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExchangeRateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid integration ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/initialize-vault": {
+      "post": {
+        "summary": "Initialize integration vault",
+        "description": "Initialize the proxy vault for an integration (admin-only).",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
+                  "signer": { "type": "string", "description": "Admin Solana address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                },
+                "required": ["integrationId", "signer", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Initialize vault transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/initialize-user-account": {
+      "post": {
+        "summary": "Initialize user branded token account",
+        "description": "Generate a transaction to initialize a user's branded token account.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
+                  "userAddress": { "type": "string", "description": "User's Solana address" },
+                  "signer": { "type": "string", "description": "Signer Solana address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                },
+                "required": ["integrationId", "userAddress", "signer", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Initialize user account transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/mint": {
+      "post": {
+        "summary": "Generate mint transaction",
+        "description": "Generate a mint transaction for integration stablecoins.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to mint",
+                    "example": 1000000
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Recipient Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID",
+                    "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mint transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/flow/mint": {
+      "post": {
+        "summary": "Mint stablecoin and whitelabel in single transaction",
+        "description": "Generate a combined transaction that mints the underlying stablecoin and then whitelabels it in a single call. This combines the functionality of /stablecoin/mint and /integration/mint.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to mint",
+                    "example": 1000000
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Recipient Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Combined mint and whitelabel transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/redeem": {
+      "post": {
+        "summary": "Generate redemption transaction",
+        "description": "Generate a redemption transaction for integration stablecoins",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to redeem",
+                    "example": 1000000
+                  },
+                  "redeemer": {
+                    "type": "string",
+                    "description": "Redeemer Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID",
+                    "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["amount", "redeemer", "integrationId", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Redemption transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/flow/redeem": {
+      "post": {
+        "summary": "Redeem whitelabeled stablecoin in single transaction",
+        "description": "Generate a combined transaction that redeems the whitelabeled stablecoin and burns the underlying stablecoin in a single call. This combines the functionality of /integration/redeem and /stablecoin/burn.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to redeem",
+                    "example": 1000000
+                  },
+                  "recipient": {
+                    "type": "string",
+                    "description": "Recipient Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Combined redeem and burn transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/claim": {
+      "post": {
+        "summary": "Generate claim transaction",
+        "description": "Generate a claim transaction for integration rewards",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to claim",
+                    "example": 1000000
+                  },
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID",
+                    "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["amount", "integrationId", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Claim transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/types": {
+      "get": {
+        "summary": "Get available stablecoin types",
+        "description": "Retrieve list of available stablecoin types",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Available stablecoin types retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer",
+                            "description": "Stablecoin index",
+                            "example": 0
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Stablecoin name",
+                            "example": "USDC+"
+                          }
+                        },
+                        "required": ["index", "name"]
+                      },
+                      "example": [
+                        { "index": 0, "name": "USDC+" }
+                      ]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/limits": {
+      "get": {
+        "summary": "Get supply cap information for all stablecoins",
+        "description": "Retrieve supply caps, current supply, and remaining capacity for all stablecoins",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Supply cap information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "index": {
+                                "type": "integer",
+                                "description": "Stablecoin index",
+                                "example": 0
+                              }
+                            },
+                            "required": ["index"]
+                          },
+                          {
+                            "$ref": "#/components/schemas/SupplyCapInfo"
+                          }
+                        ]
+                      },
+                      "example": [
+                        {
+                          "index": 0,
+                          "supplyCap": 1000000000,
+                          "currentSupply": 500000000,
+                          "remainingCapacity": 500000000,
+                          "utilizationPercentage": 50.0
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["success", "data"]
                 }
               }
             }
@@ -512,14 +1086,14 @@
         }
       }
     },
-    "/stablecoin/types": {
+    "/stats": {
       "get": {
-        "summary": "Get available stablecoin types",
-        "description": "Retrieve list of available stablecoin types",
-        "tags": ["Stablecoin"],
+        "summary": "Get protocol statistics",
+        "description": "Retrieve overall protocol statistics",
+        "tags": ["Stats"],
         "responses": {
           "200": {
-            "description": "Available stablecoin types retrieved successfully",
+            "description": "Protocol statistics retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -530,26 +1104,35 @@
                       "example": true
                     },
                     "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "index": {
-                            "type": "integer",
-                            "description": "Stablecoin index",
-                            "example": 0
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "Stablecoin name",
-                            "example": "USDC+"
-                          }
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "integer",
+                          "description": "Total number of users/holders",
+                          "example": 1250
                         },
-                        "required": ["index", "name"]
+                        "supply": {
+                          "type": "string",
+                          "description": "Total supply as string",
+                          "example": "50000000000000"
+                        },
+                        "cumulativeVolume": {
+                          "type": "string",
+                          "description": "Cumulative volume as string",
+                          "example": "100000000000000"
+                        },
+                        "tvl": {
+                          "type": "number",
+                          "description": "Total Value Locked in USD",
+                          "example": 50000000
+                        },
+                        "totalYieldDistributed": {
+                          "type": "number",
+                          "description": "Total yield distributed to users",
+                          "example": 2500000
+                        }
                       },
-                      "example": [
-                        { "index": 0, "name": "USDC+" }
-                      ]
+                      "required": ["users", "supply", "cumulativeVolume", "tvl", "totalYieldDistributed"]
                     }
                   },
                   "required": ["success", "data"]
@@ -570,55 +1153,28 @@
         }
       }
     },
-    "/stablecoin/limits": {
+    "/stablecoin/apy": {
       "get": {
-        "summary": "Get supply cap information for all stablecoins",
-        "description": "Retrieve supply caps, current supply, and remaining capacity for all stablecoins",
+        "summary": "Get APY for all stablecoins",
+        "description": "Retrieve realtime APY data for all available stablecoins.",
         "tags": ["Stablecoin"],
         "responses": {
           "200": {
-            "description": "Supply cap information retrieved successfully",
+            "description": "Successfully retrieved APY data for all stablecoins",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "allOf": [
-                          {
-                            "type": "object",
-                            "properties": {
-                              "index": {
-                                "type": "integer",
-                                "description": "Stablecoin index",
-                                "example": 0
-                              }
-                            },
-                            "required": ["index"]
-                          },
-                          {
-                            "$ref": "#/components/schemas/SupplyCapInfo"
-                          }
-                        ]
-                      },
-                      "example": [
-                        {
-                          "index": 0,
-                          "supplyCap": 1000000000,
-                          "currentSupply": 500000000,
-                          "remainingCapacity": 500000000,
-                          "utilizationPercentage": 50.0
-                        }
-                      ]
-                    }
-                  },
-                  "required": ["success", "data"]
+                  "$ref": "#/components/schemas/AllStablecoinsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No APY data found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -765,6 +1321,129 @@
         }
       }
     },
+    "/stablecoin/{index}/apy": {
+      "get": {
+        "summary": "Get APY for specific stablecoin",
+        "description": "Retrieve APY data for a specific stablecoin (realtime data).",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0: USDC+)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved APY data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsdcApyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid stablecoin index parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No APY data found for the specified stablecoin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/{index}/apy/historical": {
+      "get": {
+        "summary": "Get historical APY data for specific stablecoin",
+        "description": "Retrieve historical APY data for a specific stablecoin over a specified number of days.",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0: USDC+)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [0]
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days for historical data (default: 365)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 365
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved historical APY data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsdcApyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid stablecoin index parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/stablecoin/{index}/exchange-rate": {
       "get": {
         "summary": "Get realtime exchange rate for a stablecoin",
@@ -805,620 +1484,6 @@
             "description": "Internal server error",
             "content": {
               "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } }
-            }
-          }
-        }
-      }
-    },
-    "/integration/mint": {
-      "post": {
-        "summary": "Generate mint transaction",
-        "description": "Generate a mint transaction for integration stablecoins.",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to mint",
-                    "example": 1000000
-                  },
-                  "recipient": {
-                    "type": "string",
-                    "description": "Recipient Solana wallet address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID",
-                    "example": "int_12345"
-                  },
-                  "feePayer": {
-                    "type": "string",
-                    "description": "Fee payer Solana address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  }
-                },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Mint transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/redeem": {
-      "post": {
-        "summary": "Generate redemption transaction",
-        "description": "Generate a redemption transaction for integration stablecoins",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to redeem",
-                    "example": 1000000
-                  },
-                  "redeemer": {
-                    "type": "string",
-                    "description": "Redeemer Solana wallet address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID",
-                    "example": "int_12345"
-                  },
-                  "feePayer": {
-                    "type": "string",
-                    "description": "Fee payer Solana address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  }
-                },
-                "required": ["amount", "redeemer", "integrationId", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Redemption transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/claim": {
-      "post": {
-        "summary": "Generate claim transaction",
-        "description": "Generate a claim transaction for integration rewards",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to claim",
-                    "example": 1000000
-                  },
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID",
-                    "example": "int_12345"
-                  },
-                  "feePayer": {
-                    "type": "string",
-                    "description": "Fee payer Solana address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  }
-                },
-                "required": ["amount", "integrationId", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Claim transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/initialize": {
-      "post": {
-        "summary": "Initialize an integration",
-        "description": "Initialize a new integration with branded mint and fee configuration.",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "signer": { "type": "string", "description": "Initializer's Solana address" },
-                  "authority": { "type": "string", "description": "Authority Solana address" },
-                  "stablecoin": { "type": "integer", "enum": [0], "description": "Stablecoin index (0: USDC+)" },
-                  "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
-                  "brandedMint": { "type": "string", "description": "Branded token mint address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
-                },
-                "required": ["signer", "authority", "stablecoin", "feeBps", "brandedMint", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Initialization transaction generated successfully",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } }
-          },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
-        }
-      }
-    },
-    "/integration/initialize-vault": {
-      "post": {
-        "summary": "Initialize integration vault",
-        "description": "Initialize the proxy vault for an integration (admin-only).",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
-                  "signer": { "type": "string", "description": "Admin Solana address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
-                },
-                "required": ["integrationId", "signer", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Initialize vault transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
-        }
-      }
-    },
-    "/integration/initialize-user-account": {
-      "post": {
-        "summary": "Initialize user branded token account",
-        "description": "Generate a transaction to initialize a user's branded token account.",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
-                  "userAddress": { "type": "string", "description": "User's Solana address" },
-                  "signer": { "type": "string", "description": "Signer Solana address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
-                },
-                "required": ["integrationId", "userAddress", "signer", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Initialize user account transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
-        }
-      }
-    },
-    "/integration/flow/mint": {
-      "post": {
-        "summary": "Mint stablecoin and whitelabel in single transaction",
-        "description": "Generate a combined transaction that mints the underlying stablecoin and then whitelabels it in a single call. This combines the functionality of /stablecoin/mint and /integration/mint.",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to mint",
-                    "example": 1000000
-                  },
-                  "recipient": {
-                    "type": "string",
-                    "description": "Recipient Solana wallet address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID (proxy state address)",
-                    "example": "int_12345"
-                  },
-                  "feePayer": {
-                    "type": "string",
-                    "description": "Fee payer Solana address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  }
-                },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Combined mint and whitelabel transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/flow/redeem": {
-      "post": {
-        "summary": "Redeem whitelabeled stablecoin in single transaction",
-        "description": "Generate a combined transaction that redeems the whitelabeled stablecoin and burns the underlying stablecoin in a single call. This combines the functionality of /integration/redeem and /stablecoin/burn.",
-        "tags": ["Integration"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to redeem",
-                    "example": 1000000
-                  },
-                  "recipient": {
-                    "type": "string",
-                    "description": "Recipient Solana wallet address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID (proxy state address)",
-                    "example": "int_12345"
-                  },
-                  "feePayer": {
-                    "type": "string",
-                    "description": "Fee payer Solana address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  }
-                },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Combined redeem and burn transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/events/all/{limit}": {
-      "get": {
-        "summary": "Get recent events",
-        "description": "Retrieve the most recent protocol events up to a limit.",
-        "tags": ["Events"],
-        "parameters": [
-          { "name": "limit", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Max events to return" }
-        ],
-        "responses": {
-          "200": {
-            "description": "Events retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
-                  },
-                  "required": ["success", "events"]
-                }
-              }
-            }
-          },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
-        }
-      }
-    },
-    "/events/{signer}": {
-      "get": {
-        "summary": "Get events by signer",
-        "description": "Retrieve protocol events associated with a signer address.",
-        "tags": ["Events"],
-        "parameters": [
-          { "name": "signer", "in": "path", "required": true, "schema": { "type": "string" }, "description": "Signer Solana address" }
-        ],
-        "responses": {
-          "200": {
-            "description": "Events retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
-                  },
-                  "required": ["success", "events"]
-                }
-              }
-            }
-          },
-          "400": { "description": "Invalid signer address", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
-        }
-      }
-    },
-    "/integration/{id}/stats": {
-      "get": {
-        "summary": "Get integration statistics",
-        "description": "Retrieve statistics for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Integration statistics retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IntegrationStatsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/{id}/stats/historical": {
-      "get": {
-        "summary": "Get historical integration statistics",
-        "description": "Retrieve historical statistics for a specific integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "period",
-            "in": "query",
-            "description": "Time period for historical data",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["7d", "30d", "90d", "1y"],
-              "default": "30d"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Historical integration statistics retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HistoricalStatsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
             }
           }
         }
@@ -1532,120 +1597,60 @@
         }
       }
     },
-    "/integration/{id}/exchange-rate": {
+    "/events/all/{limit}": {
       "get": {
-        "summary": "Get current exchange rate",
-        "description": "Retrieve current exchange rate for a specific integration",
-        "tags": ["Integration"],
+        "summary": "Get recent events",
+        "description": "Retrieve the most recent protocol events up to a limit.",
+        "tags": ["Events"],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "limit", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Max events to return" }
         ],
         "responses": {
           "200": {
-            "description": "Exchange rate retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExchangeRateResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stats": {
-      "get": {
-        "summary": "Get protocol statistics",
-        "description": "Retrieve overall protocol statistics",
-        "tags": ["Stats"],
-        "responses": {
-          "200": {
-            "description": "Protocol statistics retrieved successfully",
+            "description": "Events retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "users": {
-                          "type": "integer",
-                          "description": "Total number of users/holders",
-                          "example": 1250
-                        },
-                        "supply": {
-                          "type": "string",
-                          "description": "Total supply as string",
-                          "example": "50000000000000"
-                        },
-                        "cumulativeVolume": {
-                          "type": "string",
-                          "description": "Cumulative volume as string",
-                          "example": "100000000000000"
-                        },
-                        "tvl": {
-                          "type": "number",
-                          "description": "Total Value Locked in USD",
-                          "example": 50000000
-                        },
-                        "totalYieldDistributed": {
-                          "type": "number",
-                          "description": "Total yield distributed to users",
-                          "example": 2500000
-                        }
-                      },
-                      "required": ["users", "supply", "cumulativeVolume", "tvl", "totalYieldDistributed"]
-                    }
+                    "success": { "type": "boolean", "example": true },
+                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
                   },
-                  "required": ["success", "data"]
+                  "required": ["success", "events"]
                 }
               }
             }
           },
-          "500": {
-            "description": "Internal server error",
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/events/{signer}": {
+      "get": {
+        "summary": "Get events by signer",
+        "description": "Retrieve protocol events associated with a signer address.",
+        "tags": ["Events"],
+        "parameters": [
+          { "name": "signer", "in": "path", "required": true, "schema": { "type": "string" }, "description": "Signer Solana address" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+                  },
+                  "required": ["success", "events"]
                 }
               }
             }
-          }
+          },
+          "400": { "description": "Invalid signer address", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
         }
       }
     },
