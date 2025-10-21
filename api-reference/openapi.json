@@ -810,56 +810,6 @@
         }
       }
     },
-    "/integration/{id}/api-key": {
-      "post": {
-        "summary": "Regenerate API key",
-        "description": "Regenerate API key for an integration",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Integration ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "API key regenerated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiKeyResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid integration ID",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/integration/mint": {
       "post": {
         "summary": "Generate mint transaction",
@@ -886,9 +836,14 @@
                     "type": "string",
                     "description": "Integration ID",
                     "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "recipient", "integrationId"]
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
               }
             }
           }
@@ -953,9 +908,14 @@
                     "type": "string",
                     "description": "Integration ID",
                     "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "redeemer", "integrationId"]
+                "required": ["amount", "redeemer", "integrationId", "feePayer"]
               }
             }
           }
@@ -1015,9 +975,14 @@
                     "type": "string",
                     "description": "Integration ID",
                     "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "integrationId"]
+                "required": ["amount", "integrationId", "feePayer"]
               }
             }
           }
@@ -1072,9 +1037,10 @@
                   "authority": { "type": "string", "description": "Authority Solana address" },
                   "stablecoin": { "type": "integer", "enum": [0], "description": "Stablecoin index (0: USDC+)" },
                   "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
-                  "brandedMint": { "type": "string", "description": "Branded token mint address" }
+                  "brandedMint": { "type": "string", "description": "Branded token mint address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
                 },
-                "required": ["signer", "authority", "stablecoin", "feeBps", "brandedMint"]
+                "required": ["signer", "authority", "stablecoin", "feeBps", "brandedMint", "feePayer"]
               }
             }
           }
@@ -1102,9 +1068,10 @@
                 "type": "object",
                 "properties": {
                   "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
-                  "signer": { "type": "string", "description": "Admin Solana address" }
+                  "signer": { "type": "string", "description": "Admin Solana address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
                 },
-                "required": ["integrationId", "signer"]
+                "required": ["integrationId", "signer", "feePayer"]
               }
             }
           }
@@ -1129,9 +1096,11 @@
                 "type": "object",
                 "properties": {
                   "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
-                  "userAddress": { "type": "string", "description": "User's Solana address" }
+                  "userAddress": { "type": "string", "description": "User's Solana address" },
+                  "signer": { "type": "string", "description": "Signer Solana address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
                 },
-                "required": ["integrationId", "userAddress"]
+                "required": ["integrationId", "userAddress", "signer", "feePayer"]
               }
             }
           }
@@ -1169,9 +1138,14 @@
                     "type": "string",
                     "description": "Integration ID (proxy state address)",
                     "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "recipient", "integrationId"]
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
               }
             }
           }
@@ -1227,18 +1201,23 @@
                     "description": "Amount to redeem",
                     "example": 1000000
                   },
-                  "redeemer": {
+                  "recipient": {
                     "type": "string",
-                    "description": "Redeemer Solana wallet address",
+                    "description": "Recipient Solana wallet address",
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   },
                   "integrationId": {
                     "type": "string",
                     "description": "Integration ID (proxy state address)",
                     "example": "int_12345"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "redeemer", "integrationId"]
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
               }
             }
           }
@@ -1704,70 +1683,55 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "tvlHistory": {
+                        "tvl": {
                           "type": "array",
                           "items": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "integer",
-                                "description": "Unique identifier for the TVL record",
-                                "example": 12345
-                              },
-                              "usd_value": {
-                                "type": "integer",
-                                "description": "Total Value Locked amount in USD",
-                                "example": 50000000
-                              },
                               "timestamp": {
                                 "type": "string",
                                 "format": "date-time",
                                 "description": "Timestamp of the TVL data point",
                                 "example": "2024-01-01T12:00:00.000Z"
+                              },
+                              "tvl": {
+                                "type": "integer",
+                                "description": "Total Value Locked amount in USD",
+                                "example": 50000000
                               }
                             },
-                            "required": ["id", "usd_value", "timestamp"]
+                            "required": ["timestamp", "tvl"]
                           },
                           "description": "Historical TVL data points"
                         },
-                        "volumeHistory": {
+                        "volume": {
                           "type": "array",
                           "items": {
                             "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "integer",
-                                "description": "Unique identifier for the volume record",
-                                "example": 67890
-                              },
-                              "volume_usd_24h": {
-                                "type": "string",
-                                "description": "24-hour volume in USD (BigInt as string)",
-                                "example": "1000000000000"
-                              },
                               "date": {
                                 "type": "string",
                                 "format": "date",
                                 "description": "Date of the volume data point",
                                 "example": "2024-01-01"
                               },
-                              "volume_usd_cumulative": {
+                              "volume": {
+                                "type": "string",
+                                "description": "24-hour volume in USD (BigInt as string)",
+                                "example": "1000000000000"
+                              },
+                              "cumulativeVolume": {
                                 "type": "string",
                                 "description": "Cumulative volume in USD (BigInt as string)",
                                 "example": "50000000000000"
-                              },
-                              "last_event_processed_tx_id": {
-                                "type": "string",
-                                "description": "Transaction ID of the last processed event",
-                                "example": "tx_abc123"
                               }
                             },
-                            "required": ["id", "volume_usd_24h", "date", "volume_usd_cumulative", "last_event_processed_tx_id"]
+                            "required": ["date", "volume", "cumulativeVolume"]
                           },
                           "description": "Historical volume data points"
                         }
                       },
-                      "required": ["tvlHistory", "volumeHistory"]
+                      "required": ["tvl", "volume"]
                     }
                   },
                   "required": ["success", "data"]
@@ -1781,6 +1745,441 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access/info": {
+      "get": {
+        "summary": "Get access information",
+        "description": "Retrieve access information for authenticated user",
+        "tags": ["Access"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "hasAccess": { "type": "boolean", "example": true },
+                    "codes": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["ABC12345", "DEF67890", "GHI13579"]
+                    }
+                  },
+                  "required": ["success", "hasAccess", "codes"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access token required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access/{address}": {
+      "get": {
+        "summary": "Check access for address",
+        "description": "Check if an address has access to the Reflect program",
+        "tags": ["Access"],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "Solana wallet address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "hasAccess": { "type": "boolean", "example": true }
+                  },
+                  "required": ["success", "hasAccess"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid address format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access/redeem": {
+      "post": {
+        "summary": "Redeem access code",
+        "description": "Redeem an access code for a wallet address",
+        "tags": ["Access"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "8-character access code",
+                    "example": "ABC12345"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["code", "address"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access code redeemed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Access code redeemed successfully" },
+                    "data": { "type": "object" },
+                    "codes": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["success", "message", "data", "codes"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access/account/create": {
+      "post": {
+        "summary": "Create account transaction",
+        "description": "Generate a transaction to create a user account",
+        "tags": ["Access"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  }
+                },
+                "required": ["address"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Account creation transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User has no access to Reflect program",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access/account/auth": {
+      "post": {
+        "summary": "Authenticate account",
+        "description": "Authenticate using transaction signature",
+        "tags": ["Access"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "transaction": {
+                    "type": "string",
+                    "description": "Transaction signature",
+                    "example": "base64_encoded_transaction"
+                  }
+                },
+                "required": ["address", "transaction"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "token": { "type": "string", "example": "jwt_token_here" }
+                  },
+                  "required": ["success", "token"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to authenticate using transaction signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access/reauth": {
+      "post": {
+        "summary": "Re-authenticate with message signature",
+        "description": "Authenticate using message signature",
+        "tags": ["Access"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "Message signature",
+                    "example": "signature_here"
+                  },
+                  "timestamp": {
+                    "type": "number",
+                    "description": "Timestamp of the message",
+                    "example": 1640995200000
+                  }
+                },
+                "required": ["address", "signature", "timestamp"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Re-authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "token": { "type": "string", "example": "jwt_token_here" }
+                  },
+                  "required": ["success", "token"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to authenticate using message signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/waitlist/check": {
+      "post": {
+        "summary": "Check waitlist enrollment",
+        "description": "Check if a username is already enrolled in the waitlist",
+        "tags": ["Waitlist"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Username starting with @",
+                    "example": "@username"
+                  }
+                },
+                "required": ["username"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Waitlist status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "enrolled": { "type": "boolean", "example": false }
+                  },
+                  "required": ["success", "enrolled"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/waitlist/enroll": {
+      "post": {
+        "summary": "Enroll in waitlist",
+        "description": "Add a username to the waitlist",
+        "tags": ["Waitlist"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Username starting with @",
+                    "example": "@username"
+                  }
+                },
+                "required": ["username"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User added to waitlist successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "User added to waitlist" }
+                  },
+                  "required": ["success", "message"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User already enrolled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/x": {
+      "get": {
+        "summary": "X endpoint",
+        "description": "Simple X endpoint",
+        "tags": ["X"],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Hello, X!" }
+                  },
+                  "required": ["success", "message"]
                 }
               }
             }
@@ -1866,41 +2265,23 @@
       "UsdcApyData": {
         "type": "object",
         "properties": {
-          "strategy": {
+          "index": {
             "type": "integer",
-            "enum": [0],
-            "description": "Stablecoin index (0: USDC+)"
+            "description": "Stablecoin index (0: USDC+)",
+            "example": 0
           },
-          "type": {
-            "type": "string",
-            "enum": ["realtime", "historical"],
-            "description": "Type of data returned"
-          },
-          "apy_bps": {
-            "type": "integer",
-            "description": "APY in basis points (100 bps = 1%)"
+          "apy": {
+            "type": "number",
+            "description": "APY as a number",
+            "example": 5.25
           },
           "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "Timestamp of the data point (for realtime data)"
-          },
-          "data_points": {
-            "type": "integer",
-            "description": "Number of data points used in calculation (for historical data)"
-          },
-          "start_date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Start date of the historical period (for historical data)"
-          },
-          "end_date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "End date of the historical period (for historical data)"
+            "description": "Timestamp of the data point"
           }
         },
-        "required": ["strategy", "type", "apy_bps"]
+        "required": ["index", "apy", "timestamp"]
       },
       "AllStablecoinsResponse": {
         "allOf": [
@@ -2371,6 +2752,18 @@
     {
       "name": "Events",
       "description": "Protocol events endpoints"
+    },
+    {
+      "name": "Access",
+      "description": "Access control and authentication endpoints"
+    },
+    {
+      "name": "Waitlist",
+      "description": "Waitlist management endpoints"
+    },
+    {
+      "name": "X",
+      "description": "X platform integration endpoints"
     }
   ]
 }
