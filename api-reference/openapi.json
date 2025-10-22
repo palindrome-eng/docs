@@ -216,8 +216,8 @@
     },
     "/integration/whitelist": {
       "post": {
-        "summary": "Whitelist integrator",
-        "description": "Generate a transaction to whitelist an integrator for access control.",
+        "summary": "Whitelist integration users",
+        "description": "Reflect is currently in closed beta and requires whitelisting users. To whitelist your users as integrator, generate and submit transaction returned from this endpoint.",
         "tags": ["Integration"],
         "security": [
           {
