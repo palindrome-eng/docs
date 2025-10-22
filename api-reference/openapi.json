@@ -214,6 +214,88 @@
         }
       }
     },
+    "/integration/whitelist": {
+      "post": {
+        "summary": "Whitelist integrator",
+        "description": "Generate a transaction to whitelist an integrator for access control.",
+        "tags": ["Integration"],
+        "security": [
+          {
+            "authenticatedIntegrator": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "signer": {
+                    "type": "string",
+                    "description": "Signer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "integrator": {
+                    "type": "string",
+                    "description": "Integrator identifier",
+                    "example": "my_integrator"
+                  }
+                },
+                "required": ["signer", "feePayer", "integrator"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Whitelist transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/integration/{id}/stats": {
       "get": {
         "summary": "Get integration statistics",
