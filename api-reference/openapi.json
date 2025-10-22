@@ -240,14 +240,9 @@
                     "type": "string",
                     "description": "Fee payer Solana address",
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "integrator": {
-                    "type": "string",
-                    "description": "Integrator identifier",
-                    "example": "my_integrator"
                   }
                 },
-                "required": ["signer", "feePayer", "integrator"]
+                "required": ["signer", "feePayer"]
               }
             }
           }
