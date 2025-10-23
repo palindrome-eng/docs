@@ -106,6 +106,108 @@
         }
       }
     },
+    "/integration/initialize-stablecoin": {
+      "post": {
+        "summary": "Initialize a stablecoin token",
+        "description": "Generate a transaction to create a new branded token mint with metadata.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metadata": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string", "description": "Token name" },
+                      "symbol": { "type": "string", "description": "Token symbol" },
+                      "description": { "type": "string", "description": "Token description" },
+                      "uri": { "type": "string", "description": "Metadata URI" }
+                    },
+                    "required": ["name", "symbol", "description", "uri"]
+                  },
+                  "signer": { "type": "string", "description": "Signer's Solana address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                },
+                "required": ["metadata", "signer", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token initialization transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": { "type": "string", "description": "Base64 encoded transaction" },
+                        "mint": { "type": "string", "description": "Generated mint address" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/transfer-authority": {
+      "post": {
+        "summary": "Transfer mint authority",
+        "description": "Generate a transaction to transfer mint authority of a branded token.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "brandedMint": { "type": "string", "description": "Branded token mint address" },
+                  "signer": { "type": "string", "description": "Current authority's Solana address" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                },
+                "required": ["brandedMint", "signer", "feePayer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authority transfer transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": { "type": "string", "description": "Base64 encoded transaction" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
     "/integration/{id}/config": {
       "get": {
         "summary": "Get integration configuration",
