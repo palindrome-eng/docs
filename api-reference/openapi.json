@@ -72,403 +72,6 @@
         }
       }
     },
-    "/stablecoin/types": {
-      "get": {
-        "summary": "Get available stablecoin types",
-        "description": "Retrieve list of available stablecoin types",
-        "tags": ["Stablecoin"],
-        "responses": {
-          "200": {
-            "description": "Available stablecoin types retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "index": {
-                            "type": "integer",
-                            "description": "Stablecoin index",
-                            "example": 0
-                          },
-                          "name": {
-                            "type": "string",
-                            "description": "Stablecoin name",
-                            "example": "USDC+"
-                          }
-                        },
-                        "required": ["index", "name"]
-                      },
-                      "example": [
-                        { "index": 0, "name": "USDC+" }
-                      ]
-                    }
-                  },
-                  "required": ["success", "data"]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stablecoin/limits": {
-      "get": {
-        "summary": "Get supply cap information for all stablecoins",
-        "description": "Retrieve supply caps, current supply, and remaining capacity for all stablecoins",
-        "tags": ["Stablecoin"],
-        "responses": {
-          "200": {
-            "description": "Supply cap information retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "allOf": [
-                          {
-                            "type": "object",
-                            "properties": {
-                              "index": {
-                                "type": "integer",
-                                "description": "Stablecoin index",
-                                "example": 0
-                              }
-                            },
-                            "required": ["index"]
-                          },
-                          {
-                            "$ref": "#/components/schemas/SupplyCapInfo"
-                          }
-                        ]
-                      },
-                      "example": [
-                        {
-                          "index": 0,
-                          "supplyCap": 1000000000,
-                          "currentSupply": 500000000,
-                          "remainingCapacity": 500000000,
-                          "utilizationPercentage": 50.0
-                        }
-                      ]
-                    }
-                  },
-                  "required": ["success", "data"]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stablecoin/quote/{type}": {
-      "post": {
-        "summary": "Get quote for mint or redeem",
-        "description": "Get a quote for minting or redeeming stablecoins",
-        "tags": ["Stablecoin"],
-        "parameters": [
-          {
-            "name": "type",
-            "in": "path",
-            "description": "Quote type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["mint", "redeem"]
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "stablecoinIndex": {
-                    "type": "integer",
-                    "description": "Stablecoin index (0: USDC+)",
-                    "enum": [0],
-                    "example": 0
-                  },
-                  "depositAmount": {
-                    "type": "number",
-                    "description": "Amount to quote",
-                    "example": 1000000
-                  }
-                },
-                "required": ["stablecoinIndex", "depositAmount"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Quote retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "number",
-                      "description": "Quote amount",
-                      "example": 999000
-                    }
-                  },
-                  "required": ["success", "data"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Stablecoin with the specified index not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stablecoin/mint": {
-      "post": {
-        "summary": "Generate mint transaction",
-        "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK.",
-        "tags": ["Stablecoin"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "stablecoinIndex": {
-                    "type": "integer",
-                    "description": "Stablecoin index (0: USDC+)",
-                    "enum": [0],
-                    "example": 0
-                  },
-                  "depositAmount": {
-                    "type": "number",
-                    "description": "Amount to mint in smallest unit",
-                    "example": 1000000
-                  },
-                  "signer": {
-                    "type": "string",
-                    "description": "User's Solana wallet address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "minimumReceived": {
-                    "type": "number",
-                    "description": "Minimum amount to receive (slippage protection)",
-                    "example": 999000
-                  },
-                  "collateralMint": {
-                    "type": "string",
-                    "description": "Optional collateral mint address",
-                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-                  }
-                },
-                "required": ["stablecoinIndex", "depositAmount", "signer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Mint transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Stablecoin with the specified index not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stablecoin/burn": {
-      "post": {
-        "summary": "Generate burn transaction",
-        "description": "Generate a burn transaction for stablecoins using the Reflect Money SDK",
-        "tags": ["Stablecoin"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "stablecoinIndex": {
-                    "type": "integer",
-                    "description": "Stablecoin index (0: USDC+)",
-                    "enum": [0],
-                    "example": 0
-                  },
-                  "depositAmount": {
-                    "type": "number",
-                    "description": "Amount to burn in smallest unit",
-                    "example": 1000000
-                  },
-                  "signer": {
-                    "type": "string",
-                    "description": "User's Solana wallet address",
-                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                  },
-                  "minimumReceived": {
-                    "type": "number",
-                    "description": "Minimum amount to receive (slippage protection)",
-                    "example": 999000
-                  },
-                  "collateralMint": {
-                    "type": "string",
-                    "description": "Optional collateral mint address",
-                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-                  }
-                },
-                "required": ["stablecoinIndex", "depositAmount", "signer"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Burn transaction generated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TransactionResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Stablecoin with the specified index not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/integration/initialize": {
       "post": {
         "summary": "Initialize an integration",
@@ -692,6 +295,71 @@
           },
           "400": {
             "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/{authority}/integrations": {
+      "get": {
+        "summary": "Get integrations by authority",
+        "description": "Retrieve all integrations associated with a specific authority address",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "authority",
+            "in": "path",
+            "description": "Authority Solana address",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Integrations retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      },
+                      "description": "Array of integrations associated with the authority"
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid authority address",
             "content": {
               "application/json": {
                 "schema": {
@@ -1352,6 +1020,403 @@
           },
           "400": {
             "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/types": {
+      "get": {
+        "summary": "Get available stablecoin types",
+        "description": "Retrieve list of available stablecoin types",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Available stablecoin types retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer",
+                            "description": "Stablecoin index",
+                            "example": 0
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Stablecoin name",
+                            "example": "USDC+"
+                          }
+                        },
+                        "required": ["index", "name"]
+                      },
+                      "example": [
+                        { "index": 0, "name": "USDC+" }
+                      ]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/limits": {
+      "get": {
+        "summary": "Get supply cap information for all stablecoins",
+        "description": "Retrieve supply caps, current supply, and remaining capacity for all stablecoins",
+        "tags": ["Stablecoin"],
+        "responses": {
+          "200": {
+            "description": "Supply cap information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "index": {
+                                "type": "integer",
+                                "description": "Stablecoin index",
+                                "example": 0
+                              }
+                            },
+                            "required": ["index"]
+                          },
+                          {
+                            "$ref": "#/components/schemas/SupplyCapInfo"
+                          }
+                        ]
+                      },
+                      "example": [
+                        {
+                          "index": 0,
+                          "supplyCap": 1000000000,
+                          "currentSupply": 500000000,
+                          "remainingCapacity": 500000000,
+                          "utilizationPercentage": 50.0
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/quote/{type}": {
+      "post": {
+        "summary": "Get quote for mint or redeem",
+        "description": "Get a quote for minting or redeeming stablecoins",
+        "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Quote type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["mint", "redeem"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)",
+                    "enum": [0],
+                    "example": 0
+                  },
+                  "depositAmount": {
+                    "type": "number",
+                    "description": "Amount to quote",
+                    "example": 1000000
+                  }
+                },
+                "required": ["stablecoinIndex", "depositAmount"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "number",
+                      "description": "Quote amount",
+                      "example": 999000
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stablecoin with the specified index not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/mint": {
+      "post": {
+        "summary": "Generate mint transaction",
+        "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK.",
+        "tags": ["Stablecoin"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)",
+                    "enum": [0],
+                    "example": 0
+                  },
+                  "depositAmount": {
+                    "type": "number",
+                    "description": "Amount to mint in smallest unit",
+                    "example": 1000000
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "User's Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "minimumReceived": {
+                    "type": "number",
+                    "description": "Minimum amount to receive (slippage protection)",
+                    "example": 999000
+                  },
+                  "collateralMint": {
+                    "type": "string",
+                    "description": "Optional collateral mint address",
+                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                  }
+                },
+                "required": ["stablecoinIndex", "depositAmount", "signer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mint transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stablecoin with the specified index not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stablecoin/burn": {
+      "post": {
+        "summary": "Generate burn transaction",
+        "description": "Generate a burn transaction for stablecoins using the Reflect Money SDK",
+        "tags": ["Stablecoin"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)",
+                    "enum": [0],
+                    "example": 0
+                  },
+                  "depositAmount": {
+                    "type": "number",
+                    "description": "Amount to burn in smallest unit",
+                    "example": 1000000
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "User's Solana wallet address",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "minimumReceived": {
+                    "type": "number",
+                    "description": "Minimum amount to receive (slippage protection)",
+                    "example": 999000
+                  },
+                  "collateralMint": {
+                    "type": "string",
+                    "description": "Optional collateral mint address",
+                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                  }
+                },
+                "required": ["stablecoinIndex", "depositAmount", "signer"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Burn transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stablecoin with the specified index not found",
             "content": {
               "application/json": {
                 "schema": {
