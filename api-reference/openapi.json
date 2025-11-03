@@ -745,7 +745,55 @@
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "additionalProperties": true
+                        "properties": {
+                          "pubkey": {
+                            "type": "string",
+                            "description": "Integration pubkey (proxy state address)",
+                            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                          },
+                          "data": {
+                            "type": "object",
+                            "properties": {
+                              "brandedMint": {
+                                "type": "string",
+                                "description": "Branded token mint address",
+                                "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                              },
+                              "stablecoinMint": {
+                                "type": "string",
+                                "description": "Underlying stablecoin mint address",
+                                "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                              },
+                              "fee": {
+                                "type": "integer",
+                                "description": "Fee in basis points",
+                                "example": 200
+                              },
+                              "principal": {
+                                "type": "string",
+                                "description": "Principal amount (BigInt as string)",
+                                "example": "1000000000"
+                              },
+                              "integratorsCommission": {
+                                "type": "string",
+                                "description": "Integrator's commission amount (BigInt as string)",
+                                "example": "20000000"
+                              },
+                              "authority": {
+                                "type": "string",
+                                "description": "Authority Solana address",
+                                "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                              },
+                              "bump": {
+                                "type": "integer",
+                                "description": "PDA bump seed",
+                                "example": 255
+                              }
+                            },
+                            "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+                          }
+                        },
+                        "required": ["pubkey", "data"]
                       },
                       "description": "Array of integrations associated with the authority"
                     }
