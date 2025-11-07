@@ -2374,88 +2374,43 @@
               "data": {
                 "type": "object",
                 "properties": {
-                  "permissions": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "example": ["mint", "redeem", "claim"]
-                  },
-                  "administrators": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "publicKey": {
-                          "type": "string",
-                          "description": "Administrator's Solana public key",
-                          "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-                        },
-                        "permissionLevel": {
-                          "type": "string",
-                          "enum": ["superadmin", "manager", "viewer"],
-                          "example": "superadmin"
-                        }
-                      },
-                      "required": ["publicKey", "permissionLevel"]
-                    }
-                  },
-                  "yieldBreakdownBps": {
-                    "type": "object",
-                    "properties": {
-                      "integrator": {
-                        "type": "number",
-                        "description": "Integrator's share in basis points",
-                        "example": 200
-                      },
-                      "user": {
-                        "type": "number",
-                        "description": "User's share in basis points",
-                        "example": 9800
-                      }
-                    },
-                    "required": ["integrator", "user"]
-                  },
-                  "underlyingStablecoin": {
+                  "brandedMint": {
                     "type": "string",
-                    "description": "Underlying stablecoin address",
+                    "description": "Branded mint public key",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "stablecoinMint": {
+                    "type": "string",
+                    "description": "Stablecoin mint public key",
                     "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
                   },
-                  "integrationIndex": {
+                  "fee": {
                     "type": "number",
-                    "description": "Integration index",
-                    "example": 1
+                    "description": "Fee basis points configured for the integration",
+                    "example": 50
                   },
-                  "metadata": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "example": "My Integration"
-                      },
-                      "symbol": {
-                        "type": "string",
-                        "example": "MI"
-                      },
-                      "description": {
-                        "type": "string",
-                        "example": "A custom integration stablecoin"
-                      },
-                      "logoUrl": {
-                        "type": "string",
-                        "format": "uri",
-                        "example": "https://example.com/logo.png"
-                      },
-                      "websiteUrl": {
-                        "type": "string",
-                        "format": "uri",
-                        "example": "https://example.com"
-                      }
-                    },
-                    "required": ["name", "symbol", "description"]
+                  "principal": {
+                    "type": "number",
+                    "description": "Outstanding principal held by the integration",
+                    "example": 1250000000
+                  },
+                  "integratorsCommission": {
+                    "type": "number",
+                    "description": "Integrator commission in stablecoin units",
+                    "example": 25000000
+                  },
+                  "authority": {
+                    "type": "string",
+                    "description": "Authority public key for the integration",
+                    "example": "3Nd1p6zFvDz4SqJ2T5BmJ4E5pM4ix3L1hXyX7dQf9PvR"
+                  },
+                  "bump": {
+                    "type": "number",
+                    "description": "Program derived address bump seed",
+                    "example": 255
                   }
                 },
-                "required": ["permissions", "administrators", "yieldBreakdownBps", "underlyingStablecoin", "integrationIndex", "metadata"]
+                "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
               }
             },
             "required": ["data"]
