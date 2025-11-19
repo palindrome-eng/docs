@@ -297,6 +297,19 @@
         "summary": "Generate mint transaction",
         "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK.",
         "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -384,6 +397,19 @@
         "summary": "Generate burn transaction",
         "description": "Generate a burn transaction for stablecoins using the Reflect Money SDK",
         "tags": ["Stablecoin"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
