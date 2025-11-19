@@ -1,0 +1,105 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Reflect Money",
+  "colors": {
+    "primary": "#09D175",
+    "light": "#09D175",
+    "dark": "#09D175"
+  },
+  "favicon": "/logo/logo-dark.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Protocol Overview",
+            "pages": [
+              "introduction",
+              "currencies",
+              "interestrates"
+            ]
+          },
+          {
+            "group": "Risk Management",
+            "pages": [
+              "risk-management/notice",
+              "risk-management/codeaudits"
+            ]
+          },
+          {
+            "group": "Strategy Breakdowns",
+            "pages": [
+              "strategies/USDC"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Integrating Reflect",
+        "groups": [
+          {
+            "group": "Developer Kits",
+            "pages": [
+              "api-reference/stablecoin",
+              "api-reference/restaking",
+              "api-reference/proxy",
+              "api-reference/oracle"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reflect API",
+        "openapi": {
+          "source": "/api-reference/openapi.json",
+          "directory": "reflect-api"
+        }
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/palindrome-eng",
+          "icon": "github"
+        },
+        {
+          "anchor": "Brand Kit",
+          "href": "https://github.com/palindrome-eng/",
+          "icon": "copyright"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/logo-whitebg.svg",
+    "dark": "/logo/logo-light.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Follow on X",
+        "href": "https://x.com/reflectmoney"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Visit Website",
+      "href": "https://reflect.money"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/reflectmoney",
+      "github": "https://github.com/palindrome-eng"
+    }
+  },
+  "api": {
+    "playground": {
+      "mode": "interactive",
+      "proxy": false
+    }
+  }
+}
