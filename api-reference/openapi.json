@@ -223,7 +223,6 @@
                   "stablecoinIndex": {
                     "type": "integer",
                     "description": "Stablecoin index (0: USDC+)",
-                    "enum": [0],
                     "example": 0
                   },
                   "depositAmount": {
@@ -596,6 +595,67 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
+          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+        }
+      }
+    },
+    "/integration/initialize/flow": {
+      "post": {
+        "summary": "Initialize integration flow (complete setup)",
+        "description": "A complete initialization flow that combines creating a branded mint, adding metadata, transferring authority, and initializing the integration in a single transaction. This is a wrapper around all initialization endpoints.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "signer": { "type": "string", "description": "Initializer's Solana address" },
+                  "authority": { "type": "string", "description": "Authority Solana address" },
+                  "stablecoin": { "type": "integer", "enum": [0], "description": "Stablecoin index (0: USDC+)" },
+                  "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
+                  "feePayer": { "type": "string", "description": "Fee payer Solana address" },
+                  "metadata": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string", "description": "Token name" },
+                      "symbol": { "type": "string", "description": "Token symbol" },
+                      "description": { "type": "string", "description": "Token description" },
+                      "uri": { "type": "string", "description": "Metadata URI" }
+                    },
+                    "required": ["name", "symbol", "description", "uri"]
+                  }
+                },
+                "required": ["signer", "authority", "stablecoin", "feeBps", "feePayer", "metadata"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Initialization flow transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": { "type": "string", "description": "Base64 encoded transaction (partially signed by mint keypair)" },
+                        "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" }
+                      },
+                      "required": ["transaction", "integrationId"]
+                    }
+                  },
+                  "required": ["success", "data"]
                 }
               }
             }
