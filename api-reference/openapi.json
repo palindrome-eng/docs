@@ -875,6 +875,35 @@
                               }
                             },
                             "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "Token name",
+                                "example": "My Token"
+                              },
+                              "symbol": {
+                                "type": "string",
+                                "description": "Token symbol",
+                                "example": "MTK"
+                              },
+                              "image": {
+                                "type": "string",
+                                "format": "uri",
+                                "description": "Token image URL",
+                                "example": "https://metadata-bucket.s3.region.amazonaws.com/images/abc123.png"
+                              },
+                              "description": {
+                                "type": "string",
+                                "description": "Token description",
+                                "example": "A great token"
+                              }
+                            },
+                            "required": ["name", "symbol", "image", "description"],
+                            "nullable": true,
+                            "description": "Token metadata (null if not available)"
                           }
                         },
                         "required": ["pubkey", "data"]
@@ -889,6 +918,113 @@
           },
           "400": {
             "description": "Invalid authority address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/upload": {
+      "post": {
+        "summary": "Upload integration metadata",
+        "description": "Upload image and metadata for a branded mint. Returns URLs for the uploaded image and JSON metadata file that can be used when initializing integrations.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image file (PNG, JPEG, etc.)"
+                  },
+                  "brandedMint": {
+                    "type": "string",
+                    "description": "Branded mint Solana address",
+                    "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                  },
+                  "metadata[name]": {
+                    "type": "string",
+                    "description": "Token name",
+                    "example": "My Token"
+                  },
+                  "metadata[symbol]": {
+                    "type": "string",
+                    "description": "Token symbol",
+                    "example": "MTK"
+                  },
+                  "metadata[description]": {
+                    "type": "string",
+                    "description": "Token description",
+                    "example": "A great token"
+                  },
+                  "metadata[image]": {
+                    "type": "string",
+                    "description": "Image filename (for metadata JSON)",
+                    "example": "token-image.png"
+                  }
+                },
+                "required": ["image", "brandedMint", "metadata[name]", "metadata[symbol]", "metadata[description]", "metadata[image]"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metadata uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "imageUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "URL of the uploaded image",
+                          "example": "https://metadata-bucket.s3.region.amazonaws.com/images/abc123.png"
+                        },
+                        "jsonUrl": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "URL of the uploaded JSON metadata file",
+                          "example": "https://metadata-bucket.s3.region.amazonaws.com/json/xyz789.json"
+                        }
+                      },
+                      "required": ["imageUrl", "jsonUrl"]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
             "content": {
               "application/json": {
                 "schema": {
@@ -2492,9 +2628,36 @@
                   }
                 },
                 "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+              },
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Token name",
+                    "example": "My Token"
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "description": "Token symbol",
+                    "example": "MTK"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Token image URL",
+                    "example": "https://metadata-bucket.s3.region.amazonaws.com/images/abc123.png"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Token description",
+                    "example": "A great token"
+                  }
+                },
+                "required": ["name", "symbol", "image", "description"]
               }
             },
-            "required": ["data"]
+            "required": ["data", "metadata"]
           }
         ]
       },
