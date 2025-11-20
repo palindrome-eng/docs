@@ -975,14 +975,9 @@
                     "type": "string",
                     "description": "Token description",
                     "example": "A great token"
-                  },
-                  "metadata[image]": {
-                    "type": "string",
-                    "description": "Image filename (for metadata JSON)",
-                    "example": "token-image.png"
                   }
                 },
-                "required": ["image", "brandedMint", "metadata[name]", "metadata[symbol]", "metadata[description]", "metadata[image]"]
+                "required": ["image", "brandedMint", "metadata[name]", "metadata[symbol]", "metadata[description]"]
               }
             }
           }
