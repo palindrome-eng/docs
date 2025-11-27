@@ -1041,6 +1041,194 @@
         }
       }
     },
+    "/integration/api-key": {
+      "post": {
+        "summary": "Reveal API key",
+        "description": "Reveal the API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Reveal API key for integration {integrationId} at timestamp {timestamp}'. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "Signer Solana address (must be the integration authority)",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "Base58-encoded signature of the message",
+                    "example": "5KJvsngHeMoo884zpHuqeFqJ2pB3z5K1z6T5KJvsngHeMoo884zpHuqeFqJ2pB3z5K1z6T5KJvsngHeMoo884zpHuqeFqJ2pB3z5K1z6T"
+                  },
+                  "timestamp": {
+                    "type": "integer",
+                    "description": "Unix timestamp in milliseconds. Must be within 1 minute of the current server time. Signatures expire after 1 minute.",
+                    "example": 1704067200000
+                  }
+                },
+                "required": ["integrationId", "signer", "signature", "timestamp"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key revealed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "The API key for the integration",
+                      "example": "rk_live_abc123xyz789"
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request - Invalid signature, expired signature (older than 1 minute), signer is not the authority, or timestamp is in the future",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integration not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/api-key/rotate": {
+      "post": {
+        "summary": "Rotate API key",
+        "description": "Rotate (generate a new) API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Rotate API key for integration {integrationId} at timestamp {timestamp}'. The old API key will be invalidated. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
+        "tags": ["Integration"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "Signer Solana address (must be the integration authority)",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "Base58-encoded signature of the message",
+                    "example": "5KJvsngHeMoo884zpHuqeFqJ2pB3z5K1z6T5KJvsngHeMoo884zpHuqeFqJ2pB3z5K1z6T5KJvsngHeMoo884zpHuqeFqJ2pB3z5K1z6T"
+                  },
+                  "timestamp": {
+                    "type": "integer",
+                    "description": "Unix timestamp in milliseconds. Must be within 1 minute of the current server time. Signatures expire after 1 minute.",
+                    "example": 1704067200000
+                  }
+                },
+                "required": ["integrationId", "signer", "signature", "timestamp"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key rotated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "The new API key for the integration",
+                      "example": "rk_live_new123xyz456"
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request - Invalid signature, expired signature (older than 1 minute), signer is not the authority, or timestamp is in the future",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integration not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/integration/whitelist": {
       "post": {
         "summary": "Whitelist integration users",
