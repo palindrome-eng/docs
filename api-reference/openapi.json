@@ -2651,58 +2651,58 @@
               "data": {
                 "type": "object",
                 "properties": {
-                  "totalSupply": {
-                    "type": "number",
-                    "description": "Total supply of integration stablecoins",
-                    "example": 1000000000
+                  "stablecoin": {
+                    "type": "string",
+                    "description": "Branded mint address for this integration",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
                   },
-                  "totalUsers": {
-                    "type": "number",
-                    "description": "Total number of users",
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp of the latest statistics snapshot",
+                    "example": "2024-01-01T00:00:00.000Z"
+                  },
+                  "supply": {
+                    "type": "string",
+                    "description": "Total supply of the branded stablecoin (in smallest units, e.g. lamports)",
+                    "example": "1000000000"
+                  },
+                  "holders": {
+                    "type": "integer",
+                    "description": "Total number of holders",
                     "example": 1500
                   },
-                  "totalPrincipal": {
-                    "type": "number",
-                    "description": "Total principal amount",
-                    "example": 950000000
+                  "principal": {
+                    "type": "string",
+                    "description": "Total principal amount deposited (in smallest units)",
+                    "example": "950000000"
                   },
-                  "totalYieldGenerated": {
-                    "type": "number",
-                    "description": "Total yield generated",
-                    "example": 50000000
+                  "yield": {
+                    "type": "string",
+                    "description": "Total yield generated (in smallest units)",
+                    "example": "50000000"
                   },
-                  "historicalData": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "date": {
-                          "type": "string",
-                          "format": "date",
-                          "example": "2024-01-01"
-                        },
-                        "supply": {
-                          "type": "number",
-                          "example": 1000000000
-                        },
-                        "users": {
-                          "type": "number",
-                          "example": 1500
-                        },
-                        "principal": {
-                          "type": "number",
-                          "example": 950000000
-                        },
-                        "yield": {
-                          "type": "number",
-                          "example": 50000000
-                        }
-                      },
-                      "required": ["date", "supply", "users", "principal", "yield"]
-                    }
+                  "volume": {
+                    "type": "string",
+                    "description": "Cumulative transaction volume for this integration (in smallest units)",
+                    "example": "5000000000"
+                  },
+                  "exchange_rate": {
+                    "type": "string",
+                    "description": "Current exchange rate between the branded token and the underlying stablecoin, represented as a bigint string with 6 decimal places of precision (e.g. 1000321 represents 1.000321)",
+                    "example": "1000321"
                   }
                 },
-                "required": ["totalSupply", "totalUsers", "totalPrincipal", "totalYieldGenerated", "historicalData"]
+                "required": [
+                  "stablecoin",
+                  "timestamp",
+                  "supply",
+                  "holders",
+                  "principal",
+                  "yield",
+                  "volume",
+                  "exchange_rate"
+                ]
               }
             },
             "required": ["data"]
