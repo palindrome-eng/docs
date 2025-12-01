@@ -1364,7 +1364,7 @@
     "/integration/{id}/stats/historical": {
       "get": {
         "summary": "Get historical integration statistics",
-        "description": "Retrieve historical statistics for a specific integration",
+        "description": "Retrieve historical statistics for a specific integration. Use the `period` query parameter to specify the number of days (e.g., '7' for 7 days, '30' for 30 days). Defaults to 7 days if not provided.",
         "tags": ["Integration"],
         "security": [
           {
@@ -1384,12 +1384,12 @@
           {
             "name": "period",
             "in": "query",
-            "description": "Time period for historical data",
+            "description": "Number of days for historical data (e.g., '7' for 7 days, '30' for 30 days). Defaults to 7 days if not provided.",
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["7d", "30d", "90d", "1y"],
-              "default": "30d"
+              "pattern": "^[0-9]+$",
+              "default": "7"
             }
           }
         ],
@@ -2722,8 +2722,9 @@
                 "properties": {
                   "period": {
                     "type": "string",
-                    "enum": ["7d", "30d", "90d", "1y"],
-                    "example": "30d"
+                    "description": "Number of days for the historical data period",
+                    "pattern": "^[0-9]+$",
+                    "example": "7"
                   },
                   "historicalData": {
                     "type": "array",
