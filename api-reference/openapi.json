@@ -2782,6 +2782,11 @@
                     "type": "string",
                     "description": "Current exchange rate between the branded token and the underlying stablecoin, represented as a bigint string with 6 decimal places of precision (e.g. 1000321 represents 1.000321)",
                     "example": "1000321"
+                  },
+                  "totalRevenue": {
+                    "type": "string",
+                    "description": "Total revenue generated for this integration (in smallest units)",
+                    "example": "25000000"
                   }
                 },
                 "required": [
@@ -2792,7 +2797,8 @@
                   "principal",
                   "yield",
                   "volume",
-                  "exchange_rate"
+                  "exchange_rate",
+                  "totalRevenue"
                 ]
               }
             },
