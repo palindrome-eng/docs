@@ -3045,21 +3045,21 @@
                   "rateToUnderlying": {
                     "type": "number",
                     "description": "Rate of integration stablecoin to underlying stablecoin",
-                    "example": 1.02
+                    "example": 1.000321
                   },
-                  "rateToUsd": {
+                  "rateToUsdc": {
                     "type": "number",
-                    "description": "Rate of underlying stablecoin to USD",
+                    "description": "Rate of integration stablecoin to USDC",
                     "example": 1.0
                   },
                   "timestamp": {
                     "type": "string",
                     "format": "date-time",
-                    "description": "Timestamp of the exchange rate",
+                    "description": "Timestamp when the exchange rate was retrieved",
                     "example": "2024-01-01T00:00:00.000Z"
                   }
                 },
-                "required": ["integrationId", "underlyingStablecoin", "rateToUnderlying", "rateToUsd", "timestamp"]
+                "required": ["integrationId", "underlyingStablecoin", "rateToUnderlying", "rateToUsdc", "timestamp"]
               }
             },
             "required": ["data"]
