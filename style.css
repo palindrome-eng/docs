@@ -6,10 +6,12 @@
 .almond-layout #content-area,
 #content-area {
   max-width: 52rem !important; /* ~832px - reduced width */
+  min-height: 100vh !important; /* Ensure it goes all the way to bottom */
 }
 
 #content-container {
   max-width: 100% !important;
+  min-height: 100vh !important; /* Ensure content reaches bottom */
 }
 
 .mdx-content {
@@ -65,7 +67,6 @@
 [role="dialog"] {
   max-height: 90vh !important;
   overflow-y: auto !important;
-  height: auto !important;
 }
 
 /* Prevent modal content from extending to bottom of screen */
@@ -75,40 +76,25 @@
   overflow-y: auto !important;
 }
 
-/* CRITICAL FIX: Override BOTH lg:h-screen AND lg:h-[calc(100vh-5.5rem)] on p-px container */
-/* But ONLY within API sections to avoid affecting main page */
+/* CRITICAL FIX: Remove BOTH lg:h-screen AND lg:h-[calc(100vh-5.5rem)] from the playground p-px element */
 @media (min-width: 1024px) {
-  /* Target ONLY p-px containers within API sections */
-  .api-section div[class*="p-px"][class*="col-span"],
-  .api-section div[class*="p-px"][class*="lg:col-span"],
-  #request-example div[class*="p-px"],
-  #response-example div[class*="p-px"] {
+  /* Very specific targeting for the API playground p-px container */
+  .api-section > div > div[class*="p-px"][class*="col-span-1"][class*="lg:col-span-2"] {
     height: auto !important;
-    max-height: 90vh !important;
+    max-height: none !important;
   }
   
-  /* Override lg:h-screen ONLY in API playground context */
-  .api-section div[class*="lg:h-screen"],
-  #request-example div[class*="lg:h-screen"],
-  #response-example div[class*="lg:h-screen"] {
+  /* Also target by the specific class combination more broadly */
+  div[class*="p-px"][class*="lg:space-y-6"][class*="lg:flex"][class*="lg:sticky"] {
     height: auto !important;
-    max-height: 90vh !important;
-  }
-  
-  /* Override lg:h-[calc(...)] ONLY in API playground context */
-  .api-section div[class*="lg:h-[calc"],
-  #request-example div[class*="lg:h-[calc"],
-  #response-example div[class*="lg:h-[calc"] {
-    height: auto !important;
-    max-height: 90vh !important;
+    max-height: none !important;
   }
 }
 
 /* Remove flex-grow from response/result sections to prevent hyperextension */
-[role="region"][aria-label="Response content"],
-div[class*="flex-grow"] {
+.api-section [role="region"][aria-label="Response content"],
+.api-section div[class*="flex-grow"] {
   flex-grow: 0 !important;
-  height: auto !important;
   max-height: 60vh !important;
 }
 
