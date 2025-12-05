@@ -1,9 +1,4 @@
-/* Remove border-radius from all elements globally */
-* {
-  border-radius: 0 !important;
-}
-
-/* Specific targeting for common Mintlify components */
+/* Targeted border-radius removal - avoid breaking layouts */
 
 /* Cards and Card Groups */
 .card,
@@ -18,7 +13,16 @@
 
 /* Code blocks */
 .code-block,
-.code-group {
+.code-group,
+pre,
+code {
+  border-radius: 0 !important;
+}
+
+/* API Playground - be specific to avoid breaking layout */
+.api-playground-input,
+.request-example,
+.response-example {
   border-radius: 0 !important;
 }
 
@@ -26,7 +30,8 @@
 button,
 .tryit-button,
 .chat-assistant-send-button,
-.topbar-cta-button {
+.topbar-cta-button,
+[role="button"] {
   border-radius: 0 !important;
 }
 
@@ -73,10 +78,12 @@ button,
 }
 
 /* Input fields */
-input,
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
 textarea,
 .search-input,
-.api-playground-input,
 .chat-assistant-textarea,
 .chat-assistant-input {
   border-radius: 0 !important;
@@ -88,7 +95,8 @@ textarea,
 }
 
 /* Images within frames */
-img {
+.frame img,
+.panel img {
   border-radius: 0 !important;
 }
 
@@ -99,5 +107,17 @@ img {
 
 /* Expandables */
 .expandable {
+  border-radius: 0 !important;
+}
+
+/* Sidebar elements */
+.sidebar,
+.sidebar-group {
+  border-radius: 0 !important;
+}
+
+/* Table of contents */
+.toc,
+.toc-item {
   border-radius: 0 !important;
 }
