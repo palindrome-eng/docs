@@ -80,15 +80,10 @@
   "navbar": {
     "links": [
       {
-        "label": "Follow on X",
-        "href": "https://x.com/reflectmoney"
+        "label": "Launch App",
+        "href": "https://alpha.reflect.money"
       }
     ],
-    "primary": {
-      "type": "button",
-      "label": "Visit Website",
-      "href": "https://reflect.money"
-    }
   },
   "footer": {
     "socials": {
