@@ -75,15 +75,24 @@
   overflow-y: auto !important;
 }
 
-/* Override lg:h-screen that causes the hyperextension - target the p-px container */
-div[class*="p-px"][class*="col-span"][class*="lg:h-screen"] {
-  height: auto !important;
-  max-height: 90vh !important;
-}
-
-/* More aggressive targeting for lg:h-screen */
+/* CRITICAL FIX: Override BOTH lg:h-screen AND lg:h-[calc(100vh-5.5rem)] on p-px container */
+/* This is the combination that fixes the hyperextension */
 @media (min-width: 1024px) {
+  /* Target the specific p-px container with both problematic height classes */
+  div[class*="p-px"][class*="col-span"],
+  div[class*="p-px"][class*="lg:col-span"] {
+    height: auto !important;
+    max-height: 90vh !important;
+  }
+  
+  /* Override any lg:h-screen */
   div[class*="lg:h-screen"] {
+    height: auto !important;
+    max-height: 90vh !important;
+  }
+  
+  /* Override any lg:h-[calc(...)] */
+  div[class*="lg:h-[calc"] {
     height: auto !important;
     max-height: 90vh !important;
   }
