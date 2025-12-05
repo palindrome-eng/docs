@@ -113,6 +113,57 @@
   border-radius: 0 !important;
 }
 
+/* ============================================
+   CUSTOM SCROLLBAR - Modern & Branded
+   ============================================ */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #09D175 #1a1a1a;
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-left: 1px solid #2a2a2a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #09D175;
+  border: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0bf084;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #07a85d;
+}
+
+/* Scrollbar for code blocks and specific containers */
+pre::-webkit-scrollbar,
+code::-webkit-scrollbar,
+.code-block::-webkit-scrollbar {
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-thumb,
+code::-webkit-scrollbar-thumb,
+.code-block::-webkit-scrollbar-thumb {
+  background: #09D175;
+}
+
+/* ============================================
+   BORDER RADIUS REMOVAL - Specific Elements
+   ============================================ */
+
 /* Cards and Card Groups */
 .card,
 .card-group {
