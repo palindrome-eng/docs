@@ -413,3 +413,9 @@ div[class*="focus"],
 div[class*="active"] {
   border-radius: 0 !important;
 }
+
+/*Change Sidebar & Navbar to match Dark BG. */
+.dark\:bg-\[\#09090B\]:is(.dark *) {
+    --tw-bg-opacity: 1;
+    background-color: rgb(9 13 13);
+}
