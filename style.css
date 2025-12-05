@@ -30,36 +30,33 @@
 }
 
 /* ============================================
-   API PLAYGROUND & MODAL FIX
+   CARD SPACING FIX
    ============================================ */
 
-/* Fix the API section grid to prevent overflow */
-.api-section {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 1rem !important;
-  width: 100% !important;
+/* Reduce excessive padding above call-to-action in cards */
+.card {
+  padding-bottom: 1rem !important;
 }
 
-/* Prevent columns from breaking the layout */
-.api-section > div {
-  min-width: 0 !important;
-  max-width: 100% !important;
+/* Target the link/CTA at bottom of cards to reduce top margin */
+.card > a:last-child,
+.card > div:last-child {
+  margin-top: 0.5rem !important;
 }
 
-/* Fix request and response example containers */
-#request-example,
-#response-example {
-  min-width: 0 !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
+/* Specifically target the "available as of" text spacing */
+.card p:last-of-type {
+  margin-bottom: 0.5rem !important;
 }
+
+/* ============================================
+   API PLAYGROUND MODAL FIX
+   ============================================ */
 
 /* Fix the modal/sheet that opens when clicking "Try It" */
 #chat-assistant-sheet,
 .chat-assistant-sheet,
-[role="dialog"],
-[data-state="open"] {
+[role="dialog"] {
   max-height: 90vh !important;
   overflow-y: auto !important;
 }
@@ -69,11 +66,6 @@
 #chat-assistant-sheet-content {
   max-height: 80vh !important;
   overflow-y: auto !important;
-}
-
-/* Fix any API playground modals */
-div[class*="playground"] [role="dialog"] {
-  max-height: 85vh !important;
 }
 
 /* ============================================
