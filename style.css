@@ -76,23 +76,29 @@
 }
 
 /* CRITICAL FIX: Override BOTH lg:h-screen AND lg:h-[calc(100vh-5.5rem)] on p-px container */
-/* This is the combination that fixes the hyperextension */
+/* But ONLY within API sections to avoid affecting main page */
 @media (min-width: 1024px) {
-  /* Target the specific p-px container with both problematic height classes */
-  div[class*="p-px"][class*="col-span"],
-  div[class*="p-px"][class*="lg:col-span"] {
+  /* Target ONLY p-px containers within API sections */
+  .api-section div[class*="p-px"][class*="col-span"],
+  .api-section div[class*="p-px"][class*="lg:col-span"],
+  #request-example div[class*="p-px"],
+  #response-example div[class*="p-px"] {
     height: auto !important;
     max-height: 90vh !important;
   }
   
-  /* Override any lg:h-screen */
-  div[class*="lg:h-screen"] {
+  /* Override lg:h-screen ONLY in API playground context */
+  .api-section div[class*="lg:h-screen"],
+  #request-example div[class*="lg:h-screen"],
+  #response-example div[class*="lg:h-screen"] {
     height: auto !important;
     max-height: 90vh !important;
   }
   
-  /* Override any lg:h-[calc(...)] */
-  div[class*="lg:h-[calc"] {
+  /* Override lg:h-[calc(...)] ONLY in API playground context */
+  .api-section div[class*="lg:h-[calc"],
+  #request-example div[class*="lg:h-[calc"],
+  #response-example div[class*="lg:h-[calc"] {
     height: auto !important;
     max-height: 90vh !important;
   }
