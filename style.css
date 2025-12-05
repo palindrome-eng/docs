@@ -40,9 +40,8 @@
    ============================================ */
 
 /* Fix hyper-extended p-4 elements in API playground */
-.api-playground-input .p-4,
-.request-example .p-4,
-.response-example .p-4 {
+#request-example .p-4,
+#response-example .p-4 {
   max-width: 100% !important;
   overflow: hidden !important;
   box-sizing: border-box !important;
@@ -71,18 +70,18 @@ code {
   border-radius: 0 !important;
 }
 
-/* API Playground - be specific to avoid breaking layout */
-.api-playground-input,
-.request-example,
-.response-example {
+/* API Playground */
+#api-playground-input,
+#request-example,
+#response-example {
   border-radius: 0 !important;
 }
 
 /* Buttons */
 button,
 .tryit-button,
+#topbar-cta-button,
 .chat-assistant-send-button,
-.topbar-cta-button,
 [role="button"] {
   border-radius: 0 !important;
 }
@@ -105,7 +104,8 @@ button,
 
 /* Frames and panels */
 .frame,
-.panel {
+.panel,
+#panel {
   border-radius: 0 !important;
 }
 
@@ -135,14 +135,15 @@ input[type="search"],
 input[type="email"],
 input[type="password"],
 textarea,
-.search-input,
+#search-input,
 .chat-assistant-textarea,
 .chat-assistant-input {
   border-radius: 0 !important;
 }
 
 /* Modals and sheets */
-.chat-assistant-sheet {
+.chat-assistant-sheet,
+#chat-assistant-sheet {
   border-radius: 0 !important;
 }
 
@@ -163,14 +164,16 @@ textarea,
 }
 
 /* Sidebar elements */
-.sidebar,
-.sidebar-group {
+#sidebar,
+.sidebar-group,
+#sidebar-content {
   border-radius: 0 !important;
 }
 
 /* Table of contents */
 .toc,
-.toc-item {
+.toc-item,
+#table-of-contents {
   border-radius: 0 !important;
 }
 
@@ -187,5 +190,15 @@ textarea,
 
 /* Footer */
 #footer {
+  border-radius: 0 !important;
+}
+
+/* Banner */
+#banner {
+  border-radius: 0 !important;
+}
+
+/* Updates/Changelog */
+.update {
   border-radius: 0 !important;
 }
