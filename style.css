@@ -1,0 +1,103 @@
+/* Remove border-radius from all elements globally */
+* {
+  border-radius: 0 !important;
+}
+
+/* Specific targeting for common Mintlify components */
+
+/* Cards and Card Groups */
+.card,
+.card-group {
+  border-radius: 0 !important;
+}
+
+/* Callouts and Info Boxes */
+.callout {
+  border-radius: 0 !important;
+}
+
+/* Code blocks */
+.code-block,
+.code-group {
+  border-radius: 0 !important;
+}
+
+/* Buttons */
+button,
+.tryit-button,
+.chat-assistant-send-button,
+.topbar-cta-button {
+  border-radius: 0 !important;
+}
+
+/* Navigation elements */
+.nav-anchor,
+.navbar-link,
+.nav-dropdown-trigger,
+.nav-dropdown-content,
+.nav-dropdown-item {
+  border-radius: 0 !important;
+}
+
+/* Pills and tags */
+.method-pill,
+.method-nav-pill,
+.nav-tag-pill {
+  border-radius: 0 !important;
+}
+
+/* Frames and panels */
+.frame,
+.panel {
+  border-radius: 0 !important;
+}
+
+/* Accordions */
+.accordion,
+.accordion-group {
+  border-radius: 0 !important;
+}
+
+/* Steps */
+.step,
+.steps {
+  border-radius: 0 !important;
+}
+
+/* Tabs */
+.tab,
+.tabs,
+.nav-tabs,
+.nav-tabs-item {
+  border-radius: 0 !important;
+}
+
+/* Input fields */
+input,
+textarea,
+.search-input,
+.api-playground-input,
+.chat-assistant-textarea,
+.chat-assistant-input {
+  border-radius: 0 !important;
+}
+
+/* Modals and sheets */
+.chat-assistant-sheet {
+  border-radius: 0 !important;
+}
+
+/* Images within frames */
+img {
+  border-radius: 0 !important;
+}
+
+/* Tooltips */
+.tooltip {
+  border-radius: 0 !important;
+}
+
+/* Expandables */
+.expandable {
+  border-radius: 0 !important;
+}
