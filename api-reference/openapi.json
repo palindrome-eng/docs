@@ -107,9 +107,7 @@
                         },
                         "required": ["index", "name"]
                       },
-                      "example": [
-                        { "index": 0, "name": "USDC+" }
-                      ]
+                      "example": [{ "index": 0, "name": "USDC+" }]
                     }
                   },
                   "required": ["success", "data"]
@@ -504,14 +502,41 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "signer": { "type": "string", "description": "Initializer's Solana address" },
-                  "authority": { "type": "string", "description": "Authority Solana address" },
-                  "stablecoin": { "type": "integer", "description": "Stablecoin index (0: USDC+)" },
-                  "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
-                  "brandedMint": { "type": "string", "description": "Branded token mint address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                  "signer": {
+                    "type": "string",
+                    "description": "Initializer's Solana address"
+                  },
+                  "authority": {
+                    "type": "string",
+                    "description": "Authority Solana address"
+                  },
+                  "stablecoin": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)"
+                  },
+                  "feeBps": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 10000,
+                    "description": "Fee in basis points"
+                  },
+                  "brandedMint": {
+                    "type": "string",
+                    "description": "Branded token mint address"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address"
+                  }
                 },
-                "required": ["signer", "authority", "stablecoin", "feeBps", "brandedMint", "feePayer"]
+                "required": [
+                  "signer",
+                  "authority",
+                  "stablecoin",
+                  "feeBps",
+                  "brandedMint",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -519,10 +544,32 @@
         "responses": {
           "200": {
             "description": "Initialization transaction generated successfully",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+              }
+            }
           },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -542,14 +589,26 @@
                     "type": "object",
                     "properties": {
                       "name": { "type": "string", "description": "Token name" },
-                      "symbol": { "type": "string", "description": "Token symbol" },
-                      "description": { "type": "string", "description": "Token description" },
+                      "symbol": {
+                        "type": "string",
+                        "description": "Token symbol"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Token description"
+                      },
                       "uri": { "type": "string", "description": "Metadata URI" }
                     },
                     "required": ["name", "symbol", "description", "uri"]
                   },
-                  "signer": { "type": "string", "description": "Signer's Solana address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                  "signer": {
+                    "type": "string",
+                    "description": "Signer's Solana address"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address"
+                  }
                 },
                 "required": ["metadata", "signer", "feePayer"]
               }
@@ -568,8 +627,14 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "transaction": { "type": "string", "description": "Base64 encoded transaction" },
-                        "mint": { "type": "string", "description": "Generated mint address" }
+                        "transaction": {
+                          "type": "string",
+                          "description": "Base64 encoded transaction"
+                        },
+                        "mint": {
+                          "type": "string",
+                          "description": "Generated mint address"
+                        }
                       }
                     }
                   }
@@ -577,8 +642,26 @@
               }
             }
           },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -594,9 +677,18 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "brandedMint": { "type": "string", "description": "Branded token mint address" },
-                  "signer": { "type": "string", "description": "Current authority's Solana address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                  "brandedMint": {
+                    "type": "string",
+                    "description": "Branded token mint address"
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "Current authority's Solana address"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address"
+                  }
                 },
                 "required": ["brandedMint", "signer", "feePayer"]
               }
@@ -615,7 +707,10 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "transaction": { "type": "string", "description": "Base64 encoded transaction" }
+                        "transaction": {
+                          "type": "string",
+                          "description": "Base64 encoded transaction"
+                        }
                       }
                     }
                   }
@@ -623,8 +718,26 @@
               }
             }
           },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -640,23 +753,53 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "signer": { "type": "string", "description": "Initializer's Solana address" },
-                  "authority": { "type": "string", "description": "Authority Solana address" },
-                  "stablecoin": { "type": "integer", "description": "Stablecoin index (0: USDC+)" },
-                  "feeBps": { "type": "integer", "minimum": 0, "maximum": 10000, "description": "Fee in basis points" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" },
+                  "signer": {
+                    "type": "string",
+                    "description": "Initializer's Solana address"
+                  },
+                  "authority": {
+                    "type": "string",
+                    "description": "Authority Solana address"
+                  },
+                  "stablecoin": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)"
+                  },
+                  "feeBps": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 10000,
+                    "description": "Fee in basis points"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address"
+                  },
                   "metadata": {
                     "type": "object",
                     "properties": {
                       "name": { "type": "string", "description": "Token name" },
-                      "symbol": { "type": "string", "description": "Token symbol" },
-                      "description": { "type": "string", "description": "Token description" },
+                      "symbol": {
+                        "type": "string",
+                        "description": "Token symbol"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Token description"
+                      },
                       "uri": { "type": "string", "description": "Metadata URI" }
                     },
                     "required": ["name", "symbol", "description", "uri"]
                   }
                 },
-                "required": ["signer", "authority", "stablecoin", "feeBps", "feePayer", "metadata"]
+                "required": [
+                  "signer",
+                  "authority",
+                  "stablecoin",
+                  "feeBps",
+                  "feePayer",
+                  "metadata"
+                ]
               }
             }
           }
@@ -673,8 +816,14 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "transaction": { "type": "string", "description": "Base64 encoded transaction (partially signed by mint keypair)" },
-                        "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" }
+                        "transaction": {
+                          "type": "string",
+                          "description": "Base64 encoded transaction (partially signed by mint keypair)"
+                        },
+                        "integrationId": {
+                          "type": "string",
+                          "description": "Integration ID (proxy state address)"
+                        }
                       },
                       "required": ["transaction", "integrationId"]
                     }
@@ -684,8 +833,26 @@
               }
             }
           },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -874,7 +1041,15 @@
                                 "example": 255
                               }
                             },
-                            "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+                            "required": [
+                              "brandedMint",
+                              "stablecoinMint",
+                              "fee",
+                              "principal",
+                              "integratorsCommission",
+                              "authority",
+                              "bump"
+                            ]
                           },
                           "metadata": {
                             "type": "object",
@@ -901,7 +1076,12 @@
                                 "example": "A great token"
                               }
                             },
-                            "required": ["name", "symbol", "image", "description"],
+                            "required": [
+                              "name",
+                              "symbol",
+                              "image",
+                              "description"
+                            ],
                             "nullable": true,
                             "description": "Token metadata (null if not available)"
                           }
@@ -977,7 +1157,13 @@
                     "example": "A great token"
                   }
                 },
-                "required": ["image", "brandedMint", "metadata[name]", "metadata[symbol]", "metadata[description]"]
+                "required": [
+                  "image",
+                  "brandedMint",
+                  "metadata[name]",
+                  "metadata[symbol]",
+                  "metadata[description]"
+                ]
               }
             }
           }
@@ -1074,7 +1260,12 @@
                     "example": 1704067200000
                   }
                 },
-                "required": ["integrationId", "signer", "signature", "timestamp"]
+                "required": [
+                  "integrationId",
+                  "signer",
+                  "signature",
+                  "timestamp"
+                ]
               }
             }
           }
@@ -1168,7 +1359,12 @@
                     "example": 1704067200000
                   }
                 },
-                "required": ["integrationId", "signer", "signature", "timestamp"]
+                "required": [
+                  "integrationId",
+                  "signer",
+                  "signature",
+                  "timestamp"
+                ]
               }
             }
           }
@@ -1579,9 +1775,18 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
-                  "signer": { "type": "string", "description": "Admin Solana address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)"
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "Admin Solana address"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address"
+                  }
                 },
                 "required": ["integrationId", "signer", "feePayer"]
               }
@@ -1589,9 +1794,34 @@
           }
         },
         "responses": {
-          "200": { "description": "Initialize vault transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "200": {
+            "description": "Initialize vault transaction generated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -1607,20 +1837,62 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "integrationId": { "type": "string", "description": "Integration ID (proxy state address)" },
-                  "userAddress": { "type": "string", "description": "User's Solana address" },
-                  "signer": { "type": "string", "description": "Signer Solana address" },
-                  "feePayer": { "type": "string", "description": "Fee payer Solana address" }
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)"
+                  },
+                  "userAddress": {
+                    "type": "string",
+                    "description": "User's Solana address"
+                  },
+                  "signer": {
+                    "type": "string",
+                    "description": "Signer Solana address"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Fee payer Solana address"
+                  }
                 },
-                "required": ["integrationId", "userAddress", "signer", "feePayer"]
+                "required": [
+                  "integrationId",
+                  "userAddress",
+                  "signer",
+                  "feePayer"
+                ]
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Initialize user account transaction generated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TransactionResponse" } } } },
-          "400": { "description": "Invalid request", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "200": {
+            "description": "Initialize user account transaction generated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2025,7 +2297,13 @@
                           "example": 2500000
                         }
                       },
-                      "required": ["users", "supply", "cumulativeVolume", "tvl", "totalYieldDistributed"]
+                      "required": [
+                        "users",
+                        "supply",
+                        "cumulativeVolume",
+                        "tvl",
+                        "totalYieldDistributed"
+                      ]
                     }
                   },
                   "required": ["success", "data"]
@@ -2106,11 +2384,26 @@
                         "properties": {
                           "id": { "type": "integer" },
                           "stablecoin": { "type": "integer" },
-                          "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
-                          "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
-                          "timestamp": { "type": "string", "format": "date-time" }
+                          "base_usd_value_bps": {
+                            "type": "number",
+                            "description": "Base exchange rate in bps"
+                          },
+                          "receipt_usd_value_bps": {
+                            "type": "number",
+                            "description": "Receipt exchange rate in bps"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
                         },
-                        "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
+                        "required": [
+                          "id",
+                          "stablecoin",
+                          "base_usd_value_bps",
+                          "receipt_usd_value_bps",
+                          "timestamp"
+                        ]
                       }
                     }
                   },
@@ -2123,7 +2416,9 @@
             "description": "Internal server error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
               }
             }
           }
@@ -2173,11 +2468,26 @@
                         "properties": {
                           "id": { "type": "integer" },
                           "stablecoin": { "type": "integer" },
-                          "base_usd_value_bps": { "type": "number", "description": "Base exchange rate in bps" },
-                          "receipt_usd_value_bps": { "type": "number", "description": "Receipt exchange rate in bps" },
-                          "timestamp": { "type": "string", "format": "date-time" }
+                          "base_usd_value_bps": {
+                            "type": "number",
+                            "description": "Base exchange rate in bps"
+                          },
+                          "receipt_usd_value_bps": {
+                            "type": "number",
+                            "description": "Receipt exchange rate in bps"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
                         },
-                        "required": ["id", "stablecoin", "base_usd_value_bps", "receipt_usd_value_bps", "timestamp"]
+                        "required": [
+                          "id",
+                          "stablecoin",
+                          "base_usd_value_bps",
+                          "receipt_usd_value_bps",
+                          "timestamp"
+                        ]
                       }
                     }
                   },
@@ -2190,7 +2500,9 @@
             "description": "Invalid request parameters",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
               }
             }
           },
@@ -2198,7 +2510,9 @@
             "description": "Stablecoin with the specified index not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
               }
             }
           },
@@ -2206,7 +2520,9 @@
             "description": "Internal server error",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
               }
             }
           }
@@ -2367,13 +2683,21 @@
           "400": {
             "description": "Invalid stablecoin index",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
             }
           },
           "500": {
             "description": "Internal server error",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
             }
           }
         }
@@ -2385,7 +2709,13 @@
         "description": "Retrieve the most recent protocol events up to a limit.",
         "tags": ["Events"],
         "parameters": [
-          { "name": "limit", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "Max events to return" }
+          {
+            "name": "limit",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "Max events to return"
+          }
         ],
         "responses": {
           "200": {
@@ -2396,14 +2726,29 @@
                   "type": "object",
                   "properties": {
                     "success": { "type": "boolean", "example": true },
-                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
                   },
                   "required": ["success", "events"]
                 }
               }
             }
           },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2413,7 +2758,13 @@
         "description": "Retrieve protocol events associated with a signer address.",
         "tags": ["Events"],
         "parameters": [
-          { "name": "signer", "in": "path", "required": true, "schema": { "type": "string" }, "description": "Signer Solana address" }
+          {
+            "name": "signer",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Signer Solana address"
+          }
         ],
         "responses": {
           "200": {
@@ -2424,15 +2775,39 @@
                   "type": "object",
                   "properties": {
                     "success": { "type": "boolean", "example": true },
-                    "events": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
                   },
                   "required": ["success", "events"]
                 }
               }
             }
           },
-          "400": { "description": "Invalid signer address", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/BadRequestErrorResponse" } } } },
-          "500": { "description": "Internal server error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InternalServerErrorResponse" } } } }
+          "400": {
+            "description": "Invalid signer address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -2698,7 +3073,12 @@
             "example": 50.0
           }
         },
-        "required": ["supplyCap", "currentSupply", "remainingCapacity", "utilizationPercentage"]
+        "required": [
+          "supplyCap",
+          "currentSupply",
+          "remainingCapacity",
+          "utilizationPercentage"
+        ]
       },
       "ApiKeyResponse": {
         "allOf": [
@@ -2849,7 +3229,13 @@
                           "example": 50000000
                         }
                       },
-                      "required": ["date", "supply", "users", "principal", "yield"]
+                      "required": [
+                        "date",
+                        "supply",
+                        "users",
+                        "principal",
+                        "yield"
+                      ]
                     }
                   }
                 },
@@ -2907,7 +3293,15 @@
                     "example": 255
                   }
                 },
-                "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+                "required": [
+                  "brandedMint",
+                  "stablecoinMint",
+                  "fee",
+                  "principal",
+                  "integratorsCommission",
+                  "authority",
+                  "bump"
+                ]
               },
               "metadata": {
                 "type": "object",
@@ -3058,170 +3452,195 @@
                     "example": "2024-01-01T00:00:00.000Z"
                   }
                 },
-                "required": ["integrationId", "underlyingStablecoin", "rateToUnderlying", "rateToUsdc", "timestamp"]
+                "required": [
+                  "integrationId",
+                  "underlyingStablecoin",
+                  "rateToUnderlying",
+                  "rateToUsdc",
+                  "timestamp"
+                ]
               }
             },
             "required": ["data"]
           }
         ]
-      }
-    },
-    "IntegrationEvent": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "description": "Unique event ID",
-          "example": 12345
-        },
-        "event": {
-          "type": "object",
-          "description": "Event object containing event metadata and data. The 'data' property contains the specific event type data (WrapEvent, UnwrapEvent, or ClaimFeesEvent).",
-          "properties": {
-            "data": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/WrapEvent"
-                },
-                {
-                  "$ref": "#/components/schemas/UnwrapEvent"
-                },
-                {
-                  "$ref": "#/components/schemas/ClaimFeesEvent"
-                }
-              ],
-              "description": "Event-specific data. Type depends on the 'type' field: '1' = WrapEvent, '2' = UnwrapEvent, '3' = ClaimFeesEvent"
-            }
+      },
+      "IntegrationEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique event ID",
+            "example": 12345
           },
-          "additionalProperties": true,
-          "required": ["data"]
+          "event": {
+            "type": "object",
+            "description": "Event object containing event metadata and data. The 'data' property contains the specific event type data (WrapEvent, UnwrapEvent, or ClaimFeesEvent). Type depends on the 'type' field: '1' = WrapEvent, '2' = UnwrapEvent, '3' = ClaimFeesEvent",
+            "properties": {
+              "data": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/WrapEvent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/UnwrapEvent"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ClaimFeesEvent"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": true,
+            "required": ["data"]
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the event occurred",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "transaction_id": {
+            "type": "string",
+            "description": "Transaction signature/ID",
+            "example": "5j7s8K9mN2pQ3rT4vW5xY6zA7bC8dE9fG0hI1jK2lM3nO4pQ5rS6tU7vW8xY9zA0bC1dE2fG"
+          },
+          "type": {
+            "type": "string",
+            "description": "Event type: '1' for WrapEvent, '2' for UnwrapEvent, '3' for ClaimFeesEvent",
+            "enum": ["1", "2", "3"],
+            "example": "1"
+          },
+          "signer": {
+            "type": "string",
+            "description": "Solana address of the signer who triggered the event",
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          },
+          "proxy_state_address": {
+            "type": "string",
+            "description": "Integration ID (proxy state address)",
+            "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
+          }
         },
-        "timestamp": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp when the event occurred",
-          "example": "2024-01-01T00:00:00.000Z"
-        },
-        "transaction_id": {
-          "type": "string",
-          "description": "Transaction signature/ID",
-          "example": "5j7s8K9mN2pQ3rT4vW5xY6zA7bC8dE9fG0hI1jK2lM3nO4pQ5rS6tU7vW8xY9zA0bC1dE2fG"
-        },
-        "type": {
-          "type": "string",
-          "description": "Event type: '1' for WrapEvent, '2' for UnwrapEvent, '3' for ClaimFeesEvent",
-          "enum": ["1", "2", "3"],
-          "example": "1"
-        },
-        "signer": {
-          "type": "string",
-          "description": "Solana address of the signer who triggered the event",
-          "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-        },
-        "proxy_state_address": {
-          "type": "string",
-          "description": "Integration ID (proxy state address)",
-          "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
-        }
+        "required": [
+          "id",
+          "event",
+          "timestamp",
+          "transaction_id",
+          "type",
+          "signer",
+          "proxy_state_address"
+        ]
       },
-      "required": ["id", "event", "timestamp", "transaction_id", "type", "signer", "proxy_state_address"]
-    },
-    "WrapEvent": {
-      "type": "object",
-      "description": "Wrap event data (type '1', discriminator: 1) - occurs when a user deposits/mints branded tokens",
-      "properties": {
-        "discriminator": {
-          "type": "integer",
-          "enum": [1],
-          "description": "Event discriminator for Wrap event",
-          "example": 1
+      "WrapEvent": {
+        "type": "object",
+        "description": "Wrap event data (type '1', discriminator: 1) - occurs when a user deposits/mints branded tokens",
+        "properties": {
+          "discriminator": {
+            "type": "integer",
+            "enum": [1],
+            "description": "Event discriminator for Wrap event",
+            "example": 1
+          },
+          "proxyState": {
+            "type": "string",
+            "description": "Proxy state address (integration ID)",
+            "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
+          },
+          "user": {
+            "type": "string",
+            "description": "User address who performed the wrap",
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          },
+          "amountIn": {
+            "type": "string",
+            "description": "Amount deposited (in smallest units, e.g. lamports)",
+            "example": "1000000000"
+          },
+          "amountOut": {
+            "type": "string",
+            "description": "Amount of branded tokens received (in smallest units, e.g. lamports)",
+            "example": "1000000000"
+          }
         },
-        "proxyState": {
-          "type": "string",
-          "description": "Proxy state address (integration ID)",
-          "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
-        },
-        "user": {
-          "type": "string",
-          "description": "User address who performed the wrap",
-          "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-        },
-        "amountIn": {
-          "type": "string",
-          "description": "Amount deposited (in smallest units, e.g. lamports)",
-          "example": "1000000000"
-        },
-        "amountOut": {
-          "type": "string",
-          "description": "Amount of branded tokens received (in smallest units, e.g. lamports)",
-          "example": "1000000000"
-        }
+        "additionalProperties": true,
+        "required": [
+          "discriminator",
+          "proxyState",
+          "user",
+          "amountIn",
+          "amountOut"
+        ]
       },
-      "additionalProperties": true,
-      "required": ["discriminator", "proxyState", "user", "amountIn", "amountOut"]
-    },
-    "UnwrapEvent": {
-      "type": "object",
-      "description": "Unwrap event data (type '2', discriminator: 2) - occurs when a user withdraws/redeems branded tokens",
-      "properties": {
-        "discriminator": {
-          "type": "integer",
-          "enum": [2],
-          "description": "Event discriminator for Unwrap event",
-          "example": 2
+      "UnwrapEvent": {
+        "type": "object",
+        "description": "Unwrap event data (type '2', discriminator: 2) - occurs when a user withdraws/redeems branded tokens",
+        "properties": {
+          "discriminator": {
+            "type": "integer",
+            "enum": [2],
+            "description": "Event discriminator for Unwrap event",
+            "example": 2
+          },
+          "proxyState": {
+            "type": "string",
+            "description": "Proxy state address (integration ID)",
+            "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
+          },
+          "user": {
+            "type": "string",
+            "description": "User address who performed the unwrap",
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          },
+          "amountIn": {
+            "type": "string",
+            "description": "Amount of branded tokens burned (in smallest units, e.g. lamports)",
+            "example": "500000000"
+          },
+          "amountOut": {
+            "type": "string",
+            "description": "Amount withdrawn (in smallest units, e.g. lamports)",
+            "example": "500000000"
+          }
         },
-        "proxyState": {
-          "type": "string",
-          "description": "Proxy state address (integration ID)",
-          "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
-        },
-        "user": {
-          "type": "string",
-          "description": "User address who performed the unwrap",
-          "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-        },
-        "amountIn": {
-          "type": "string",
-          "description": "Amount of branded tokens burned (in smallest units, e.g. lamports)",
-          "example": "500000000"
-        },
-        "amountOut": {
-          "type": "string",
-          "description": "Amount withdrawn (in smallest units, e.g. lamports)",
-          "example": "500000000"
-        }
+        "additionalProperties": true,
+        "required": [
+          "discriminator",
+          "proxyState",
+          "user",
+          "amountIn",
+          "amountOut"
+        ]
       },
-      "additionalProperties": true,
-      "required": ["discriminator", "proxyState", "user", "amountIn", "amountOut"]
-    },
-    "ClaimFeesEvent": {
-      "type": "object",
-      "description": "Claim fees event data (type '3', discriminator: 3) - occurs when fees are claimed by the integration authority",
-      "properties": {
-        "discriminator": {
-          "type": "integer",
-          "enum": [3],
-          "description": "Event discriminator for ClaimFees event",
-          "example": 3
+      "ClaimFeesEvent": {
+        "type": "object",
+        "description": "Claim fees event data (type '3', discriminator: 3) - occurs when fees are claimed by the integration authority",
+        "properties": {
+          "discriminator": {
+            "type": "integer",
+            "enum": [3],
+            "description": "Event discriminator for ClaimFees event",
+            "example": 3
+          },
+          "proxyState": {
+            "type": "string",
+            "description": "Proxy state address (integration ID)",
+            "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
+          },
+          "authority": {
+            "type": "string",
+            "description": "Authority address who claimed the fees",
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Amount of fees claimed (in smallest units, e.g. lamports)",
+            "example": "25000000"
+          }
         },
-        "proxyState": {
-          "type": "string",
-          "description": "Proxy state address (integration ID)",
-          "example": "9GKYXhPf7XF2yVHRwzVWpeLxRJszp4Jf7zF19hbfE1Ah"
-        },
-        "authority": {
-          "type": "string",
-          "description": "Authority address who claimed the fees",
-          "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
-        },
-        "amount": {
-          "type": "string",
-          "description": "Amount of fees claimed (in smallest units, e.g. lamports)",
-          "example": "25000000"
-        }
-      },
-      "additionalProperties": true,
-      "required": ["discriminator", "proxyState", "authority", "amount"]
+        "additionalProperties": true,
+        "required": ["discriminator", "proxyState", "authority", "amount"]
+      }
     }
   },
   "tags": [
