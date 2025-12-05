@@ -65,6 +65,7 @@
 [role="dialog"] {
   max-height: 90vh !important;
   overflow-y: auto !important;
+  height: auto !important; /* Override the calc(100vh-5.5rem) */
 }
 
 /* Prevent modal content from extending to bottom of screen */
@@ -72,6 +73,22 @@
 #chat-assistant-sheet-content {
   max-height: 80vh !important;
   overflow-y: auto !important;
+}
+
+/* Fix the API playground modal specifically */
+[data-testid="api-playground-modal"],
+.api-playground-modal {
+  height: auto !important; /* Override lg:h-[calc(100vh-5.5rem)] */
+  max-height: 90vh !important;
+}
+
+/* Remove flex-grow from response/result sections to prevent hyperextension */
+[role="region"][aria-label="Response content"],
+.api-playground-modal [class*="flex-grow"],
+div[class*="overflow-y-auto"][class*="flex-grow"] {
+  flex-grow: 0 !important;
+  height: auto !important;
+  max-height: 60vh !important;
 }
 
 /* ============================================
