@@ -1,4 +1,55 @@
-/* Targeted border-radius removal - avoid breaking layouts */
+/* ============================================
+   CONTENT WIDTH - Make content area wider (responsive)
+   ============================================ */
+
+/* Main content area - use relative width instead of fixed pixels */
+#content-area {
+  max-width: 85% !important;
+}
+
+/* Content container */
+#content-container {
+  max-width: 100% !important;
+  padding-left: clamp(1rem, 3vw, 3rem) !important;
+  padding-right: clamp(1rem, 3vw, 3rem) !important;
+}
+
+/* MDX content itself */
+.mdx-content {
+  max-width: 100% !important;
+}
+
+/* Almond layout specific adjustments */
+.almond-layout #content-area {
+  max-width: 85% !important;
+}
+
+/* Adjust the content side layout for better spacing */
+#content-side-layout {
+  gap: clamp(1.5rem, 3vw, 3rem) !important;
+}
+
+/* Media queries for different screen sizes */
+@media (max-width: 768px) {
+  #content-area {
+    max-width: 95% !important;
+  }
+  
+  #content-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  #content-area {
+    max-width: 1100px !important;
+  }
+}
+
+/* ============================================
+   BORDER RADIUS REMOVAL - Cyber/Technical Style
+   ============================================ */
 
 /* Cards and Card Groups */
 .card,
@@ -119,5 +170,21 @@ textarea,
 /* Table of contents */
 .toc,
 .toc-item {
+  border-radius: 0 !important;
+}
+
+/* Search bar */
+#search-bar-entry,
+#search-bar-entry-mobile {
+  border-radius: 0 !important;
+}
+
+/* Navbar */
+#navbar {
+  border-radius: 0 !important;
+}
+
+/* Footer */
+#footer {
   border-radius: 0 !important;
 }
