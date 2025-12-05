@@ -36,6 +36,29 @@
 }
 
 /* ============================================
+   API PLAYGROUND FIX
+   ============================================ */
+
+/* Fix the API playground grid layout */
+.api-section {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1rem !important;
+}
+
+/* Ensure request/response boxes don't overflow */
+.request-example,
+.response-example {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Fix p-4 padding elements in playground */
+.api-section .p-4 {
+  box-sizing: border-box !important;
+}
+
+/* ============================================
    BORDER RADIUS REMOVAL - Cyber/Technical Style
    ============================================ */
 
