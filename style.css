@@ -38,6 +38,12 @@
   padding-bottom: 1rem !important;
 }
 
+/* Override the mt-8 class on card-cta to remove excessive spacing */
+.card-cta,
+[data-component-part="card-cta"] {
+  margin-top: 0 !important;
+}
+
 /* Target the link/CTA at bottom of cards to reduce top margin */
 .card > a:last-child,
 .card > div:last-child {
