@@ -1,10 +1,10 @@
 /* ============================================
-   CONTENT WIDTH - Make content area ~20% wider (responsive)
+   CONTENT WIDTH - Make content area ~10% wider (responsive)
    ============================================ */
 
-/* Main content area - modest increase */
+/* Main content area - modest 10% increase */
 #content-area {
-  max-width: 62rem !important; /* ~992px, up from ~820px */
+  max-width: 57rem !important; /* ~912px, up from ~820px */
 }
 
 /* Content container */
@@ -19,7 +19,7 @@
 
 /* Almond layout specific adjustments */
 .almond-layout #content-area {
-  max-width: 62rem !important;
+  max-width: 57rem !important;
 }
 
 /* Media queries for different screen sizes */
@@ -31,7 +31,7 @@
 
 @media (min-width: 1600px) {
   #content-area {
-    max-width: 64rem !important; /* Slight bump on very large screens */
+    max-width: 58rem !important; /* Slight bump on very large screens */
   }
 }
 
