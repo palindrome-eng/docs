@@ -65,7 +65,7 @@
 [role="dialog"] {
   max-height: 90vh !important;
   overflow-y: auto !important;
-  height: auto !important; /* Override the calc(100vh-5.5rem) */
+  height: auto !important;
 }
 
 /* Prevent modal content from extending to bottom of screen */
@@ -75,17 +75,23 @@
   overflow-y: auto !important;
 }
 
-/* Fix the API playground modal specifically */
-[data-testid="api-playground-modal"],
-.api-playground-modal {
-  height: auto !important; /* Override lg:h-[calc(100vh-5.5rem)] */
+/* Override lg:h-screen that causes the hyperextension - target the p-px container */
+div[class*="p-px"][class*="col-span"][class*="lg:h-screen"] {
+  height: auto !important;
   max-height: 90vh !important;
+}
+
+/* More aggressive targeting for lg:h-screen */
+@media (min-width: 1024px) {
+  div[class*="lg:h-screen"] {
+    height: auto !important;
+    max-height: 90vh !important;
+  }
 }
 
 /* Remove flex-grow from response/result sections to prevent hyperextension */
 [role="region"][aria-label="Response content"],
-.api-playground-modal [class*="flex-grow"],
-div[class*="overflow-y-auto"][class*="flex-grow"] {
+div[class*="flex-grow"] {
   flex-grow: 0 !important;
   height: auto !important;
   max-height: 60vh !important;
