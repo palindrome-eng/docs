@@ -1,10 +1,10 @@
 /* ============================================
-   CONTENT WIDTH - Make content area ~10% wider (responsive)
+   CONTENT WIDTH - Make content area slightly wider (responsive)
    ============================================ */
 
-/* Main content area - modest 10% increase */
+/* Main content area - conservative increase */
 #content-area {
-  max-width: 57rem !important; /* ~912px, up from ~820px */
+  max-width: 54rem !important; /* ~864px, reduced from 57rem */
 }
 
 /* Content container */
@@ -19,7 +19,7 @@
 
 /* Almond layout specific adjustments */
 .almond-layout #content-area {
-  max-width: 57rem !important;
+  max-width: 54rem !important;
 }
 
 /* Media queries for different screen sizes */
@@ -31,30 +31,20 @@
 
 @media (min-width: 1600px) {
   #content-area {
-    max-width: 58rem !important; /* Slight bump on very large screens */
+    max-width: 55rem !important;
   }
 }
 
 /* ============================================
-   API PLAYGROUND FIX
+   API PLAYGROUND FIX - p-4 overflow only
    ============================================ */
 
-/* Fix the API playground grid layout */
-.api-section {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 1rem !important;
-}
-
-/* Ensure request/response boxes don't overflow */
-.request-example,
-.response-example {
-  min-width: 0 !important;
+/* Fix hyper-extended p-4 elements in API playground */
+.api-playground-input .p-4,
+.request-example .p-4,
+.response-example .p-4 {
   max-width: 100% !important;
-}
-
-/* Fix p-4 padding elements in playground */
-.api-section .p-4 {
+  overflow: hidden !important;
   box-sizing: border-box !important;
 }
 
