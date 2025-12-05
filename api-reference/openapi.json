@@ -904,10 +904,12 @@
             }
           }
         }
-      },
-      "put": {
+      }
+    },
+    "/integration/{id}/config/update": {
+      "post": {
         "summary": "Update integration configuration",
-        "description": "Update configuration for a specific integration",
+        "description": "Generate a transaction to update the fee configuration for a specific integration",
         "tags": ["Integration"],
         "parameters": [
           {
@@ -932,11 +934,11 @@
         },
         "responses": {
           "200": {
-            "description": "Integration configuration updated successfully",
+            "description": "Update configuration transaction generated successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IntegrationConfigResponse"
+                  "$ref": "#/components/schemas/TransactionResponse"
                 }
               }
             }
@@ -3342,6 +3344,29 @@
         ]
       },
       "UpdateConfigRequest": {
+        "type": "object",
+        "properties": {
+          "signer": {
+            "type": "string",
+            "description": "Solana address of the signer (authority)",
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          },
+          "feeBps": {
+            "type": "integer",
+            "description": "Integrator commission fee in basis points (0-10000). 10000 = 100%",
+            "minimum": 0,
+            "maximum": 10000,
+            "example": 200
+          },
+          "feePayer": {
+            "type": "string",
+            "description": "Solana address of the fee payer",
+            "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+          }
+        },
+        "required": ["signer", "feeBps", "feePayer"]
+      },
+      "UpdateConfigRequestOld": {
         "type": "object",
         "properties": {
           "permissions": {
