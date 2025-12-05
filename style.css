@@ -36,15 +36,17 @@
 }
 
 /* ============================================
-   API PLAYGROUND FIX - p-4 overflow only
+   API PLAYGROUND FIX - Fix grid column issue
    ============================================ */
 
-/* Fix hyper-extended p-4 elements in API playground */
-#request-example .p-4,
-#response-example .p-4 {
-  max-width: 100% !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
+/* Fix the API playground grid that's breaking layout */
+.api-section > div[class*="grid"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* Ensure columns don't overflow */
+.api-section [class*="col-span"] {
+  grid-column: span 1 !important;
 }
 
 /* ============================================
@@ -88,10 +90,18 @@ button,
 
 /* Navigation elements */
 .nav-anchor,
+.nav-anchor:hover,
+.nav-anchor:focus,
 .navbar-link,
+.navbar-link:hover,
+.navbar-link:focus,
 .nav-dropdown-trigger,
+.nav-dropdown-trigger:hover,
+.nav-dropdown-trigger:focus,
 .nav-dropdown-content,
-.nav-dropdown-item {
+.nav-dropdown-item,
+.nav-dropdown-item:hover,
+.nav-dropdown-item:focus {
   border-radius: 0 !important;
 }
 
@@ -163,10 +173,29 @@ textarea,
   border-radius: 0 !important;
 }
 
-/* Sidebar elements */
+/* Sidebar elements - all states */
 #sidebar,
+#sidebar *,
 .sidebar-group,
-#sidebar-content {
+.sidebar-group *,
+#sidebar-content,
+#sidebar-content *,
+.sidebar-group:hover,
+.sidebar-group:focus,
+a[href]:hover,
+a[href]:focus {
+  border-radius: 0 !important;
+}
+
+/* Sidebar navigation items - specifically target hover states */
+#sidebar a,
+#sidebar a:hover,
+#sidebar a:focus,
+#sidebar a:active,
+#sidebar button,
+#sidebar button:hover,
+#sidebar button:focus,
+#sidebar button:active {
   border-radius: 0 !important;
 }
 
@@ -200,5 +229,14 @@ textarea,
 
 /* Updates/Changelog */
 .update {
+  border-radius: 0 !important;
+}
+
+/* Catch-all for any pseudo-elements and states */
+*::before,
+*::after,
+*:hover,
+*:focus,
+*:active {
   border-radius: 0 !important;
 }
