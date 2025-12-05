@@ -1,28 +1,22 @@
 /* ============================================
-   CONTENT WIDTH - Make content area slightly wider (responsive)
+   CONTENT WIDTH - Reduce content area width
    ============================================ */
 
-/* Main content area - conservative increase */
+/* Target the actual content container in Almond layout */
+.almond-layout #content-area,
 #content-area {
-  max-width: 54rem !important; /* ~864px, reduced from 57rem */
+  max-width: 52rem !important; /* ~832px - reduced width */
 }
 
-/* Content container */
 #content-container {
   max-width: 100% !important;
 }
 
-/* MDX content itself */
 .mdx-content {
   max-width: 100% !important;
 }
 
-/* Almond layout specific adjustments */
-.almond-layout #content-area {
-  max-width: 54rem !important;
-}
-
-/* Media queries for different screen sizes */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   #content-area {
     max-width: 95% !important;
@@ -31,27 +25,71 @@
 
 @media (min-width: 1600px) {
   #content-area {
-    max-width: 55rem !important;
+    max-width: 53rem !important;
   }
 }
 
 /* ============================================
-   API PLAYGROUND FIX - Fix grid column issue
+   API PLAYGROUND & MODAL FIX
    ============================================ */
 
-/* Fix the API playground grid that's breaking layout */
-.api-section > div[class*="grid"] {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+/* Fix the API section grid to prevent overflow */
+.api-section {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1rem !important;
+  width: 100% !important;
 }
 
-/* Ensure columns don't overflow */
-.api-section [class*="col-span"] {
-  grid-column: span 1 !important;
+/* Prevent columns from breaking the layout */
+.api-section > div {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Fix request and response example containers */
+#request-example,
+#response-example {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Fix the modal/sheet that opens when clicking "Try It" */
+#chat-assistant-sheet,
+.chat-assistant-sheet,
+[role="dialog"],
+[data-state="open"] {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+/* Prevent modal content from extending to bottom of screen */
+.chat-assistant-sheet-content,
+#chat-assistant-sheet-content {
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+}
+
+/* Fix any API playground modals */
+div[class*="playground"] [role="dialog"] {
+  max-height: 85vh !important;
 }
 
 /* ============================================
-   BORDER RADIUS REMOVAL - Cyber/Technical Style
+   BORDER RADIUS REMOVAL - All Elements & States
    ============================================ */
+
+/* Universal catch-all for border-radius removal */
+*,
+*::before,
+*::after,
+*:hover,
+*:focus,
+*:active,
+*:visited {
+  border-radius: 0 !important;
+}
 
 /* Cards and Card Groups */
 .card,
@@ -79,22 +117,35 @@ code {
   border-radius: 0 !important;
 }
 
-/* Buttons */
+/* Buttons - all states */
 button,
+button:hover,
+button:focus,
+button:active,
 .tryit-button,
+.tryit-button:hover,
+.tryit-button:focus,
 #topbar-cta-button,
+#topbar-cta-button:hover,
+#topbar-cta-button:focus,
 .chat-assistant-send-button,
-[role="button"] {
+.chat-assistant-send-button:hover,
+.chat-assistant-send-button:focus,
+[role="button"],
+[role="button"]:hover,
+[role="button"]:focus {
   border-radius: 0 !important;
 }
 
-/* Navigation elements */
+/* Navigation elements - all states */
 .nav-anchor,
 .nav-anchor:hover,
 .nav-anchor:focus,
+.nav-anchor:active,
 .navbar-link,
 .navbar-link:hover,
 .navbar-link:focus,
+.navbar-link:active,
 .nav-dropdown-trigger,
 .nav-dropdown-trigger:hover,
 .nav-dropdown-trigger:focus,
@@ -139,32 +190,51 @@ button,
   border-radius: 0 !important;
 }
 
-/* Input fields */
+/* Input fields - all states */
+input,
+input:hover,
+input:focus,
+input:active,
 input[type="text"],
 input[type="search"],
 input[type="email"],
 input[type="password"],
 textarea,
+textarea:hover,
+textarea:focus,
+textarea:active,
 #search-input,
+#search-input:hover,
+#search-input:focus,
 .chat-assistant-textarea,
-.chat-assistant-input {
+.chat-assistant-textarea:hover,
+.chat-assistant-textarea:focus,
+.chat-assistant-input,
+.chat-assistant-input:hover,
+.chat-assistant-input:focus {
   border-radius: 0 !important;
 }
 
-/* Modals and sheets */
+/* Modals and sheets - all states */
 .chat-assistant-sheet,
-#chat-assistant-sheet {
+.chat-assistant-sheet:hover,
+#chat-assistant-sheet,
+#chat-assistant-sheet:hover,
+[role="dialog"],
+[role="dialog"]:hover {
   border-radius: 0 !important;
 }
 
 /* Images within frames */
 .frame img,
-.panel img {
+.panel img,
+img {
   border-radius: 0 !important;
 }
 
 /* Tooltips */
-.tooltip {
+.tooltip,
+[role="tooltip"] {
   border-radius: 0 !important;
 }
 
@@ -173,52 +243,75 @@ textarea,
   border-radius: 0 !important;
 }
 
-/* Sidebar elements - all states */
+/* Sidebar elements - all states including hover */
 #sidebar,
 #sidebar *,
+#sidebar *:hover,
+#sidebar *:focus,
+#sidebar *:active,
 .sidebar-group,
 .sidebar-group *,
+.sidebar-group *:hover,
+.sidebar-group *:focus,
 #sidebar-content,
 #sidebar-content *,
-.sidebar-group:hover,
-.sidebar-group:focus,
-a[href]:hover,
-a[href]:focus {
+#sidebar-content *:hover,
+#sidebar-content *:focus {
   border-radius: 0 !important;
 }
 
-/* Sidebar navigation items - specifically target hover states */
+/* Sidebar links and buttons - explicitly target hover states */
 #sidebar a,
 #sidebar a:hover,
 #sidebar a:focus,
 #sidebar a:active,
+#sidebar a:visited,
 #sidebar button,
 #sidebar button:hover,
 #sidebar button:focus,
-#sidebar button:active {
+#sidebar button:active,
+.sidebar-group a,
+.sidebar-group a:hover,
+.sidebar-group a:focus,
+.sidebar-group button,
+.sidebar-group button:hover,
+.sidebar-group button:focus {
   border-radius: 0 !important;
 }
 
 /* Table of contents */
 .toc,
 .toc-item,
-#table-of-contents {
+.toc-item:hover,
+.toc-item:focus,
+#table-of-contents,
+#table-of-contents *,
+#table-of-contents *:hover {
   border-radius: 0 !important;
 }
 
 /* Search bar */
 #search-bar-entry,
-#search-bar-entry-mobile {
+#search-bar-entry:hover,
+#search-bar-entry:focus,
+#search-bar-entry-mobile,
+#search-bar-entry-mobile:hover,
+#search-bar-entry-mobile:focus {
   border-radius: 0 !important;
 }
 
 /* Navbar */
-#navbar {
+#navbar,
+#navbar *,
+#navbar *:hover,
+#navbar *:focus {
   border-radius: 0 !important;
 }
 
 /* Footer */
-#footer {
+#footer,
+#footer *,
+#footer *:hover {
   border-radius: 0 !important;
 }
 
@@ -232,11 +325,18 @@ a[href]:focus {
   border-radius: 0 !important;
 }
 
-/* Catch-all for any pseudo-elements and states */
-*::before,
-*::after,
-*:hover,
-*:focus,
-*:active {
+/* Links - all states */
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  border-radius: 0 !important;
+}
+
+/* Divs with background - common hover effect containers */
+div[class*="hover"],
+div[class*="focus"],
+div[class*="active"] {
   border-radius: 0 !important;
 }
