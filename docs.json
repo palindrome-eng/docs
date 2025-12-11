@@ -22,16 +22,16 @@
             ]
           },
           {
+            "group": "Interest-Generating Dollars",
+            "pages": [
+              "strategies/USDC"
+            ]
+          },
+          {
             "group": "Risk Management",
             "pages": [
               "risk-management/notice",
               "risk-management/codeaudits"
-            ]
-          },
-          {
-            "group": "Interest-Generating Dollars",
-            "pages": [
-              "strategies/USDC"
             ]
           }
         ]
