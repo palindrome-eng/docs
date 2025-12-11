@@ -1,19 +1,15 @@
 ---
-title: "Cross-Margin Rate Farming "
-description: "An overview of the strategy used to collect margin rates across borrow & lend protocols available on SVM networks. "
+title: "USDC+"
+description: "An overview of the strategy used by USDC+ to collect margin rates across borrow & lend protocols available on SVM networks. "
 ---
 
-![Docs Margin Image Pn](https://github.com/palindrome-eng/docs/blob/main/images/docs-margin-image.png?raw=true)
-
-### The Efficiency Strategy for Money Markets
-
-United States Dollar Coin Plus (**_USDC\+_**) is an optimally efficient version of the [USDC](https://coinmarketcap.com/currencies/usd-coin/) stablecoin provided by [Circle (CRCL)](circle.com) a publicly traded US company. It produces efficiency and interest-rates through a lender/borrower based strategy.
+United States Dollar Coin Plus (**_USDC+_**) is an optimally efficient version of the [USDC](https://coinmarketcap.com/currencies/usd-coin/) stablecoin provided by [Circle (CRCL)](circle.com) a publicly traded US company. It produces efficiency and interest-rates through a lender/borrower based strategy.
 
 <Info>
   Reflect Money is a [_Member of the Circle Alliance_](https://partners.circle.com/partner/reflect-money) - a program by Circle to combine the best operators who wish to scale the use of its digital cash.
 
   \
-  _<sub>Please be aware that Reflect Money and its USDC\+ stablecoin are not affiliated with or endorsed by Circle Inc and are entirely seperate entities. </sub>_
+  _<sub>Please be aware that Reflect Money and its USDC+ stablecoin are not affiliated with or endorsed by Circle Inc and are entirely seperate entities. </sub>_
 </Info>
 
 ### Operational Strategy
@@ -32,19 +28,19 @@ The Capital Supplier strategy is one of the simplest and safest interest-rate ge
     _The distributor program calcultes the best interest-rates at X size for USDC on the network and marks what venues can host up to how much liquidity._
   </Step>
   <Step title="USDC is Distributed">
-    _The program then distributes this USDC immediately in order to capture interest-rates from leverage markets or borrow/lend pools._
+    _The program then distributes this USDC immediately in order to capture interest-rates from margin markets or borrow/lend pools such as _[_Drift,_](https://drift.trade)_ _[_Kamino_](https://kamino.com)_, _[_Jupiter (Fluid)_](https://jup.ag/lend/earn)
   </Step>
   <Step title="USDC+ is Issued">
-    _Depositors receive USDC\+ equivalent to their share in the pool i.e. 1 USDC can equal 0.975 USDC\+ similar to liquid staked tokens._
+    _Depositors receive USDC+ equivalent to their share in the pool i.e. 1 USDC can equal 0.975 USDC+ similar to liquid staked tokens._
   </Step>
   <Step title="USDC+ collateral grows">
-    _The value of USDC\+ in USDC grows and appreciation in this can be claimed by unwrapping the USDC\+ token to its native form._
+    _The value of USDC+ in USDC grows and appreciation in this can be claimed by unwrapping the USDC+ token to its native form._
   </Step>
 </Steps>
 
 ### Strategic Value Propositions
 
-USDC\+ is designed to provide a familiar, safe and low risk-tolerance yield-bearing asset for use within financial applications requiring interest-rates on its stablecoin balances. _More information about its primary value propositons can be found below._
+USDC+ is designed to provide a familiar, safe and low risk-tolerance yield-bearing asset for use within financial applications requiring interest-rates on its stablecoin balances. _More information about its primary value propositons can be found below._
 
 <CardGroup cols={2}>
   <Card title="Reduction in Margin Costs">
@@ -57,17 +53,17 @@ USDC\+ is designed to provide a familiar, safe and low risk-tolerance yield-bear
     Reflect provides cash-capital to money markets over a longer time-horizon and therefore increases the available size of lending for these markets.
   </Card>
   <Card title="Earn During Settlement">
-    USDC is a payments-powerhouse but lacks the ability to be intermediated during payment-settlement periods. USDC\+ enables low-risk value capture on this period.
+    USDC is a payments-powerhouse but lacks the ability to be intermediated during payment-settlement periods. USDC+ enables low-risk value capture on this period.
   </Card>
 </CardGroup>
 
 ### Risk Modeling Cross-Margin Strategies
 
-_Integrators should understand the composite risk profile when deploying USDC\+ within their applications, as the strategy inherits risks from all underlying lending venues._
+_Integrators should understand the composite risk profile when deploying USDC+ within their applications, as the strategy inherits risks from all underlying lending venues._
 
 **<u>Primary Risk Considerations</u>**
 
-Since USDC\+ distributes capital across multiple borrow/lend markets, the risk profile combines individual protocol exposures with cross-margin strategy considerations:
+Since USDC+ distributes capital across multiple borrow/lend markets, the risk profile combines individual protocol exposures with cross-margin strategy considerations:
 
 <CardGroup cols={2}>
   <Card title="Protocol Security Risk">
@@ -86,5 +82,5 @@ Since USDC\+ distributes capital across multiple borrow/lend markets, the risk p
 - **Venue concentration**: Capital allocation methodology may create dependencies on specific protocols
 
 <Info>
-  Integrators should treat USDC\+ as a higher-risk asset compared to native USDC and implement appropriate user disclosures regarding multi-venue exposure and inherited protocol risks.
+  Integrators should treat USDC+ as a higher-risk asset compared to native USDC and implement appropriate user disclosures regarding multi-venue exposure and inherited protocol risks.
 </Info>
