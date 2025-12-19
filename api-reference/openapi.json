@@ -1830,7 +1830,7 @@
     "/integration/initialize-user-account": {
       "post": {
         "summary": "Initialize user branded token account",
-        "description": "Generate a transaction to initialize a user's branded token account.",
+        "description": "Generate a transaction to initialize a user's branded token account. This endpoint allows developers to pay for account initialization on behalf of users by setting the `signer` parameter to their own address - the signer will pay for the account initialization costs, while `feePayer` covers transaction fees. Note: The `/integration/mint` endpoint automatically handles account initialization, so this endpoint is typically only needed if you want to initialize accounts separately from minting.",
         "tags": ["Integration"],
         "requestBody": {
           "required": true,
@@ -1845,15 +1845,15 @@
                   },
                   "userAddress": {
                     "type": "string",
-                    "description": "User's Solana address"
+                    "description": "User's Solana address (the account owner)"
                   },
                   "signer": {
                     "type": "string",
-                    "description": "Signer Solana address"
+                    "description": "Signer Solana address. This address will pay for the account initialization costs. Set this to your integration's address to pay for users on their behalf."
                   },
                   "feePayer": {
                     "type": "string",
-                    "description": "Fee payer Solana address"
+                    "description": "Fee payer Solana address. This address will pay for transaction fees."
                   }
                 },
                 "required": [
@@ -1901,7 +1901,7 @@
     "/integration/mint": {
       "post": {
         "summary": "Generate mint transaction",
-        "description": "Generate a mint transaction for integration stablecoins.",
+        "description": "Generate a mint transaction for integration stablecoins. This endpoint automatically detects if the recipient's branded token account needs to be initialized and includes the initialization instruction in the transaction if required. Developers can pay for account initialization on behalf of users by setting the `feePayer` parameter to their own address - the feePayer will cover both transaction fees and account initialization costs.",
         "tags": ["Integration"],
         "requestBody": {
           "required": true,
@@ -1917,17 +1917,17 @@
                   },
                   "recipient": {
                     "type": "string",
-                    "description": "Recipient Solana wallet address",
+                    "description": "Recipient Solana wallet address (the user receiving the tokens)",
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   },
                   "integrationId": {
                     "type": "string",
-                    "description": "Integration ID",
+                    "description": "Integration ID (proxy state address)",
                     "example": "int_12345"
                   },
                   "feePayer": {
                     "type": "string",
-                    "description": "Fee payer Solana address",
+                    "description": "Fee payer Solana address. This address will pay for transaction fees and account initialization costs (if the recipient's account needs to be initialized). Set this to your integration's address to pay for users on their behalf.",
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
