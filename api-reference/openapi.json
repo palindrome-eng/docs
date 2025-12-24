@@ -339,6 +339,11 @@
                     "type": "string",
                     "description": "Optional collateral mint address",
                     "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Optional Solana wallet address that will pay the transaction fee. If not provided, defaults to the signer address.",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
                 "required": ["stablecoinIndex", "depositAmount", "signer"]
@@ -439,6 +444,11 @@
                     "type": "string",
                     "description": "Optional collateral mint address",
                     "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                  },
+                  "feePayer": {
+                    "type": "string",
+                    "description": "Optional Solana wallet address that will pay the transaction fee. If not provided, defaults to the signer address.",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
                 "required": ["stablecoinIndex", "depositAmount", "signer"]
