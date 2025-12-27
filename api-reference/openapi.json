@@ -1600,6 +1600,17 @@
               "example": "100",
               "default": "100"
             }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Number of days in the past to lookup events. Must be a positive number if set. Can be combined with limit to filter both by time range and result count.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]+(\\.?[0-9]+)?$",
+              "example": "30"
+            }
           }
         ],
         "responses": {
