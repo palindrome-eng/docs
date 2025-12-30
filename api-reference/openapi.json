@@ -1447,6 +1447,19 @@
             "authenticatedIntegrator": []
           }
         ],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
