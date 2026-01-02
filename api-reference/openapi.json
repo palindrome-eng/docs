@@ -1472,6 +1472,11 @@
                     "description": "Signer Solana address",
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   },
+                  "user": {
+                    "type": "string",
+                    "description": "User Solana address to whitelist. If not provided, defaults to the signer address.",
+                    "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+                  },
                   "feePayer": {
                     "type": "string",
                     "description": "Fee payer Solana address",
