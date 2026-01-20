@@ -3,14 +3,14 @@ title: "Properties of Capital Efficient Stablecoins"
 ---
 
 <Card title="Capital Efficient Money via Onchain Strategy" icon="money-bill-trend-up" img="https://github.com/palindrome-eng/docs/blob/main/images/docs-saas-image.png?raw=true">
-  This section of the documentation briefly covers the <u>DeFi Strategy</u> and <u>Stablecoins</u> managed by reflect programs. You will learn about different financial product types and how they affect the corresponding stablecoin via strategic stability.
+  This section of the documentation briefly covers the DeFi strategy and stablecoins managed by Reflect programs. You will learn about different financial product types and how they affect the corresponding stablecoin via strategic stability.
 
-  ### <u>Public Stablecoins:</u>
+  ### Public stablecoins
 
   | **Ticker**    | **DeFi Strategy**                   | **Collateral** | **Status** | **Audit(s)**    |
   | :------------ | :---------------------------------- | :------------- | :--------- | :-------------- |
-  | <u>USDJ</u>   | Delta-Neutral Funding Rate Capture  | JLP            | Not Live   | _<u>1 of 2</u>_ |
-  | <u>USDC\+</u> | Cross Margin (Lending) Rate Capture | USDC           | LIVE       | _<u>1 of 2</u>_ |
+  | USDJ   | Delta-Neutral Funding Rate Capture  | JLP            | Not Live   | 1 of 2 |
+  | USDC\+ | Cross Margin (Lending) Rate Capture | USDC           | LIVE       | 1 of 2 |
 </Card>
 
 ### Why Capital Efficient Stablecoins from Reflect
@@ -19,7 +19,7 @@ Reflect offers a truly open framework for developers and users alike to own the 
 
 <CardGroup cols={2}>
   <Card title="Non-Custodial" icon="wallet">
-    - All collateral deposits are held in program accounts on the issuing network, with no access for any human party. _This means all of your funds are safe from human hands._
+    - All collateral deposits are held in program accounts on the issuing network, with no access for any human party. This means all of your funds are safe from human hands.
   </Card>
   <Card title="Permissionless" icon="unlock">
     - All Reflect-issued stablecoins can be created and redeemed at will, with no restrictions or required access controls.
@@ -40,13 +40,13 @@ Reflect offers a truly open framework for developers and users alike to own the 
 
 ### Decentralised Finance Strategies
 
-The engineering team behind [reflect.money](http://reflect.money) is constantly _evaluating, researching and implementing_ potential new financial strategies that can be used in all market sectors as yield-bearing stablecoins.
+The engineering team behind [reflect.money](http://reflect.money) is constantly evaluating, researching and implementing potential new financial strategies that can be used in all market sectors as yield-bearing stablecoins.
 
 <CardGroup cols="1">
   <Card title="Delta-Neutral Funding Rate Capture" icon="chart-simple">
     This strategy utilises a single-sided delta-neutral trade whereby productive capital is deposited by users or integrated programs and the equal dollar value amount short position is opened against the likewise asset. i.e. if a user deposits 100\$ of SOL then 100\$ of SOL is shorted to create a zero delta position. \
     \
-    This removes the exposure to price risk, i.e. _price going up and down_ - and instead <u>increases exposure to the funding rate</u> - a cash settled payment which helps to balance the pricing of the markets, this payment can be determined to be the yield and or potential loss of this strategy.
+    This removes the exposure to price risk, i.e. the price going up and down - and instead increases exposure to the funding rate - a cash-settled payment which helps to balance the pricing of the markets, this payment can be determined to be the yield and or potential loss of this strategy.
   </Card>
   <Card title="Delta-Neutral Cross Margin Rate Capture" icon="chart-mixed">
     This strategy utilises a double-sided delta-neutral trade whereby collateral is converted to cash upon deposit and used to place a trade on both sides of the same market at an identical strike price. This removes exposure to price and funding rate and increases exposure to cross-margin capital demands. \
@@ -55,19 +55,19 @@ The engineering team behind [reflect.money](http://reflect.money) is constantly 
   </Card>
 </CardGroup>
 
-### _Frequently Asked Questions (FAQs)_
+### Frequently Asked Questions
 
 <br />
 
 <AccordionGroup>
   <Accordion title="Are there any mint/redeem fees?" icon="circle-question">
-    **No**, there are zero fees when minting or redeeming Strategic Stablecoins. _Depending on the strategy chosen, there may be a temporary arb hold percentage._
+    **No**, there are zero fees when minting or redeeming strategic stablecoins. Depending on the strategy chosen, there may be a temporary arb hold percentage.
   </Accordion>
   <Accordion title="How is the price of Reflected Currencies made to be stable?" icon="circle-question">
     **Reflect-issued stablecoins have built-in stability mechanisms like rebalancing, debt settlement, and more within their onchain programs.** They can be called permissionlessly and automatically, allowing for the maximum frequency of attestation.
   </Accordion>
   <Accordion title="Where does the Interest (yield) come from?" icon="circle-question">
-    **Interest rates or "yields" are generated via the productivity of the relevant DeFi Strategy** - for example, in the case of USDJ our single-sided delta-neutral token the yield is generated by those paying funding rates to leverage long SOL-USD. _In the case of other stablecoins this will vary._
+    **Interest rates or "yields" are generated via the productivity of the relevant DeFi Strategy** - for example, in the case of USDJ our single-sided delta-neutral token the yield is generated by those paying funding rates to leverage long SOL-USD. In the case of other stablecoins this will vary.
   </Accordion>
   <Accordion title="Is the collateral in the program(s) insured?" icon="circle-question">
     **Yes.** Reflect Protocol operates both a **hard cash insurance fund** and multiple **Restaked Validated Services** that offload protocol risk to network stakers in exchange for a portion of the revenue from each specific DeFi strategy that is tokenized.

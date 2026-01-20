@@ -24,11 +24,11 @@ pnpm install @reflectmoney/proxy.ts
 
 ### Overview
 
-Use this SDK to interact with Reflect Proxy Program, an on-chain infrastructure for minting and redeeming whitelabel yield-bearing stablecoins backed by collateral in Reflect. This SDK offers high-level functionality for creating a new proxy, issuing a branded stablecoin, minting, redeeming, and managing the integration.
+Use this SDK to interact with Reflect Proxy Program, an onchain infrastructure for minting and redeeming whitelabel yield-bearing stablecoins backed by collateral in Reflect. This SDK offers high-level functionality for creating a new proxy, issuing a branded stablecoin, minting, redeeming, and managing the integration.
 
 ### Quick Start
 
-To create a new proxy, use the static `initialize` method on the `Proxy` class exported from the SDK. When creating a new proxy instance via constructor, the SDK expects on-chain accounts to be already initialized and loads them silently. Only use the constructor after setting up the on-chain proxy first.
+To create a new proxy, use the static `initialize` method on the `Proxy` class exported from the SDK. When creating a new proxy instance via constructor, the SDK expects onchain accounts to be already initialized and loads them silently. Only use the constructor after setting up the onchain proxy first.
 
 ```typescript initialize.ts
 import { Proxy, USDC_PLUS_MINT } from "@reflectmoney/proxy.ts";
@@ -48,7 +48,7 @@ const createProxyIx = await Proxy.initialize({
 // Transaction sign & send logic
 ```
 
-To load an existing proxy, just use the constructor. In the background, the SDK will lazy-load all the necessary on-chain state.
+To load an existing proxy, just use the constructor. In the background, the SDK will lazy-load all the necessary onchain state.
 
 ```typescript load.ts
 import { Proxy } from "@reflectmoney/proxy.ts";
