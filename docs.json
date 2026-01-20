@@ -37,6 +37,13 @@
         ]
       },
       {
+        "tab": "Reflect API",
+        "openapi": {
+          "source": "/api-reference/openapi.json",
+          "directory": "reflect-api"
+        }
+      },
+      {
         "tab": "Integrating Reflect",
         "groups": [
           {
@@ -48,13 +55,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Reflect API",
-        "openapi": {
-          "source": "/api-reference/openapi.json",
-          "directory": "reflect-api"
-        }
       }
     ],
     "global": {
