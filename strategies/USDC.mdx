@@ -18,23 +18,23 @@ Here you will find a description of the financial intermediation strategy utilis
 
 **The Capital Supplier Methodology**
 
-The Capital Supplier strategy is one of the simplest and safest interest-rate-generating strategies available on public ledger networks as it utilises highly-liquid cash assets to farm interest rates on overcollateralised lending/margin pools.
+The Capital Supplier strategy is one of the simplest and safest ways to generate interest onchain. It works by supplying your USDC to overcollateralised lending pools, where borrowers pay interest to access liquidity.
 
 <Steps>
   <Step title="USDC is Deposited">
-    USDC is sent by users or developers to the distributor program, which acts as a non-custodial pool for all collateral assets.
+    USDC is sent to the Reflect program, which holds all deposits in a non-custodial pool that no human can access.
   </Step>
-  <Step title="Distributor Calculates Rates">
-    The distributor program calculates the best interest rates at X size for USDC on the network and marks what venues can host up to how much liquidity.
+  <Step title="Best Rates are Found">
+    The program scans Solana's top lending markets to find where USDC can earn the highest interest rates.
   </Step>
-  <Step title="USDC is Distributed">
-    The program then distributes this USDC immediately in order to capture interest rates from margin markets or borrow/lend pools such as [Drift](https://drift.trade), [Kamino](https://kamino.com), and [Jupiter (Fluid)](https://jup.ag/lend/earn).
+  <Step title="USDC is Put to Work">
+    USDC is automatically distributed across trusted lending platforms like [Drift](https://drift.trade), [Kamino](https://kamino.com), and [Jupiter](https://jup.ag/lend/earn) to capture the best available rates.
   </Step>
   <Step title="USDC+ is Issued">
-    Depositors receive USDC+ equivalent to their share in the pool, i.e., 1 USDC can equal 0.975 USDC+, similar to liquid staked tokens.
+    Depositors receive USDC+ tokens representing their share of the pool. Because the pool earns interest, 1 USDC+ is worth slightly more than 1 USDC and grows over time.
   </Step>
-  <Step title="USDC+ Collateral Grows">
-    The value of USDC+ in USDC grows and appreciation in this can be claimed by unwrapping the USDC+ token to its native form.
+  <Step title="Collateral Grows">
+    As interest accumulates, the value of USDC+ increases. It can be converted back to USDC anytime to claim earnings.
   </Step>
 </Steps>
 
