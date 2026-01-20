@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Reflect Money API",
-    "description": "Interact with the Reflect Money infrastructure via API. Retrieve stablecoin and protocol stats. Generate transactions for minting and redeeming stablecoins. Manage integrations and issue whitelabel stablecoins.\n\n## Rate Limiting\n- **Unauthenticated users**: 100 requests per minute\n- **Authenticated integrators**: 500 requests per minute\n\n## Authentication\nTo access higher rate limits, include your API key in the `X-API-Key` header. API keys can be obtained through the integration management endpoints.",
+    "title": "Reflect API",
+    "description": "Interact with the Reflect infrastructure via API. Retrieve stablecoin and protocol stats. Generate transactions for minting and redeeming stablecoins. Manage integrations and issue whitelabel stablecoins.\n\n## Rate Limiting\n- **Unauthenticated users**: 100 requests per minute\n- **Authenticated integrators**: 500 requests per minute\n\n## Authentication\nTo access higher rate limits, include your API key in the `X-API-Key` header. API keys can be obtained through the integration management endpoints.",
     "version": "1.0.0",
     "contact": {
-      "name": "Reflect Money",
+      "name": "Reflect",
       "url": "https://reflect.money"
     }
   },
@@ -293,7 +293,7 @@
     "/stablecoin/mint": {
       "post": {
         "summary": "Generate mint transaction",
-        "description": "Generate a mint transaction for stablecoins using the Reflect Money SDK.",
+        "description": "Generate a mint transaction for stablecoins using the Reflect SDK.",
         "tags": ["Stablecoin"],
         "parameters": [
           {
@@ -398,7 +398,7 @@
     "/stablecoin/burn": {
       "post": {
         "summary": "Generate burn transaction",
-        "description": "Generate a burn transaction for stablecoins using the Reflect Money SDK",
+        "description": "Generate a burn transaction for stablecoins using the Reflect SDK",
         "tags": ["Stablecoin"],
         "parameters": [
           {
