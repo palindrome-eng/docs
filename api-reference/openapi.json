@@ -500,203 +500,6 @@
         }
       }
     },
-    "/integration/quote/{type}": {
-      "post": {
-        "summary": "Get quote for mint or redeem",
-        "description": "Get a quote for minting (wrapping USDC+ into branded tokens) or redeeming (unwrapping branded tokens back to USDC+) for a specific integration.",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "type",
-            "in": "path",
-            "description": "Quote type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["mint", "redeem"]
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID (proxy state address)",
-                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
-                  },
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to quote (in smallest unit). For mint: amount of USDC+ to deposit. For redeem: amount of branded tokens to redeem.",
-                    "example": 1000000
-                  }
-                },
-                "required": ["integrationId", "amount"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Quote retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "number",
-                      "description": "Quote amount (in smallest unit). For mint: amount of branded tokens to receive. For redeem: amount of USDC+ to receive.",
-                      "example": 999000
-                    }
-                  },
-                  "required": ["success", "data"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Integration not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/integration/quote/flow/{type}": {
-      "post": {
-        "summary": "Get quote for mint or redeem with USDC input/output",
-        "description": "Get a quote for the full flow: USDC → USDC+ → branded tokens (mint) or branded tokens → USDC+ → USDC (redeem). This endpoint handles both the stablecoin conversion and the integration wrap/unwrap in a single quote.",
-        "tags": ["Integration"],
-        "parameters": [
-          {
-            "name": "type",
-            "in": "path",
-            "description": "Quote type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["mint", "redeem"]
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "integrationId": {
-                    "type": "string",
-                    "description": "Integration ID (proxy state address)",
-                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
-                  },
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to quote (in smallest unit). For mint: amount of USDC to deposit. For redeem: amount of branded tokens to redeem.",
-                    "example": 1000000
-                  },
-                  "stablecoinIndex": {
-                    "type": "integer",
-                    "description": "Stablecoin index (0: USDC+)",
-                    "example": 0
-                  }
-                },
-                "required": ["integrationId", "amount", "stablecoinIndex"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Quote retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "number",
-                      "description": "Quote amount (in smallest unit). For mint: amount of branded tokens to receive. For redeem: amount of USDC to receive.",
-                      "example": 999000
-                    }
-                  },
-                  "required": ["success", "data"]
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Integration or stablecoin not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/integration/initialize": {
       "post": {
         "summary": "Initialize an integration",
@@ -2138,6 +1941,203 @@
           },
           "400": {
             "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/quote/{type}": {
+      "post": {
+        "summary": "Get quote for mint or redeem",
+        "description": "Get a quote for minting (wrapping USDC+ into branded tokens) or redeeming (unwrapping branded tokens back to USDC+) for a specific integration.",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Quote type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["mint", "redeem"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to quote (in smallest unit). For mint: amount of USDC+ to deposit. For redeem: amount of branded tokens to redeem.",
+                    "example": 1000000
+                  }
+                },
+                "required": ["integrationId", "amount"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "number",
+                      "description": "Quote amount (in smallest unit). For mint: amount of branded tokens to receive. For redeem: amount of USDC+ to receive.",
+                      "example": 999000
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integration not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integration/quote/flow/{type}": {
+      "post": {
+        "summary": "Get quote for mint or redeem with USDC input/output",
+        "description": "Get a quote for the full flow: USDC → USDC+ → branded tokens (mint) or branded tokens → USDC+ → USDC (redeem). This endpoint handles both the stablecoin conversion and the integration wrap/unwrap in a single quote.",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Quote type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["mint", "redeem"]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integrationId": {
+                    "type": "string",
+                    "description": "Integration ID (proxy state address)",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "description": "Amount to quote (in smallest unit). For mint: amount of USDC to deposit. For redeem: amount of branded tokens to redeem.",
+                    "example": 1000000
+                  },
+                  "stablecoinIndex": {
+                    "type": "integer",
+                    "description": "Stablecoin index (0: USDC+)",
+                    "example": 0
+                  }
+                },
+                "required": ["integrationId", "amount", "stablecoinIndex"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "number",
+                      "description": "Quote amount (in smallest unit). For mint: amount of branded tokens to receive. For redeem: amount of USDC to receive.",
+                      "example": 999000
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integration or stablecoin not found",
             "content": {
               "application/json": {
                 "schema": {
