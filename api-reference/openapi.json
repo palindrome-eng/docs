@@ -556,7 +556,27 @@
             "description": "Initialization transaction generated successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": {
+                          "type": "string",
+                          "description": "Base64 encoded transaction"
+                        },
+                        "integrationId": {
+                          "type": "string",
+                          "description": "Integration ID (proxy state address)"
+                        }
+                      },
+                      "required": ["transaction", "integrationId"]
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
               }
             }
           },
@@ -1239,7 +1259,7 @@
         }
       }
     },
-    "/integration/api-key": {
+    "/integration/api-key/reveal": {
       "post": {
         "summary": "Reveal API key",
         "description": "Reveal the API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Reveal API key for integration {integrationId} at timestamp {timestamp}'. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
@@ -1592,11 +1612,6 @@
         "summary": "Get integration events",
         "description": "Retrieve recent events for a specific integration.",
         "tags": ["Integration"],
-        "security": [
-          {
-            "authenticatedIntegrator": []
-          }
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1628,6 +1643,16 @@
               "type": "string",
               "pattern": "^[0-9]+(\\.?[0-9]+)?$",
               "example": "30"
+            }
+          },
+          {
+            "name": "signer",
+            "in": "query",
+            "description": "Filter events by signer address. Only returns events triggered by this specific wallet address.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
             }
           }
         ],
@@ -2098,15 +2123,15 @@
                     "description": "Amount to redeem",
                     "example": 1000000
                   },
-                  "redeemer": {
+                  "recipient": {
                     "type": "string",
-                    "description": "Redeemer Solana wallet address",
+                    "description": "Recipient Solana wallet address (the user redeeming the tokens)",
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   },
                   "integrationId": {
                     "type": "string",
-                    "description": "Integration ID",
-                    "example": "int_12345"
+                    "description": "Integration ID (proxy state address)",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
                   },
                   "feePayer": {
                     "type": "string",
@@ -2114,7 +2139,7 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "redeemer", "integrationId", "feePayer"]
+                "required": ["amount", "recipient", "integrationId", "feePayer"]
               }
             }
           }
@@ -2228,7 +2253,7 @@
     "/integration/claim": {
       "post": {
         "summary": "Generate claim transaction",
-        "description": "Generate a claim transaction for integration rewards",
+        "description": "Generate a claim transaction for integration rewards. Claims all available rewards for the integration.",
         "tags": ["Integration"],
         "requestBody": {
           "required": true,
@@ -2237,15 +2262,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "amount": {
-                    "type": "number",
-                    "description": "Amount to claim",
-                    "example": 1000000
-                  },
                   "integrationId": {
                     "type": "string",
-                    "description": "Integration ID",
-                    "example": "int_12345"
+                    "description": "Integration ID (proxy state address)",
+                    "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
                   },
                   "feePayer": {
                     "type": "string",
@@ -2253,7 +2273,7 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "integrationId", "feePayer"]
+                "required": ["integrationId", "feePayer"]
               }
             }
           }
@@ -2754,8 +2774,22 @@
             "name": "limit",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" },
-            "description": "Max events to return"
+            "schema": { "type": "integer", "minimum": 1, "maximum": 1000 },
+            "description": "Max events to return (1-1000)"
+          },
+          {
+            "name": "nonZero",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["true"] },
+            "description": "If set to 'true', only returns events with non-zero amounts"
+          },
+          {
+            "name": "minimumValue",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+            "description": "Filter events by minimum value. Must be a positive number if set."
           }
         ],
         "responses": {
@@ -2855,19 +2889,18 @@
     "/stats/historical": {
       "get": {
         "summary": "Get historical TVL and volume data",
-        "description": "Retrieve historical Total Value Locked (TVL) and volume data. By default returns last 7 days of data, customise by using the `period` parameter (in days).",
+        "description": "Retrieve historical Total Value Locked (TVL) and volume data. Use the `days` parameter to specify the number of days (1-365).",
         "tags": ["Stats"],
         "parameters": [
           {
-            "name": "period",
+            "name": "days",
             "in": "query",
-            "description": "Number of days of historical data to retrieve (default: 7)",
-            "required": false,
+            "description": "Number of days of historical data to retrieve (1-365)",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 7,
-              "example": 7
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "example": "7"
             }
           }
         ],
