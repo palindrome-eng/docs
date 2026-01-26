@@ -500,6 +500,49 @@
         }
       }
     },
+    "/integration/verified": {
+      "get": {
+        "summary": "Get verified integrations",
+        "description": "Retrieve a list of all verified integrations with their statistics, metadata, and configuration. This endpoint returns public information about integrations that have been verified by the Reflect team.",
+        "tags": ["Integration"],
+        "responses": {
+          "200": {
+            "description": "Verified integrations retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VerifiedIntegration"
+                      },
+                      "description": "Array of verified integrations with their stats, metadata, and config"
+                    }
+                  },
+                  "required": ["success", "data"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/integration/initialize": {
       "post": {
         "summary": "Initialize an integration",
@@ -3380,6 +3423,130 @@
             "required": ["data"]
           }
         ]
+      },
+      "VerifiedIntegration": {
+        "type": "object",
+        "description": "A verified integration with its statistics, metadata, and configuration",
+        "properties": {
+          "stablecoin": {
+            "type": "string",
+            "description": "Branded mint address for this integration",
+            "example": "6RiHbTkMvYmr39GQArt7siykWDghC8uMcwHAWkZLiQ3i"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the latest statistics snapshot",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "supply": {
+            "type": "string",
+            "description": "Total supply of the branded stablecoin (in smallest units)",
+            "example": "1000000000"
+          },
+          "holders": {
+            "type": "integer",
+            "description": "Total number of holders",
+            "example": 1500
+          },
+          "principal": {
+            "type": "string",
+            "description": "Total principal amount deposited (in smallest units)",
+            "example": "950000000"
+          },
+          "yield": {
+            "type": "string",
+            "description": "Total yield generated (in smallest units)",
+            "example": "50000000"
+          },
+          "volume": {
+            "type": "string",
+            "description": "Cumulative transaction volume for this integration (in smallest units)",
+            "example": "5000000000"
+          },
+          "exchange_rate_underlying": {
+            "type": "string",
+            "description": "Exchange rate between the branded token and the underlying stablecoin (as string)",
+            "example": "1000321"
+          },
+          "exchange_rate_usdc": {
+            "type": "string",
+            "nullable": true,
+            "description": "Exchange rate to USDC (as string, may be null)",
+            "example": "1000000"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Token metadata for the branded stablecoin",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Token name",
+                "example": "My Branded Token"
+              },
+              "symbol": {
+                "type": "string",
+                "description": "Token symbol",
+                "example": "MBT"
+              },
+              "image": {
+                "type": "string",
+                "format": "uri",
+                "description": "Token image URL",
+                "example": "https://metadata-bucket.s3.region.amazonaws.com/images/abc123.png"
+              },
+              "description": {
+                "type": "string",
+                "description": "Token description",
+                "example": "A branded yield-bearing stablecoin"
+              }
+            },
+            "required": ["name", "symbol", "image", "description"]
+          },
+          "config": {
+            "type": "object",
+            "description": "Integration configuration from on-chain state",
+            "properties": {
+              "brandedMint": {
+                "type": "string",
+                "description": "Branded mint public key",
+                "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+              },
+              "stablecoinMint": {
+                "type": "string",
+                "description": "Underlying stablecoin mint public key",
+                "example": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+              },
+              "fee": {
+                "type": "number",
+                "description": "Fee in basis points configured for the integration",
+                "example": 50
+              },
+              "principal": {
+                "type": "number",
+                "description": "Outstanding principal held by the integration",
+                "example": 1250000000
+              },
+              "integratorsCommission": {
+                "type": "number",
+                "description": "Integrator commission in stablecoin units",
+                "example": 25000000
+              },
+              "authority": {
+                "type": "string",
+                "description": "Authority public key for the integration",
+                "example": "3Nd1p6zFvDz4SqJ2T5BmJ4E5pM4ix3L1hXyX7dQf9PvR"
+              },
+              "bump": {
+                "type": "number",
+                "description": "Program derived address bump seed (0-255)",
+                "example": 255
+              }
+            },
+            "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+          }
+        },
+        "required": ["stablecoin", "timestamp", "supply", "holders", "principal", "yield", "volume", "exchange_rate_underlying", "metadata", "config"]
       },
       "IntegrationStatsResponse": {
         "allOf": [
