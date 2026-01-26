@@ -500,6 +500,69 @@
         }
       }
     },
+    "/integration/check/{stablecoin}": {
+      "get": {
+        "summary": "Check integration verification status",
+        "description": "Check whether a specific integration is verified by its branded stablecoin mint address. Returns a boolean indicating the verification status.",
+        "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "stablecoin",
+            "in": "path",
+            "description": "Branded stablecoin mint address - must be a valid Solana address",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "7FUxqf1ZeabzdPFGSsy1EUQBm8MNRR5GoRRSS7K6p4hb"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "verified": {
+                      "type": "boolean",
+                      "description": "Whether the integration is verified",
+                      "example": true
+                    }
+                  },
+                  "required": ["success", "verified"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid integration ID format - must be a valid Solana address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/integration/verified": {
       "get": {
         "summary": "Get verified integrations",
