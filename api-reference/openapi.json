@@ -3541,9 +3541,14 @@
                 "nullable": true,
                 "description": "Exchange rate to USDC (as string, may be null)",
                 "example": "10206"
+              },
+              "apy_bps": {
+                "type": "integer",
+                "description": "Current APY in basis points (e.g., 500 = 5%)",
+                "example": 500
               }
             },
-            "required": ["stablecoin", "timestamp", "supply", "holders", "principal", "yield", "volume", "exchange_rate_underlying"]
+            "required": ["stablecoin", "timestamp", "supply", "holders", "principal", "yield", "volume", "exchange_rate_underlying", "apy_bps"]
           },
           "metadata": {
             "type": "object",
