@@ -515,6 +515,17 @@
               "type": "string",
               "example": "7FUxqf1ZeabzdPFGSsy1EUQBm8MNRR5GoRRSS7K6p4hb"
             }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
           }
         ],
         "responses": {
@@ -568,6 +579,19 @@
         "summary": "Get verified integrations",
         "description": "Retrieve a list of all verified integrations with their statistics, metadata, and configuration. This endpoint returns public information about integrations that have been verified by the Reflect team.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Verified integrations retrieved successfully",
@@ -611,6 +635,19 @@
         "summary": "Initialize an integration",
         "description": "Initialize a new integration with branded mint and fee configuration.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -714,6 +751,19 @@
         "summary": "Initialize a stablecoin token",
         "description": "Generate a transaction to create a new branded token mint with metadata.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -806,6 +856,19 @@
         "summary": "Transfer mint authority",
         "description": "Generate a transaction to transfer mint authority of a branded token.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -882,6 +945,19 @@
         "summary": "Initialize integration flow (complete setup)",
         "description": "A complete initialization flow that combines creating a branded mint, adding metadata, transferring authority, and initializing the integration in a single transaction. This is a wrapper around all initialization endpoints.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1006,6 +1082,17 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
           }
         ],
         "responses": {
@@ -1055,6 +1142,17 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
             }
           }
         ],
@@ -1115,6 +1213,17 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
             }
           }
         ],
@@ -1262,6 +1371,19 @@
         "summary": "Upload integration metadata",
         "description": "Upload image and metadata for a branded mint. Returns URLs for the uploaded image and JSON metadata file that can be used when initializing integrations.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1370,6 +1492,19 @@
         "summary": "Reveal API key",
         "description": "Reveal the API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Reveal API key for integration {integrationId} at timestamp {timestamp}'. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1469,6 +1604,19 @@
         "summary": "Rotate API key",
         "description": "Rotate (generate a new) API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Rotate API key for integration {integrationId} at timestamp {timestamp}'. The old API key will be invalidated. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1677,6 +1825,17 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
           }
         ],
         "responses": {
@@ -1759,6 +1918,17 @@
             "schema": {
               "type": "string",
               "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+            }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
             }
           }
         ],
@@ -1849,6 +2019,17 @@
               "pattern": "^[0-9]+$",
               "default": "7"
             }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
           }
         ],
         "responses": {
@@ -1899,6 +2080,17 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
           }
         ],
         "responses": {
@@ -1940,6 +2132,19 @@
         "summary": "Initialize integration vault",
         "description": "Initialize the proxy vault for an integration (admin-only).",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2002,6 +2207,19 @@
         "summary": "Initialize user branded token account",
         "description": "Generate a transaction to initialize a user's branded token account. This endpoint allows developers to pay for account initialization on behalf of users by setting the `signer` parameter to their own address - the signer will pay for the account initialization costs, while `feePayer` covers transaction fees. Note: The `/integration/mint` endpoint automatically handles account initialization, so this endpoint is typically only needed if you want to initialize accounts separately from minting.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2082,6 +2300,17 @@
             "schema": {
               "type": "string",
               "enum": ["mint", "redeem"]
+            }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
             }
           }
         ],
@@ -2179,6 +2408,17 @@
               "type": "string",
               "enum": ["mint", "redeem"]
             }
+          },
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
           }
         ],
         "requestBody": {
@@ -2270,6 +2510,19 @@
         "summary": "Generate mint transaction",
         "description": "Generate a mint transaction for integration stablecoins. This endpoint automatically detects if the recipient's branded token account needs to be initialized and includes the initialization instruction in the transaction if required. Developers can pay for account initialization on behalf of users by setting the `feePayer` parameter to their own address - the feePayer will cover both transaction fees and account initialization costs.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2342,6 +2595,19 @@
         "summary": "Mint stablecoin and whitelabel in single transaction",
         "description": "Generate a combined transaction that mints the underlying stablecoin and then whitelabels it in a single call. This combines the functionality of /stablecoin/mint and /integration/mint.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2414,6 +2680,19 @@
         "summary": "Generate redemption transaction",
         "description": "Generate a redemption transaction for integration stablecoins",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2486,6 +2765,19 @@
         "summary": "Redeem whitelabeled stablecoin in single transaction",
         "description": "Generate a combined transaction that redeems the whitelabeled stablecoin and burns the underlying stablecoin in a single call. This combines the functionality of /integration/redeem and /stablecoin/burn.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2558,6 +2850,19 @@
         "summary": "Generate claim transaction",
         "description": "Generate a claim transaction for integration rewards. Claims all available rewards for the integration.",
         "tags": ["Integration"],
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "query",
+            "description": "Solana cluster to use (defaults to mainnet)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["mainnet", "devnet"],
+              "default": "mainnet"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
