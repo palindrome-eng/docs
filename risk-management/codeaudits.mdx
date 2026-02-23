@@ -1,14 +1,33 @@
 ---
-title: "Code Security Audit(s)"
-description: "Code Security Audits (CSA) are thorough software audits carried out by industry-leading third-party organisations for both onchain and offchain software."
+title: "Code Security Audits"
+description: "Code security audits are thorough reviews of onchain programs, carried out by industry-leading third-party organizations to ensure the integrity and safety of Reflect infrastructure."
 ---
 
+Reflect is committed to maintaining the highest security standards across its infrastructure. All audit reports are publicly available in our [audits repository](https://github.com/palindrome-eng/audits).
+
 <Tabs>
+  <Tab title="02/2026 - Offside Labs">
+    This audit covers the **Reflect Core Yield Routing** infrastructure — the system responsible for directing and managing yield flows across the protocol. Key focus areas include:
+
+    - Routing logic correctness and edge-case handling
+    - Access control and permissioning for yield operations
+    - Safety of cross-program invocations and account validation
+    - Protection against fund misrouting or loss scenarios
+  </Tab>
   <Tab title="09/2025 - Offside Labs">
-    This audit is published and finalised and can be found below.
+    This audit covers the **Delta-Neutral Strategy** powering the USDC+ yield product. Key focus areas include:
+
+    - Program validation and instruction integrity
+    - Token minting and redemption logic
+    - Access controls and privilege escalation vectors
+    - Soundness of the delta-neutral position management
   </Tab>
 </Tabs>
 
-<Card title="Offside Labs - USD Coin Plus Audit Report" icon="book" href="https://alpha.reflect.money/static/Reflect-DeltaNeutral-Sep-2025-OffsideLabs.pdf" img="/images/USDC+Header.png" cta="Read the report!">
-  Collaborative audit process led to successful resolution of all major findings, including enhanced program validation, improved token minting logic, and strengthened access controls. The protocol's security posture for yield strategies has been significantly reinforced through these improvements.
+<Card title="Offside Labs — Reflect Core Yield Routing Audit Report" icon="book" href="https://github.com/palindrome-eng/audits/blob/main/Reflect-ReflectCoreYieldRouting-Feb-2026-OffsideLabs.pdf" cta="Read the report">
+  Comprehensive audit of Reflect's core yield routing system, which orchestrates how yield is distributed and managed across the protocol's products. All findings were addressed and resolved prior to publication.
+</Card>
+
+<Card title="Offside Labs — USDC+ Delta-Neutral Strategy Audit Report" icon="book" href="https://github.com/palindrome-eng/audits/blob/main/Reflect-DeltaNeutral-Sep-2025-OffsideLabs.pdf" img="/images/USDC+Header.png" cta="Read the report">
+  Audit of the delta-neutral yield strategy underpinning USDC+. The collaborative review led to the successful resolution of all major findings, including enhanced program validation, improved token minting logic, and strengthened access controls.
 </Card>
