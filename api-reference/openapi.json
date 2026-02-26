@@ -20,7 +20,9 @@
       "get": {
         "summary": "Health check",
         "description": "Check if the is operational and healthy.",
-        "tags": ["Health"],
+        "tags": [
+          "Health"
+        ],
         "responses": {
           "200": {
             "description": "API is operational",
@@ -43,7 +45,11 @@
                       "example": "2024-01-01T00:00:00.000Z"
                     }
                   },
-                  "required": ["success", "message", "timestamp"]
+                  "required": [
+                    "success",
+                    "message",
+                    "timestamp"
+                  ]
                 }
               }
             }
@@ -64,7 +70,10 @@
                       "example": "Internal server error."
                     }
                   },
-                  "required": ["success", "message"]
+                  "required": [
+                    "success",
+                    "message"
+                  ]
                 }
               }
             }
@@ -76,7 +85,9 @@
       "get": {
         "summary": "Get available stablecoin types",
         "description": "Retrieve list of available stablecoin types",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "responses": {
           "200": {
             "description": "Available stablecoin types retrieved successfully",
@@ -105,12 +116,23 @@
                             "example": "USDC+"
                           }
                         },
-                        "required": ["index", "name"]
+                        "required": [
+                          "index",
+                          "name"
+                        ]
                       },
-                      "example": [{ "index": 0, "name": "USDC+" }]
+                      "example": [
+                        {
+                          "index": 0,
+                          "name": "USDC+"
+                        }
+                      ]
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -132,7 +154,9 @@
       "get": {
         "summary": "Get supply cap information for all stablecoins",
         "description": "Retrieve supply caps, current supply, and remaining capacity for all stablecoins",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "responses": {
           "200": {
             "description": "Supply cap information retrieved successfully",
@@ -158,7 +182,9 @@
                                 "example": 0
                               }
                             },
-                            "required": ["index"]
+                            "required": [
+                              "index"
+                            ]
                           },
                           {
                             "$ref": "#/components/schemas/SupplyCapInfo"
@@ -171,12 +197,15 @@
                           "supplyCap": 1000000000,
                           "currentSupply": 500000000,
                           "remainingCapacity": 500000000,
-                          "utilizationPercentage": 50.0
+                          "utilizationPercentage": 50
                         }
                       ]
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -198,7 +227,9 @@
       "post": {
         "summary": "Get quote for mint or redeem",
         "description": "Get a quote for minting or redeeming stablecoins",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -207,7 +238,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["mint", "redeem"]
+              "enum": [
+                "mint",
+                "redeem"
+              ]
             }
           }
         ],
@@ -229,7 +263,10 @@
                     "example": 1000000
                   }
                 },
-                "required": ["stablecoinIndex", "depositAmount"]
+                "required": [
+                  "stablecoinIndex",
+                  "depositAmount"
+                ]
               }
             }
           }
@@ -252,7 +289,10 @@
                       "example": 999000
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -294,7 +334,9 @@
       "post": {
         "summary": "Generate mint transaction",
         "description": "Generate a mint transaction for stablecoins using the Reflect SDK.",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -303,7 +345,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -346,7 +391,11 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["stablecoinIndex", "depositAmount", "signer"]
+                "required": [
+                  "stablecoinIndex",
+                  "depositAmount",
+                  "signer"
+                ]
               }
             }
           }
@@ -399,7 +448,9 @@
       "post": {
         "summary": "Generate burn transaction",
         "description": "Generate a burn transaction for stablecoins using the Reflect SDK",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -408,7 +459,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -451,7 +505,11 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["stablecoinIndex", "depositAmount", "signer"]
+                "required": [
+                  "stablecoinIndex",
+                  "depositAmount",
+                  "signer"
+                ]
               }
             }
           }
@@ -504,7 +562,9 @@
       "get": {
         "summary": "Check integration verification status",
         "description": "Check whether a specific integration is verified by its branded stablecoin mint address. Returns a boolean indicating the verification status.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "stablecoin",
@@ -523,7 +583,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -546,7 +609,10 @@
                       "example": true
                     }
                   },
-                  "required": ["success", "verified"]
+                  "required": [
+                    "success",
+                    "verified"
+                  ]
                 }
               }
             }
@@ -578,7 +644,9 @@
       "get": {
         "summary": "Get verified integrations",
         "description": "Retrieve a list of all verified integrations with their statistics, metadata, and configuration. This endpoint returns public information about integrations that have been verified by the Reflect team.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -587,7 +655,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -612,7 +683,10 @@
                       "description": "Array of verified integrations with their stats, metadata, and config"
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -634,7 +708,9 @@
       "post": {
         "summary": "Initialize an integration",
         "description": "Initialize a new integration with branded mint and fee configuration.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -643,7 +719,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -702,7 +781,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
@@ -715,10 +797,16 @@
                           "description": "Integration ID (proxy state address)"
                         }
                       },
-                      "required": ["transaction", "integrationId"]
+                      "required": [
+                        "transaction",
+                        "integrationId"
+                      ]
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -750,7 +838,9 @@
       "post": {
         "summary": "Initialize a stablecoin token",
         "description": "Generate a transaction to create a new branded token mint with metadata.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -759,7 +849,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -774,7 +867,10 @@
                   "metadata": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string", "description": "Token name" },
+                      "name": {
+                        "type": "string",
+                        "description": "Token name"
+                      },
                       "symbol": {
                         "type": "string",
                         "description": "Token symbol"
@@ -783,9 +879,17 @@
                         "type": "string",
                         "description": "Token description"
                       },
-                      "uri": { "type": "string", "description": "Metadata URI" }
+                      "uri": {
+                        "type": "string",
+                        "description": "Metadata URI"
+                      }
                     },
-                    "required": ["name", "symbol", "description", "uri"]
+                    "required": [
+                      "name",
+                      "symbol",
+                      "description",
+                      "uri"
+                    ]
                   },
                   "signer": {
                     "type": "string",
@@ -796,7 +900,11 @@
                     "description": "Fee payer Solana address"
                   }
                 },
-                "required": ["metadata", "signer", "feePayer"]
+                "required": [
+                  "metadata",
+                  "signer",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -809,7 +917,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
@@ -855,7 +966,9 @@
       "post": {
         "summary": "Transfer mint authority",
         "description": "Generate a transaction to transfer mint authority of a branded token.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -864,7 +977,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -889,7 +1005,11 @@
                     "description": "Fee payer Solana address"
                   }
                 },
-                "required": ["brandedMint", "signer", "feePayer"]
+                "required": [
+                  "brandedMint",
+                  "signer",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -902,7 +1022,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
@@ -944,7 +1067,9 @@
       "post": {
         "summary": "Initialize integration flow (complete setup)",
         "description": "A complete initialization flow that combines creating a branded mint, adding metadata, transferring authority, and initializing the integration in a single transaction. This is a wrapper around all initialization endpoints.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -953,7 +1078,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -990,7 +1118,10 @@
                   "metadata": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string", "description": "Token name" },
+                      "name": {
+                        "type": "string",
+                        "description": "Token name"
+                      },
                       "symbol": {
                         "type": "string",
                         "description": "Token symbol"
@@ -999,9 +1130,17 @@
                         "type": "string",
                         "description": "Token description"
                       },
-                      "uri": { "type": "string", "description": "Metadata URI" }
+                      "uri": {
+                        "type": "string",
+                        "description": "Metadata URI"
+                      }
                     },
-                    "required": ["name", "symbol", "description", "uri"]
+                    "required": [
+                      "name",
+                      "symbol",
+                      "description",
+                      "uri"
+                    ]
                   }
                 },
                 "required": [
@@ -1024,7 +1163,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
@@ -1037,10 +1179,16 @@
                           "description": "Integration ID (proxy state address)"
                         }
                       },
-                      "required": ["transaction", "integrationId"]
+                      "required": [
+                        "transaction",
+                        "integrationId"
+                      ]
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -1072,7 +1220,9 @@
       "get": {
         "summary": "Get integration configuration",
         "description": "Retrieve configuration for a specific integration",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1090,7 +1240,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1133,7 +1286,9 @@
       "post": {
         "summary": "Update integration configuration",
         "description": "Generate a transaction to update the fee configuration for a specific integration",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1151,7 +1306,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1204,7 +1362,9 @@
       "get": {
         "summary": "Get integrations by authority",
         "description": "Retrieve all integrations associated with a specific authority address",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "authority",
@@ -1222,7 +1382,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1333,12 +1496,18 @@
                             "description": "Token metadata (null if not available)"
                           }
                         },
-                        "required": ["pubkey", "data"]
+                        "required": [
+                          "pubkey",
+                          "data"
+                        ]
                       },
                       "description": "Array of integrations associated with the authority"
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -1370,7 +1539,9 @@
       "post": {
         "summary": "Upload integration metadata",
         "description": "Upload image and metadata for a branded mint. Returns URLs for the uploaded image and JSON metadata file that can be used when initializing integrations.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -1379,7 +1550,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1456,10 +1630,16 @@
                           "example": "https://metadata-bucket.s3.region.amazonaws.com/json/xyz789.json"
                         }
                       },
-                      "required": ["imageUrl", "jsonUrl"]
+                      "required": [
+                        "imageUrl",
+                        "jsonUrl"
+                      ]
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -1491,7 +1671,9 @@
       "post": {
         "summary": "Reveal API key",
         "description": "Reveal the API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Reveal API key for integration {integrationId} at timestamp {timestamp}'. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -1500,7 +1682,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1561,7 +1746,10 @@
                       "example": "rk_live_abc123xyz789"
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -1603,7 +1791,9 @@
       "post": {
         "summary": "Rotate API key",
         "description": "Rotate (generate a new) API key for an integration. Requires a signature from the integration authority to prove ownership. The message to sign should be: 'Rotate API key for integration {integrationId} at timestamp {timestamp}'. The old API key will be invalidated. **Important**: The signature is only valid for 1 minute from the timestamp. The timestamp must be within 1 minute of the current server time.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -1612,7 +1802,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1673,7 +1866,10 @@
                       "example": "rk_live_new123xyz456"
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -1715,7 +1911,9 @@
       "post": {
         "summary": "Whitelist integration users",
         "description": "Reflect is currently in closed beta and requires whitelisting users. To whitelist your users as integrator, generate and submit transaction returned from this endpoint.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "security": [
           {
             "authenticatedIntegrator": []
@@ -1729,7 +1927,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1757,7 +1958,10 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["signer", "feePayer"]
+                "required": [
+                  "signer",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -1810,7 +2014,9 @@
       "get": {
         "summary": "Get integration statistics",
         "description": "Retrieve statistics for a specific integration",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "security": [
           {
             "authenticatedIntegrator": []
@@ -1833,7 +2039,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1876,7 +2085,9 @@
       "get": {
         "summary": "Get integration events",
         "description": "Retrieve recent events for a specific integration.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1927,7 +2138,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -1951,7 +2165,10 @@
                       }
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -1993,7 +2210,9 @@
       "get": {
         "summary": "Get historical integration statistics",
         "description": "Retrieve historical statistics for a specific integration. Use the `period` query parameter to specify the number of days (e.g., '7' for 7 days, '30' for 30 days). Defaults to 7 days if not provided.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "security": [
           {
             "authenticatedIntegrator": []
@@ -2027,7 +2246,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2070,7 +2292,9 @@
       "get": {
         "summary": "Get current exchange rate",
         "description": "Retrieve current exchange rate for a specific integration",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -2088,7 +2312,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2131,7 +2358,9 @@
       "post": {
         "summary": "Initialize integration vault",
         "description": "Initialize the proxy vault for an integration (admin-only).",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2140,7 +2369,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2165,7 +2397,11 @@
                     "description": "Fee payer Solana address"
                   }
                 },
-                "required": ["integrationId", "signer", "feePayer"]
+                "required": [
+                  "integrationId",
+                  "signer",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -2175,7 +2411,9 @@
             "description": "Initialize vault transaction generated",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
               }
             }
           },
@@ -2206,7 +2444,9 @@
       "post": {
         "summary": "Initialize user branded token account",
         "description": "Generate a transaction to initialize a user's branded token account. This endpoint allows developers to pay for account initialization on behalf of users by setting the `signer` parameter to their own address - the signer will pay for the account initialization costs, while `feePayer` covers transaction fees. Note: The `/integration/mint` endpoint automatically handles account initialization, so this endpoint is typically only needed if you want to initialize accounts separately from minting.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2215,7 +2455,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2259,7 +2502,9 @@
             "description": "Initialize user account transaction generated",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
               }
             }
           },
@@ -2290,7 +2535,9 @@
       "post": {
         "summary": "Get quote for mint or redeem",
         "description": "Get a quote for minting (wrapping USDC+ into branded tokens) or redeeming (unwrapping branded tokens back to USDC+) for a specific integration.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -2299,7 +2546,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["mint", "redeem"]
+              "enum": [
+                "mint",
+                "redeem"
+              ]
             }
           },
           {
@@ -2309,7 +2559,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2332,7 +2585,10 @@
                     "example": 1000000
                   }
                 },
-                "required": ["integrationId", "amount"]
+                "required": [
+                  "integrationId",
+                  "amount"
+                ]
               }
             }
           }
@@ -2355,7 +2611,10 @@
                       "example": 999000
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -2397,7 +2656,9 @@
       "post": {
         "summary": "Get quote for mint or redeem with USDC input/output",
         "description": "Get a quote for the full flow: USDC → USDC+ → branded tokens (mint) or branded tokens → USDC+ → USDC (redeem). This endpoint handles both the stablecoin conversion and the integration wrap/unwrap in a single quote.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "type",
@@ -2406,7 +2667,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["mint", "redeem"]
+              "enum": [
+                "mint",
+                "redeem"
+              ]
             }
           },
           {
@@ -2416,7 +2680,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2444,7 +2711,11 @@
                     "example": 0
                   }
                 },
-                "required": ["integrationId", "amount", "stablecoinIndex"]
+                "required": [
+                  "integrationId",
+                  "amount",
+                  "stablecoinIndex"
+                ]
               }
             }
           }
@@ -2467,7 +2738,10 @@
                       "example": 999000
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -2509,7 +2783,9 @@
       "post": {
         "summary": "Generate mint transaction",
         "description": "Generate a mint transaction for integration stablecoins. This endpoint automatically detects if the recipient's branded token account needs to be initialized and includes the initialization instruction in the transaction if required. Developers can pay for account initialization on behalf of users by setting the `feePayer` parameter to their own address - the feePayer will cover both transaction fees and account initialization costs.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2518,7 +2794,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2551,7 +2830,12 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
+                "required": [
+                  "amount",
+                  "recipient",
+                  "integrationId",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -2594,7 +2878,9 @@
       "post": {
         "summary": "Mint stablecoin and whitelabel in single transaction",
         "description": "Generate a combined transaction that mints the underlying stablecoin and then whitelabels it in a single call. This combines the functionality of /stablecoin/mint and /integration/mint.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2603,7 +2889,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2636,7 +2925,12 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
+                "required": [
+                  "amount",
+                  "recipient",
+                  "integrationId",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -2679,7 +2973,9 @@
       "post": {
         "summary": "Generate redemption transaction",
         "description": "Generate a redemption transaction for integration stablecoins",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2688,7 +2984,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2721,7 +3020,12 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
+                "required": [
+                  "amount",
+                  "recipient",
+                  "integrationId",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -2764,7 +3068,9 @@
       "post": {
         "summary": "Redeem whitelabeled stablecoin in single transaction",
         "description": "Generate a combined transaction that redeems the whitelabeled stablecoin and burns the underlying stablecoin in a single call. This combines the functionality of /integration/redeem and /stablecoin/burn.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2773,7 +3079,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2806,7 +3115,12 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["amount", "recipient", "integrationId", "feePayer"]
+                "required": [
+                  "amount",
+                  "recipient",
+                  "integrationId",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -2849,7 +3163,9 @@
       "post": {
         "summary": "Generate claim transaction",
         "description": "Generate a claim transaction for integration rewards. Claims all available rewards for the integration.",
-        "tags": ["Integration"],
+        "tags": [
+          "Integration"
+        ],
         "parameters": [
           {
             "name": "cluster",
@@ -2858,7 +3174,10 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["mainnet", "devnet"],
+              "enum": [
+                "mainnet",
+                "devnet"
+              ],
               "default": "mainnet"
             }
           }
@@ -2881,7 +3200,10 @@
                     "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
                   }
                 },
-                "required": ["integrationId", "feePayer"]
+                "required": [
+                  "integrationId",
+                  "feePayer"
+                ]
               }
             }
           }
@@ -2924,7 +3246,9 @@
       "get": {
         "summary": "Get protocol statistics",
         "description": "Retrieve overall protocol statistics",
-        "tags": ["Stats"],
+        "tags": [
+          "Stats"
+        ],
         "responses": {
           "200": {
             "description": "Protocol statistics retrieved successfully",
@@ -2960,6 +3284,29 @@
                           "description": "Total Value Locked in USD",
                           "example": 50000000
                         },
+                        "tvlBreakdown": {
+                          "type": "array",
+                          "description": "TVL breakdown by stablecoin index",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "index": {
+                                "type": "integer",
+                                "description": "Stablecoin index",
+                                "example": 0
+                              },
+                              "tvl": {
+                                "type": "number",
+                                "description": "TVL for this stablecoin in USD",
+                                "example": 50000000
+                              }
+                            },
+                            "required": [
+                              "index",
+                              "tvl"
+                            ]
+                          }
+                        },
                         "totalYieldDistributed": {
                           "type": "number",
                           "description": "Total yield distributed to users",
@@ -2971,11 +3318,503 @@
                         "supply",
                         "cumulativeVolume",
                         "tvl",
+                        "tvlBreakdown",
                         "totalYieldDistributed"
                       ]
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/global": {
+      "get": {
+        "summary": "Get global protocol statistics",
+        "description": "Retrieve overall protocol statistics including TVL breakdown by stablecoin. Alias for /stats.",
+        "tags": [
+          "Stats"
+        ],
+        "responses": {
+          "200": {
+            "description": "Global protocol statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "integer",
+                          "description": "Total number of users/holders",
+                          "example": 1250
+                        },
+                        "supply": {
+                          "type": "string",
+                          "description": "Total supply as string",
+                          "example": "50000000000000"
+                        },
+                        "cumulativeVolume": {
+                          "type": "string",
+                          "description": "Cumulative volume as string",
+                          "example": "100000000000000"
+                        },
+                        "tvl": {
+                          "type": "number",
+                          "description": "Total Value Locked in USD",
+                          "example": 50000000
+                        },
+                        "tvlBreakdown": {
+                          "type": "array",
+                          "description": "TVL breakdown by stablecoin index",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "index": {
+                                "type": "integer",
+                                "description": "Stablecoin index",
+                                "example": 0
+                              },
+                              "tvl": {
+                                "type": "number",
+                                "description": "TVL for this stablecoin in USD",
+                                "example": 50000000
+                              }
+                            },
+                            "required": [
+                              "index",
+                              "tvl"
+                            ]
+                          }
+                        },
+                        "totalYieldDistributed": {
+                          "type": "number",
+                          "description": "Total yield distributed to users",
+                          "example": 2500000
+                        }
+                      },
+                      "required": [
+                        "users",
+                        "supply",
+                        "cumulativeVolume",
+                        "tvl",
+                        "tvlBreakdown",
+                        "totalYieldDistributed"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/{index}": {
+      "get": {
+        "summary": "Get statistics for a specific stablecoin",
+        "description": "Retrieve protocol statistics for a specific stablecoin by index.",
+        "tags": [
+          "Stats"
+        ],
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0 or 1)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stablecoin statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "integer",
+                          "description": "Number of holders for this stablecoin",
+                          "example": 800
+                        },
+                        "supply": {
+                          "type": "string",
+                          "description": "Supply as string",
+                          "example": "30000000000000"
+                        },
+                        "cumulativeVolume": {
+                          "type": "string",
+                          "description": "Cumulative volume as string",
+                          "example": "60000000000000"
+                        },
+                        "tvl": {
+                          "type": "number",
+                          "description": "Total Value Locked in USD for this stablecoin",
+                          "example": 30000000
+                        },
+                        "totalYieldDistributed": {
+                          "type": "number",
+                          "description": "Total yield distributed for this stablecoin",
+                          "example": 1500000
+                        },
+                        "weights": {
+                          "type": "array",
+                          "description": "Venue allocation weights (only venues with weight > 0)",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "venue": {
+                                "type": "object",
+                                "description": "Lending venue information",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Name of the venue",
+                                    "example": "Kamino"
+                                  }
+                                }
+                              },
+                              "weight": {
+                                "type": "number",
+                                "description": "Allocation weight (0-1)",
+                                "example": 0.35
+                              }
+                            },
+                            "required": [
+                              "venue",
+                              "weight"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "users",
+                        "supply",
+                        "cumulativeVolume",
+                        "tvl",
+                        "totalYieldDistributed",
+                        "weights"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid stablecoin index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/historical": {
+      "get": {
+        "summary": "Get historical protocol statistics",
+        "description": "Retrieve historical TVL and volume data across all stablecoins for a given number of days.",
+        "tags": [
+          "Stats"
+        ],
+        "parameters": [
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days of historical data (max 365)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "example": "7"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tvl": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "custom_time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp of the data point"
+                              },
+                              "usd_value": {
+                                "type": "number",
+                                "description": "TVL in USD at this point in time"
+                              }
+                            },
+                            "required": [
+                              "custom_time",
+                              "usd_value"
+                            ]
+                          }
+                        },
+                        "volume": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Date of the volume data point"
+                              },
+                              "volume": {
+                                "type": "string",
+                                "description": "24h volume as string (BigInt)"
+                              },
+                              "cumulativeVolume": {
+                                "type": "string",
+                                "description": "Cumulative volume as string (BigInt)"
+                              }
+                            },
+                            "required": [
+                              "date",
+                              "volume",
+                              "cumulativeVolume"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "tvl",
+                        "volume"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/historical/{index}": {
+      "get": {
+        "summary": "Get historical statistics for a specific stablecoin",
+        "description": "Retrieve historical TVL and volume data for a specific stablecoin by index.",
+        "tags": [
+          "Stats"
+        ],
+        "parameters": [
+          {
+            "name": "index",
+            "in": "path",
+            "description": "Stablecoin index (0 or 1)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "description": "Number of days of historical data (max 365)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "example": "7"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tvl": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "custom_time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp of the data point"
+                              },
+                              "usd_value": {
+                                "type": "number",
+                                "description": "TVL in USD at this point in time"
+                              }
+                            },
+                            "required": [
+                              "custom_time",
+                              "usd_value"
+                            ]
+                          }
+                        },
+                        "volume": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "date": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Date of the volume data point"
+                              },
+                              "volume_usd_24h": {
+                                "type": "string",
+                                "description": "24h volume as string (BigInt)"
+                              },
+                              "volume_usd_cumulative": {
+                                "type": "string",
+                                "description": "Cumulative volume as string (BigInt)"
+                              }
+                            },
+                            "required": [
+                              "date",
+                              "volume_usd_24h",
+                              "volume_usd_cumulative"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "tvl",
+                        "volume"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestErrorResponse"
                 }
               }
             }
@@ -2997,7 +3836,9 @@
       "get": {
         "summary": "Get APY for all stablecoins",
         "description": "Retrieve realtime APY data for all available stablecoins.",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "responses": {
           "200": {
             "description": "Successfully retrieved APY data for all stablecoins",
@@ -3036,7 +3877,9 @@
       "get": {
         "summary": "Get latest exchange rates for all stablecoins",
         "description": "Retrieve the latest base and receipt exchange rates for all supported stablecoins (USDC+).",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "responses": {
           "200": {
             "description": "Latest exchange rates for all stablecoins retrieved successfully",
@@ -3045,14 +3888,21 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "data": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "integer" },
-                          "stablecoin": { "type": "integer" },
+                          "id": {
+                            "type": "integer"
+                          },
+                          "stablecoin": {
+                            "type": "integer"
+                          },
                           "base_usd_value_bps": {
                             "type": "number",
                             "description": "Base exchange rate in bps"
@@ -3076,7 +3926,10 @@
                       }
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -3098,7 +3951,9 @@
       "get": {
         "summary": "Get historical exchange rates for a stablecoin",
         "description": "Retrieve historical base and receipt exchange rates for a specific stablecoin (0: USDC+) and a number of days.",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "stablecoin",
@@ -3129,14 +3984,21 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "data": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "integer" },
-                          "stablecoin": { "type": "integer" },
+                          "id": {
+                            "type": "integer"
+                          },
+                          "stablecoin": {
+                            "type": "integer"
+                          },
                           "base_usd_value_bps": {
                             "type": "number",
                             "description": "Base exchange rate in bps"
@@ -3160,7 +4022,10 @@
                       }
                     }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -3202,7 +4067,9 @@
       "get": {
         "summary": "Get APY for specific stablecoin",
         "description": "Retrieve APY data for a specific stablecoin (realtime data).",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "index",
@@ -3262,7 +4129,9 @@
       "get": {
         "summary": "Get historical APY data for specific stablecoin",
         "description": "Retrieve historical APY data for a specific stablecoin over a specified number of days.",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "index",
@@ -3323,14 +4192,18 @@
       "get": {
         "summary": "Get realtime exchange rate for a stablecoin",
         "description": "Retrieve the current exchange rate for the specified stablecoin.",
-        "tags": ["Stablecoin"],
+        "tags": [
+          "Stablecoin"
+        ],
         "parameters": [
           {
             "name": "index",
             "in": "path",
             "description": "Stablecoin index (0: USDC+)",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -3341,10 +4214,19 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "type": "object", "additionalProperties": true }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
                   },
-                  "required": ["success", "data"]
+                  "required": [
+                    "success",
+                    "data"
+                  ]
                 }
               }
             }
@@ -3376,27 +4258,41 @@
       "get": {
         "summary": "Get recent events",
         "description": "Retrieve the most recent protocol events up to a limit.",
-        "tags": ["Events"],
+        "tags": [
+          "Events"
+        ],
         "parameters": [
           {
             "name": "limit",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "minimum": 1, "maximum": 1000 },
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
             "description": "Max events to return (1-1000)"
           },
           {
             "name": "nonZero",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "enum": ["true"] },
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            },
             "description": "If set to 'true', only returns events with non-zero amounts"
           },
           {
             "name": "minimumValue",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]+(\\.[0-9]+)?$"
+            },
             "description": "Filter events by minimum value. Must be a positive number if set."
           }
         ],
@@ -3408,7 +4304,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "events": {
                       "type": "array",
                       "items": {
@@ -3417,7 +4316,10 @@
                       }
                     }
                   },
-                  "required": ["success", "events"]
+                  "required": [
+                    "success",
+                    "events"
+                  ]
                 }
               }
             }
@@ -3439,13 +4341,17 @@
       "get": {
         "summary": "Get events by signer",
         "description": "Retrieve protocol events associated with a signer address.",
-        "tags": ["Events"],
+        "tags": [
+          "Events"
+        ],
         "parameters": [
           {
             "name": "signer",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Signer Solana address"
           }
         ],
@@ -3457,7 +4363,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
                     "events": {
                       "type": "array",
                       "items": {
@@ -3466,7 +4375,10 @@
                       }
                     }
                   },
-                  "required": ["success", "events"]
+                  "required": [
+                    "success",
+                    "events"
+                  ]
                 }
               }
             }
@@ -3477,108 +4389,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BadRequestErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stats/historical": {
-      "get": {
-        "summary": "Get historical TVL and volume data",
-        "description": "Retrieve historical Total Value Locked (TVL) and volume data. Use the `days` parameter to specify the number of days (1-365).",
-        "tags": ["Stats"],
-        "parameters": [
-          {
-            "name": "days",
-            "in": "query",
-            "description": "Number of days of historical data to retrieve (1-365)",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9]+$",
-              "example": "7"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Historical data retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "tvl": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "timestamp": {
-                                "type": "string",
-                                "format": "date-time",
-                                "description": "Timestamp of the TVL data point",
-                                "example": "2024-01-01T12:00:00.000Z"
-                              },
-                              "tvl": {
-                                "type": "integer",
-                                "description": "Total Value Locked amount in USD",
-                                "example": 50000000
-                              }
-                            },
-                            "required": ["timestamp", "tvl"]
-                          },
-                          "description": "Historical TVL data points"
-                        },
-                        "volume": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "date": {
-                                "type": "string",
-                                "format": "date",
-                                "description": "Date of the volume data point",
-                                "example": "2024-01-01"
-                              },
-                              "volume": {
-                                "type": "string",
-                                "description": "24-hour volume in USD (BigInt as string)",
-                                "example": "1000000000000"
-                              },
-                              "cumulativeVolume": {
-                                "type": "string",
-                                "description": "Cumulative volume in USD (BigInt as string)",
-                                "example": "50000000000000"
-                              }
-                            },
-                            "required": ["date", "volume", "cumulativeVolume"]
-                          },
-                          "description": "Historical volume data points"
-                        }
-                      },
-                      "required": ["tvl", "volume"]
-                    }
-                  },
-                  "required": ["success", "data"]
                 }
               }
             }
@@ -3615,7 +4425,9 @@
             "description": "Whether the request was successful"
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "BadRequestErrorResponse": {
         "type": "object",
@@ -3631,7 +4443,10 @@
             "example": "Invalid request data: depositAmount must be positive"
           }
         },
-        "required": ["success", "message"]
+        "required": [
+          "success",
+          "message"
+        ]
       },
       "InternalServerErrorResponse": {
         "type": "object",
@@ -3647,7 +4462,10 @@
             "example": "Internal server error"
           }
         },
-        "required": ["success", "message"]
+        "required": [
+          "success",
+          "message"
+        ]
       },
       "UsdcApyResponse": {
         "allOf": [
@@ -3661,7 +4479,9 @@
                 "$ref": "#/components/schemas/UsdcApyData"
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -3684,7 +4504,11 @@
             "description": "Timestamp of the data point"
           }
         },
-        "required": ["index", "apy", "timestamp"]
+        "required": [
+          "index",
+          "apy",
+          "timestamp"
+        ]
       },
       "AllStablecoinsResponse": {
         "allOf": [
@@ -3702,7 +4526,9 @@
                 "description": "Array of stablecoin APY data"
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -3723,10 +4549,14 @@
                     "example": "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAED..."
                   }
                 },
-                "required": ["transaction"]
+                "required": [
+                  "transaction"
+                ]
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -3752,7 +4582,7 @@
             "type": "number",
             "format": "float",
             "description": "Percentage of cap currently utilized",
-            "example": 50.0
+            "example": 50
           }
         },
         "required": [
@@ -3785,10 +4615,15 @@
                     "example": "2024-12-31T23:59:59.000Z"
                   }
                 },
-                "required": ["apiKey", "expiresAt"]
+                "required": [
+                  "apiKey",
+                  "expiresAt"
+                ]
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -3853,7 +4688,17 @@
                 "example": 500
               }
             },
-            "required": ["stablecoin", "timestamp", "supply", "holders", "principal", "yield", "volume", "exchange_rate_underlying", "apy_bps"]
+            "required": [
+              "stablecoin",
+              "timestamp",
+              "supply",
+              "holders",
+              "principal",
+              "yield",
+              "volume",
+              "exchange_rate_underlying",
+              "apy_bps"
+            ]
           },
           "metadata": {
             "type": "object",
@@ -3880,7 +4725,12 @@
                 "example": "A branded yield-bearing stablecoin"
               }
             },
-            "required": ["name", "symbol", "image", "description"]
+            "required": [
+              "name",
+              "symbol",
+              "image",
+              "description"
+            ]
           },
           "config": {
             "type": "object",
@@ -3922,10 +4772,22 @@
                 "example": 255
               }
             },
-            "required": ["brandedMint", "stablecoinMint", "fee", "principal", "integratorsCommission", "authority", "bump"]
+            "required": [
+              "brandedMint",
+              "stablecoinMint",
+              "fee",
+              "principal",
+              "integratorsCommission",
+              "authority",
+              "bump"
+            ]
           }
         },
-        "required": ["stats", "metadata", "config"]
+        "required": [
+          "stats",
+          "metadata",
+          "config"
+        ]
       },
       "IntegrationStatsResponse": {
         "allOf": [
@@ -4004,7 +4866,9 @@
                 ]
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -4062,10 +4926,15 @@
                     }
                   }
                 },
-                "required": ["period", "historicalData"]
+                "required": [
+                  "period",
+                  "historicalData"
+                ]
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -4151,10 +5020,18 @@
                     "example": "A great token"
                   }
                 },
-                "required": ["name", "symbol", "image", "description"]
+                "required": [
+                  "name",
+                  "symbol",
+                  "image",
+                  "description"
+                ]
               }
             },
-            "required": ["data", "metadata"]
+            "required": [
+              "data",
+              "metadata"
+            ]
           }
         ]
       },
@@ -4179,7 +5056,11 @@
             "example": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
           }
         },
-        "required": ["signer", "feeBps", "feePayer"]
+        "required": [
+          "signer",
+          "feeBps",
+          "feePayer"
+        ]
       },
       "ExchangeRateResponse": {
         "allOf": [
@@ -4210,7 +5091,7 @@
                   "rateToUsdc": {
                     "type": "number",
                     "description": "Rate of integration stablecoin to USDC",
-                    "example": 1.0
+                    "example": 1
                   },
                   "timestamp": {
                     "type": "string",
@@ -4228,7 +5109,9 @@
                 ]
               }
             },
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           }
         ]
       },
@@ -4259,7 +5142,9 @@
               }
             },
             "additionalProperties": true,
-            "required": ["data"]
+            "required": [
+              "data"
+            ]
           },
           "timestamp": {
             "type": "string",
@@ -4275,7 +5160,11 @@
           "type": {
             "type": "string",
             "description": "Event type: '1' for WrapEvent, '2' for UnwrapEvent, '3' for ClaimFeesEvent",
-            "enum": ["1", "2", "3"],
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
             "example": "1"
           },
           "signer": {
@@ -4305,7 +5194,9 @@
         "properties": {
           "discriminator": {
             "type": "integer",
-            "enum": [1],
+            "enum": [
+              1
+            ],
             "description": "Event discriminator for Wrap event",
             "example": 1
           },
@@ -4345,7 +5236,9 @@
         "properties": {
           "discriminator": {
             "type": "integer",
-            "enum": [2],
+            "enum": [
+              2
+            ],
             "description": "Event discriminator for Unwrap event",
             "example": 2
           },
@@ -4385,7 +5278,9 @@
         "properties": {
           "discriminator": {
             "type": "integer",
-            "enum": [3],
+            "enum": [
+              3
+            ],
             "description": "Event discriminator for ClaimFees event",
             "example": 3
           },
@@ -4406,7 +5301,12 @@
           }
         },
         "additionalProperties": true,
-        "required": ["discriminator", "proxyState", "authority", "amount"]
+        "required": [
+          "discriminator",
+          "proxyState",
+          "authority",
+          "amount"
+        ]
       }
     }
   },
